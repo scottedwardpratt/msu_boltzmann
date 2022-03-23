@@ -1,9 +1,9 @@
 #include "inelastic.h"
-#include "b3d.h"
+#include "boltzmann.h"
 #include "resonances.h"
 #include "misc.h"
 
-CB3D *CInelasticList::b3d=NULL;
+CMSU_Boltzmann *CInelasticList::boltzmann=NULL;
 bool CInelasticList::UseFile = false;
 bool CInelasticList::UseInelasticArray = false;
 
@@ -12,9 +12,9 @@ CInelasticList::CInelasticList(){
 	// UseFile = false;
 	// UseInelasticArray = true;
 
-	if(b3d!=NULL){
-		NResonances = b3d->reslist->resmap.size();
-		filename = b3d->parmap.getS("B3D_INELASTIC_INFO_FILE",string("inelastic.tmp"));
+	if(boltzmann!=NULL){
+		NResonances = boltzmann->reslist->resmap.size();
+		filename = boltzmann->parmap.getS("B3D_INELASTIC_INFO_FILE",string("inelastic.tmp"));
 
 		//create a new NResonances x NResonances array to store lists of elements
 		InelasticArray = new list<CInelasticInfo> *[NResonances];
@@ -76,7 +76,7 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 	CResInfoMap::iterator rpos1,rpos2;
 	CInelasticInfo *temp;
 	list<CInelasticInfo>::iterator Th_iter;
-	CResList *reslist=b3d->reslist;
+	CResList *reslist=boltzmann->reslist;
 	int nres=reslist->resmap.size();
 
 	if(FromFile){
@@ -88,8 +88,8 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 				sum = netq + netb + nets + pmq + pmb + pms;
 				for(int i=0; i<size; i++){
 					inelasticfile >> ires1 >> ires2;
-					resinfoptr_1=b3d->reslist->GetResInfoPtr(ires1);
-					resinfoptr_2=b3d->reslist->GetResInfoPtr(ires2);
+					resinfoptr_1=boltzmann->reslist->GetResInfoPtr(ires1);
+					resinfoptr_2=boltzmann->reslist->GetResInfoPtr(ires2);
 
 					CInelasticInfo temp2(resinfoptr_1,resinfoptr_2, 0);
 					ThermalArray[netb][netq][nets][pmb][pmq][pms].push_back(temp2);
@@ -102,8 +102,8 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 					while(inelasticfile >> ires1 >> ires2 >> size){
 						for(int i=0; i<size; i++){
 							inelasticfile >>ires3 >> ires4;
-							resinfoptr_1=b3d->reslist->GetResInfoPtr(ires3);
-							resinfoptr_2=b3d->reslist->GetResInfoPtr(ires4);
+							resinfoptr_1=boltzmann->reslist->GetResInfoPtr(ires3);
+							resinfoptr_2=boltzmann->reslist->GetResInfoPtr(ires4);
 
 							CInelasticInfo temp2(resinfoptr_1,resinfoptr_2,0);
 							InelasticArray[ires1][ires2].push_back(temp2);
@@ -167,7 +167,7 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 			//cout << "storing to file" << endl;
 			inelasticfile.open(filename.c_str(), fstream::out);
 			if(inelasticfile){
-				//inelasticfile << b3d->run_name << endl;
+				//inelasticfile << boltzmann->run_name << endl;
 				inelasticfile << "#THERMAL" << endl;
 				for(int i = 0; i<3; i++){
 					for(int j = 0; j<5; j++){

@@ -23,7 +23,7 @@ public:
 	bool sufficientNpi,sufficientNK;
 	vector<bool> sufficientNB;
 	
-	void UpdateNPE(CB3DCell *cell);
+	void UpdateNPE(CMSU_BoltzmannCell *cell);
 	void CalcAllMuTU();
 	static void GetMuT(double mass,double degen,double rho_target,double epsilon_target,
 		double &T,double &mu);
@@ -42,7 +42,7 @@ public:
 	static vector<double> degenB;
 	static int NXY;
 	static double DXY;
-	static CB3D *b3d;
+	static CMSU_Boltzmann *boltzmann;
 	static int GetBtype(int pid);
 };
 

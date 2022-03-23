@@ -1,11 +1,11 @@
 #include "mutinfo.h"
 #include "part.h"
-#include "b3d.h"
+#include "boltzmann.h"
 #include "cell.h"
 #include "log.h"
 #include "resonances.h"
 
-CB3D *CMuTInfo::b3d=NULL;
+CMSU_Boltzmann *CMuTInfo::boltzmann=NULL;
 int CMuTInfo::NETEVENTS=0;
 int CMuTInfo::NMINCALC=5;
 int CMuTInfo::NXY=0;
@@ -79,7 +79,7 @@ void CMuTInfo::CalcAllMuTU(){
 	int btype;
 	char message[200];
 
-	double volume=4.0*tau*2.0*b3d->ETAMAX*DXY*DXY*double(NETEVENTS);   // factor or 4 due to combining quadrants
+	double volume=4.0*tau*2.0*boltzmann->ETAMAX*DXY*DXY*double(NETEVENTS);   // factor or 4 due to combining quadrants
 	if(Npi>=NMINCALC){
 		Txx=Txxpi/volume;
 		Tyy=Tyypi/volume;

@@ -5,11 +5,11 @@
 
 using namespace std;
 
-class CB3D;
+class CMSU_Boltzmann;
 
 class CSEInfo{
 public:
-	CSEInfo(CB3D *b3dset);
+	CSEInfo(CMSU_Boltzmann *boltzmannset);
 	// vectors hold information for different times
 	vector<double> Pbar,Tzz,epsilon,nhadrons,K0,F0,uperpbar;
 	// this is information for latest time
@@ -19,7 +19,7 @@ public:
 	double R,TAU0,TAUMAX,DELTAU,ETAOVERS,RMAX;
 	int NTAU;
 	int NETEVENTS;
-	CB3D *b3d;
+	CMSU_Boltzmann *boltzmann;
 	char message[500];
 };
 

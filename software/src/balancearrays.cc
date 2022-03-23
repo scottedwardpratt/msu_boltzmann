@@ -1,5 +1,5 @@
 #include "balancearrays.h"
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "acceptance.h"
 #include "randy.h"
@@ -9,12 +9,12 @@
 
 using namespace std;
 
-CBalanceArrays::CBalanceArrays(CB3D *b3dset){
-	b3d=b3dset;
+CBalanceArrays::CBalanceArrays(CMSU_Boltzmann *boltzmannset){
+	boltzmann=boltzmannset;
 	CBFNumer::message=message;
 	CBFDenom::message=message;
-	reslist=b3d->reslist;
-	parmap=&(b3d->parmap);
+	reslist=boltzmann->reslist;
+	parmap=&(boltzmann->parmap);
 	InitArrays();
 }
 
@@ -50,7 +50,7 @@ void CBalanceArrays::InitArrays(){
 		CLog::Fatal(message);
 	}
 	CBFNumer::acceptance=acceptance;
-	NSAMPLE_HYDRO2UDS=NSAMPLE_HYDRO2UDS/(2.0*b3d->ETAMAX);
+	NSAMPLE_HYDRO2UDS=NSAMPLE_HYDRO2UDS/(2.0*boltzmann->ETAMAX);
 	NEVENTS=0;
 	GAMMAP_OS=GAMMAP_SS=0.0;
 	NORM_GAMMAP_OS=NORM_GAMMAP_SS=0;
@@ -281,7 +281,7 @@ void CBalanceArrays::WriteGammaP(){
 	FILE *fptr=fopen(filename.c_str(),"w");
 	if(FROM_UDS){
 		Ntot=denom_allcharges->Nplus+denom_allcharges->Nminus;
-		mult=Ntot*BF_YMAX/(b3d->ETAMAX*NEVENTS);
+		mult=Ntot*BF_YMAX/(boltzmann->ETAMAX*NEVENTS);
 		gp=gammap/(2.0*Ntot*NSAMPLE_UDS2BAL*NSAMPLE_UDS2BAL*NSAMPLE_HYDRO2UDS);
 		gp=gp/(0.5*mult);
 		normtest=0.25*normtest/(0.5*Ntot*NSAMPLE_UDS2BAL*NSAMPLE_UDS2BAL*NSAMPLE_HYDRO2UDS);
@@ -289,7 +289,7 @@ void CBalanceArrays::WriteGammaP(){
 	}
 	else{
 		Ntot=denom_allcharges->Nplus+denom_allcharges->Nminus;
-		mult=Ntot/(NEVENTS*b3d->ETAMAX/BF_YMAX);
+		mult=Ntot/(NEVENTS*boltzmann->ETAMAX/BF_YMAX);
 		gp=gammap/(Ntot*0.5*mult);
 	}
 	fprintf(fptr,"%g %g %g %g\n",gp,2.0*gammap/gammapnorm,normtest,mult);
@@ -322,7 +322,7 @@ void CBalanceArrays::ProcessBFPartMap(){
 	pair<CPartMap::iterator,CPartMap::iterator> itpair_even,itpair_odd;
 	CPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
 	CPart *parta,*partb,*part;
-	for(it=b3d->PartMap.begin();it!=b3d->PartMap.end();++it){
+	for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 		part=it->second;
 		if(part->balanceID>maxbid)
 			maxbid=part->balanceID;
@@ -365,17 +365,17 @@ void CBalanceArrays::ProcessBFPartMap(){
 
 void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from cascade
 	multimap<double,CPart *> ppartmap;
-	double ya,yb,dely,delymax,B3D_ETAMAX=b3d->ETAMAX;
+	double ya,yb,dely,delymax,B3D_ETAMAX=boltzmann->ETAMAX;
 	CPartMap::iterator it;
 	multimap<double,CPart *>::iterator ita,itb;
 	int pida,pidb;
 	CPart *parta,*partb;
 	pair<CPartMap::iterator,CPartMap::iterator> itpair;
-	sprintf(message,"processing %d parts in PartMap\n",int(b3d->PartMap.size()));
+	sprintf(message,"processing %d parts in PartMap\n",int(boltzmann->PartMap.size()));
 	CLog::Info(message);
 	NEVENTS+=1;
 	if(FROM_UDS){
-		for(it=b3d->PartMap.begin();it!=b3d->PartMap.end();++it){
+		for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 			parta=it->second;
 			if(abs(parta->resinfo->charge)==1 && parta->balanceID<0){
 				IncrementDenom(parta);
@@ -383,7 +383,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 		}
 	}
 	else{
-		for(it=b3d->PartMap.begin();it!=b3d->PartMap.end();++it){
+		for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 			parta=it->second;
 			
 			if(parta->balanceID<0){
@@ -439,7 +439,7 @@ void CBalanceArrays::ProcessV2Perfect(){
 	CPart boostedpart;
 	CPartMap::iterator it;
 	CPart *part;
-	for(it=b3d->PartMap.begin();it!=b3d->PartMap.end();++it){
+	for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 		part=it->second;
 		if(abs(part->resinfo->charge)>0){
 			if(part->balanceID<0){
@@ -456,7 +456,7 @@ void CBalanceArrays::ProcessV2Perfect(){
 				pmag=sqrt(boostedpart.p[1]*boostedpart.p[1]+boostedpart.p[2]*boostedpart.p[2]+boostedpart.p[3]*boostedpart.p[3]);
 				eta=atanh(boostedpart.p[3]/pmag);
 				if(fabs(eta)<acceptance->ETAMAX){
-					dNdeta+=0.5/b3d->ETAMAX;
+					dNdeta+=0.5/boltzmann->ETAMAX;
 				}
 			}
 		}
@@ -467,16 +467,16 @@ void CBalanceArrays::IncrementDenom(CPart *part){
 	int pid;
 	bool accepta;
 	double effa,dely,ya,phia;
-	CRandy *randy=b3d->randy;
+	CRandy *randy=boltzmann->randy;
 	CPart parta;
 	pid=part->resinfo->code;
 	int iy=5+floorl(part->y);
 	if(abs(pid)==211)
-		denom_pi->dNdy+=1.0/(4.0*b3d->NSAMPLE*b3d->ETAMAX);
+		denom_pi->dNdy+=1.0/(4.0*boltzmann->NSAMPLE*boltzmann->ETAMAX);
 	if(abs(pid)==321)
-		denom_K->dNdy+=1.0/(4.0*b3d->NSAMPLE*b3d->ETAMAX);
+		denom_K->dNdy+=1.0/(4.0*boltzmann->NSAMPLE*boltzmann->ETAMAX);
 	if(abs(pid)==2212)
-		denom_p->dNdy+=1.0/(4.0*b3d->NSAMPLE*b3d->ETAMAX);
+		denom_p->dNdy+=1.0/(4.0*boltzmann->NSAMPLE*boltzmann->ETAMAX);
 	if(abs(pid)==211 || abs(pid)==321 || abs(pid)==2212){
 		parta.Copy(part);
 		ya=BF_YMIN+randy->ran()*(BF_YMAX-BF_YMIN);
@@ -520,9 +520,9 @@ void CBalanceArrays::IncrementDenom(CPart *part){
 void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 	double effa,effb,effaNoID,effbNoID,ya,dely,phia,phib,delyb=0.0,Minv;
 	bool accepta,acceptb,acceptaNoID,acceptbNoID;
-	double B3D_ETAMAX=b3d->ETAMAX;
+	double B3D_ETAMAX=boltzmann->ETAMAX;
 	int pida,pidb;
-	CRandy *randy=b3d->randy;
+	CRandy *randy=boltzmann->randy;
 	CPart partaa,partbb;
 	pida=parta->resinfo->code;
 	pidb=partb->resinfo->code;
@@ -615,20 +615,20 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 
 void CBalanceArrays::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
-	string command="mkdir -p model_output/"+b3d->run_name+"/"+qualifier;
+	string command="mkdir -p model_output/"+boltzmann->run_name+"/"+qualifier;
 	system(command.c_str());
 	
 	if(acceptance_description=="CHEAP"){
-		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_cheap";
+		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_cheap";
 	}
 	else if(acceptance_description=="STAR"){
-		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_star";
+		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_star";
 	}
 	else if(acceptance_description=="ALICE"){
-		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_alice";
+		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_alice";
 	}
 	else if(acceptance_description=="ALICE_PERFECT"){
-		bf_results_dirname="model_output/"+b3d->run_name+"/"+qualifier+"/results_alice";
+		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_alice";
 	}
 	else{
 		sprintf(message,"acceptance_description not recognized in CBalanceArrays::SetQualifier()\n");

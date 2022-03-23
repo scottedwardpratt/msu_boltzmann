@@ -6,14 +6,14 @@
 
 void CAction::PerformMuTCalcUpdateNPE(){
 	int ix,iy,itau,btype,pid;
-	itau=lrint(floor(tau/b3d->MUTCALC_DELTAU));
+	itau=lrint(floor(tau/boltzmann->MUTCALC_DELTAU));
 	CPartMap::iterator ppos;
 	CPart *part;
 	CResInfo *resinfo;
 	CMuTInfo *mti;
 	double gamma,gammav,E,px,py,eta,t,x,y;
 
-	for(ppos=b3d->PartMap.begin();ppos!=b3d->PartMap.end();++ppos){
+	for(ppos=boltzmann->PartMap.begin();ppos!=boltzmann->PartMap.end();++ppos){
 		part=ppos->second;
 		
 		resinfo=part->resinfo;
@@ -26,7 +26,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 			y=part->r[2]+(t-part->r[0])*part->p[2]/part->p[0];
 			CMuTInfo::GetIxIy(x,y,ix,iy);
 			if(ix<CMuTInfo::NXY && iy<CMuTInfo::NXY){
-				if(b3d->tau>CMuTInfo::taumin[ix][iy]){
+				if(boltzmann->tau>CMuTInfo::taumin[ix][iy]){
 					px=part->p[1];
 					py=part->p[2];
 					if(x<0.0)
@@ -34,7 +34,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 					if(y<0.0)
 						py=-py;
 					if(ix<CMuTInfo::NXY && iy<CMuTInfo::NXY){
-						mti=b3d->muTinfo[itau][ix][iy];
+						mti=boltzmann->muTinfo[itau][ix][iy];
 
 						if(resinfo->code==111 || abs(resinfo->code)==211){
 							gamma=cosh(eta);

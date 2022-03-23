@@ -1,4 +1,4 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "resonances.h"
 #include "cell.h"
@@ -9,7 +9,7 @@
 
 // If two particles pass one another, Collide will determine whether to scatter and how
 
-int CB3D::Collide_Scatter(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Scatter(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
 	bool bjtranslate=false;
 	int colltype;
 	if(BJORKEN && ((part1->cell->ieta==0 && part2->cell->ieta==2*NETA-1) || (part1->cell->ieta==2*NETA-1 && part2->cell->ieta==0))){
@@ -41,7 +41,7 @@ int CB3D::Collide_Scatter(CPart *part1,CPart *part2,int &nproducts,array<CPart*,
 	return colltype;
 }
 
-int CB3D::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,vector<double> &dsigma_merge,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,vector<double> &dsigma_merge,int &nproducts,array<CPart*,5> &product){
 	bool bjtranslate=false,msuccess;
 	int ir1,ir2,irflip,colltype,imerge;
 	double r,sigmatot;
@@ -67,7 +67,7 @@ int CB3D::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,vector<doub
 		imerge+=1;
 		sigmatot+=dsigma_merge[imerge];
 		if(merge==NULL){
-			sprintf(message,"In CB3D::Collide_Merge, merge is NULL??, sigmatot/sigma_merge=%g\n",sigmatot/sigma_merge);
+			sprintf(message,"In CMSU_Boltzmann::Collide_Merge, merge is NULL??, sigmatot/sigma_merge=%g\n",sigmatot/sigma_merge);
 			CLog::Fatal(message);
 		}
 	}
@@ -97,7 +97,7 @@ int CB3D::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,vector<doub
 	return colltype;
 }
 
-int CB3D::Collide_Annihilate(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Annihilate(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
 	bool bjtranslate=false;
 	int colltype;
 	if(BJORKEN && ((part1->cell->ieta==0 && part2->cell->ieta==2*NETA-1) || (part1->cell->ieta==2*NETA-1 && part2->cell->ieta==0))){
@@ -125,7 +125,7 @@ int CB3D::Collide_Annihilate(CPart *part1,CPart *part2,int &nproducts,array<CPar
 }
 
 // warning Inelastic Scattering NEEDS to be tested
-int CB3D::Collide_Inelastic(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Inelastic(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
 	sprintf(message,"INELASTIC IS UNTESTED!!!!\n");
 	CLog::Fatal(message);
 	const int NWMAX=5000;
@@ -234,7 +234,7 @@ int CB3D::Collide_Inelastic(CPart *part1,CPart *part2,int &nproducts,array<CPart
 
 
 /*
-int CB3D::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product,double pibsquared){
+int CMSU_Boltzmann::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product,double pibsquared){
 	CPart *part3=NULL,*part4=NULL;
 	const double g[4]={1,-1,-1,-1};
 	double sigma=0.0,sigma_annihilation,Gamma,G,MR,M,b,q2=0.0,q3,q4,qR2;
@@ -410,7 +410,7 @@ int CB3D::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &prod
 				}
 				iw+=1;
 				if(iw==NWMAX){
-					sprintf(message,"MUST INCREASE NWMAX in int CB3D::Collide\n");
+					sprintf(message,"MUST INCREASE NWMAX in int CMSU_Boltzmann::Collide\n");
 					CLog::Fatal(message);
 				}
 				inel++;

@@ -7,14 +7,14 @@ void CAction::PerformDecay(){
 	CPart *mother,*dptr;
 	CPartMap::iterator ppos;
 	int ibody,nbodies;
-	double mtot,mt,etamax=b3d->ETAMAX,mothermass;
+	double mtot,mt,etamax=boltzmann->ETAMAX,mothermass;
 	double deleta;
 	ppos=partmap.begin();
 	mother=ppos->second;
-	b3d->GetDeadParts(product);
+	boltzmann->GetDeadParts(product);
 
 	mothermass=mother->GetMass();
-	if(mother->cell!=NULL && mother->cell!=mother->FindCell() && tau<b3d->TAUCOLLMAX){
+	if(mother->cell!=NULL && mother->cell!=mother->FindCell() && tau<boltzmann->TAUCOLLMAX){
 		mother->CheckRapidity();
 		mother->cell->Print();
 		mother->FindCell()->Print();
@@ -22,8 +22,8 @@ void CAction::PerformDecay(){
 		sprintf(message,"Cells don't match for decaying mother\n");
 		CLog::Fatal(message);
 	}
-	if(tau>b3d->TAUCOLLMAX || mother->cell==NULL){
-		while(b3d->BJORKEN && (mother->eta<-etamax || mother->eta>etamax)){
+	if(tau>boltzmann->TAUCOLLMAX || mother->cell==NULL){
+		while(boltzmann->BJORKEN && (mother->eta<-etamax || mother->eta>etamax)){
 			if(mother->eta<-etamax) deleta=2.0*etamax*ceil((-etamax-mother->eta)/(2.0*etamax));
 			if(mother->eta>etamax) deleta=-2.0*etamax*ceil((mother->eta-etamax)/(2.0*etamax));
 			mother->eta+=deleta;
@@ -57,7 +57,7 @@ void CAction::PerformDecay(){
 		product[ibody]->resinfo=daughterresinfo[ibody];
 	}
 	
-	b3d->Decay(mother,nbodies,product);
+	boltzmann->Decay(mother,nbodies,product);
 	
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -68,12 +68,12 @@ void CAction::PerformDecay(){
 		dptr->balanceID=mother->balanceID;
 		dptr->nscatt=0;
 		dptr->tau_lastint=tau;
-		dptr->actionmother=b3d->nactions;
+		dptr->actionmother=boltzmann->nactions;
 		dptr->ChangeCell(dptr->FindCell());
-		if(dptr->currentmap!=&(b3d->PartMap))
-			dptr->ChangeMap(&(b3d->PartMap));
+		if(dptr->currentmap!=&(boltzmann->PartMap))
+			dptr->ChangeMap(&(boltzmann->PartMap));
 		dptr->FindActions();
 	}
 	mother->Kill();
-	b3d->ndecay+=1;
+	boltzmann->ndecay+=1;
 }

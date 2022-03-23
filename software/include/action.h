@@ -1,12 +1,12 @@
 #ifndef __B3D_ACTION_H__
 #define __B3D_ACTION_H__
 
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "cell.h"
 #include "resonances.h"
 
-//!An action in the CB3D model.
+//!An action in the CMSU_Boltzmann model.
 /*!
 \version 1.0
 \author Scott Pratt
@@ -14,7 +14,7 @@
 
 This class handles any actions that the model takes during execution. Examples of "actions" that the model takes are a resonance decaying, a particle crossing a cell boundary, a collision, new particles being generated, etc. In this way, a complex system of interacting particles is reduced to a scheduled list of actions. Scheduling is handled using a C++ map container of CAction objects, keyed by the boost-invariant time tau (\f$\tau\f$) at which they are scheduled to occur. Note that this map is revised consistently, as future actions often change dramatically as a result of the current action.
 
-Actions are allocated and are moved from the map of future actions (CB3D::ActionMap) to the list of completed actions (CB3D::DeadActionMap) once they have been performed.
+Actions are allocated and are moved from the map of future actions (CMSU_Boltzmann::ActionMap) to the list of completed actions (CMSU_Boltzmann::DeadActionMap) once they have been performed.
 */
 class CAction{
 public:
@@ -47,7 +47,7 @@ public:
 	CAction(int keyset);
 	~CAction();
 
-	static CB3D *b3d;
+	static CMSU_Boltzmann *boltzmann;
 	static char *message;
 
 	CActionMap::iterator GetPos(CActionMap *actionmap);

@@ -9,7 +9,7 @@ using namespace std;
 //using namespace boost::math;
 
 CSampler* CResList::sampler=NULL;
-CB3D* CResList::b3d=NULL;
+CMSU_Boltzmann* CResList::boltzmann=NULL;
 
 CResList::CResList(CparameterMap* parmap_in){
 	parmap=parmap_in;

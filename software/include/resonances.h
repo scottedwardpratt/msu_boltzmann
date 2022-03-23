@@ -104,7 +104,7 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	vector<double> densityf,maxweightf;
 	Eigen::Matrix3d chif,chiinvf;
 	//double triangle(double m0,double m1,double m2);
-	static CB3D *b3d;
+	static CMSU_Boltzmann *boltzmann;
 	static CBalance *cb;
 	static CSampler *sampler;
 

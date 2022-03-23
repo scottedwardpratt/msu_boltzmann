@@ -1,8 +1,8 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
-#include "b3d.h"
+#include "boltzmann.h"
 //#include "hist.h"
 #include "pow.h"
 #include "part.h"
@@ -14,10 +14,10 @@
 #include "hyper.h"
 #include "action.h"
 
-CB3D::CB3D(){
+CMSU_Boltzmann::CMSU_Boltzmann(){
 };
 
-CB3D::CB3D(string run_name_set){
+CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	run_name=run_name_set;
 	string parsfilename,dirname;
 	dirname="model_output/"+run_name;
@@ -38,8 +38,8 @@ CB3D::CB3D(string run_name_set){
 	}
 	ibalmax=0;
 	npartstot=nactionstot=0;
-	CResList::b3d=this;
-	CPart::b3d=this;
+	CResList::boltzmann=this;
+	CPart::boltzmann=this;
 	tau=0.0;
 	chitotH.setZero();
 	chitotQ.setZero();
@@ -49,24 +49,24 @@ CB3D::CB3D(string run_name_set){
 	ActionMap.clear();
 	DeadActionMap.clear();
 	randy=new CRandy(-1234);
-	CAction::b3d=this;
-	CPart::b3d=this;
-	CB3DCell::b3d=this;
+	CAction::boltzmann=this;
+	CPart::boltzmann=this;
+	CMSU_BoltzmannCell::boltzmann=this;
 	oscarfile=NULL;
 	reslist=new CResList(&parmap);
 	sampler=new CSampler(this);
 	decay_nbody=new CDecay_NBody(randy);
 }
 
-void CB3D::CopyParMapPars(){
+void CMSU_Boltzmann::CopyParMapPars(){
 	NACTIONSMAX=parmap.getI("B3D_NACTIONSMAX",100000);
 	NPARTSMAX=parmap.getI("B3D_NPARTSMAX",200000);
 	TAUCOLLMAX=parmap.getD("B3D_TAUCOLLMAX",50.0);
 	DENSWRITE=parmap.getB("B3D_DENSWRITE",false);
 	DENSWRITE_NTAU=parmap.getI("B3D_DENSWRITE_NTAU",20);
 	DENSWRITE_DELTAU=parmap.getD("B3D_DENSWRITE_DELTAU",1.0);
-	input_dataroot=parmap.getS("B3D_INPUT_DATAROOT","udsdata/b3d");
-	output_dataroot=parmap.getS("B3D_OUTPUT_DATAROOT","udsdata/b3d");
+	input_dataroot=parmap.getS("B3D_INPUT_DATAROOT","udsdata/boltzmann");
+	output_dataroot=parmap.getS("B3D_OUTPUT_DATAROOT","udsdata/boltzmann");
 	NSAMPLE=parmap.getI("B3D_NSAMPLE",1);
 	NSAMPLE_UDS2BAL=parmap.getI("NSAMPLE_UDS2BAL",1);
 	ERROR_PRINT=parmap.getB("B3D_ERROR_PRINT",true);
@@ -107,12 +107,12 @@ void CB3D::CopyParMapPars(){
 	BALANCE_CALC=parmap.getB("B3D_BALANCE_CALC",false);
 }
 
-void CB3D::InitCascade(){
+void CMSU_Boltzmann::InitCascade(){
 	// First initialize cells
 	int ix,iy,ieta,jx,jy,jeta,iitau,imax;
 	double xmin,xmax,ymin,ymax,etamin,etamax;
-	CB3DCell *c;
-	CInelasticList::b3d=this;
+	CMSU_BoltzmannCell *c;
+	CInelasticList::boltzmann=this;
 	CInelasticList::UseFile = false;
 	CInelasticList::UseInelasticArray = false;
 	if(INELASTIC)
@@ -130,7 +130,7 @@ void CB3D::InitCascade(){
 			for(ieta=0;ieta<2*NETA;ieta++){
 				etamin=-ETAMAX+DETA*ieta;
 				etamax=etamin+DETA;
-				cell[ix][iy][ieta]=new CB3DCell(xmin,xmax,ymin,ymax,etamin,etamax);
+				cell[ix][iy][ieta]=new CMSU_BoltzmannCell(xmin,xmax,ymin,ymax,etamin,etamax);
 			}
 		}
 	}
@@ -204,7 +204,7 @@ void CB3D::InitCascade(){
 	}
 }
 
-void CB3D::SetQualifier(string qualifier_set){
+void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
 	string command="mkdir -p model_output/"+run_name+"/"+qualifier;
 	system(command.c_str());
@@ -220,7 +220,7 @@ void CB3D::SetQualifier(string qualifier_set){
 	oscarfilename="model_output/"+run_name+"/"+qualifier+"/oscar.txt";
 }
 
-void CB3D::Reset(){
+void CMSU_Boltzmann::Reset(){
 	int iitau,ntau;
 	double taucalc;
 	KillAllParts();
@@ -238,7 +238,7 @@ void CB3D::Reset(){
 	}
 }
 
-CB3D::~CB3D(){
+CMSU_Boltzmann::~CMSU_Boltzmann(){
 	if(oscarfile!=NULL)
 		fclose(oscarfile);
 }

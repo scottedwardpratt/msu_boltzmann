@@ -3,7 +3,7 @@
 #include "resonances.h"
 #include "randy.h"
 #include "misc.h"
-#include "b3d.h"
+#include "boltzmann.h"
 #include "sampler.h"
 
 using namespace std;
@@ -12,7 +12,7 @@ void CHyperElement::GetP(CResInfo *resinfo,FourVector &p,double &mass,double mw)
 	bool VISCOUSCORRECTIONS=true;
 	CResList *reslist=resinfo->reslist;
 	bool reflect;
-	CRandy *randy=(reslist->b3d)->randy;
+	CRandy *randy=(reslist->boltzmann)->randy;
 	double pdotdOmega,nhatnorm,nhatdotp,wreflect;
 	double pitilde[4][4];
 	FourVector dOmegaprime,dOmega;

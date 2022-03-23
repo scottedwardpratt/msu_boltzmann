@@ -22,7 +22,7 @@ public:
 	CPart();
 	CPart(int keyset);
 	~CPart();
-	CB3DCell *cell,*nextcell;
+	CMSU_BoltzmannCell *cell,*nextcell;
 	double tau0,tau_lastint,tauexit,taudecay;
 	double y,eta,msquared,weight;
 	int badmother;
@@ -33,7 +33,7 @@ public:
 	int actionmother; //refers to action from which particle was created
 	CResInfo *resinfo;
 	bool active;
-	CPartMap *currentmap; // PartList for a Cell, or b3d->DeadPartList
+	CPartMap *currentmap; // PartList for a Cell, or boltzmann->DeadPartList
 	
 	void InitBalance(int ID,double x,double y,double tau,double eta,double px,double py,double mass,double rapidity,double bweight,int balanceid);
 	void Propagate(double tau);
@@ -72,9 +72,9 @@ public:
 	// These are the actions involving these particles
 	CActionMap actionmap;
 
-	CB3DCell *FindCell();
+	CMSU_BoltzmannCell *FindCell();
 
-	static CB3D *b3d;
+	static CMSU_Boltzmann *boltzmann;
 	static CBalance *cb;
 	static char *message;
 	double GetEta(double tau);
@@ -88,7 +88,7 @@ public:
 
 	CPartMap::iterator GetPos(CPartMap *pmap);
 	CPartMap::iterator DeleteFromMap(CPartMap *partmap);
-	void ChangeCell(CB3DCell *newcell);
+	void ChangeCell(CMSU_BoltzmannCell *newcell);
 	void RemoveFromCell();
 
 	void ChangePartMap(CPartMap *newmap);
@@ -97,7 +97,7 @@ public:
 	void AddToMap(CPartMap::iterator guess,CPartMap *newmap);
 };
 
-class CB3DBinaryPartInfo{
+class CMSU_BoltzmannBinaryPartInfo{
 public:
 	int ID;
 	double tau,x,y,eta;
@@ -108,7 +108,7 @@ public:
 	}
 };
 
-class CB3DBinaryBalancePartInfo{
+class CMSU_BoltzmannBinaryBalancePartInfo{
 public:
 	int ID,balanceID;
 	double px,py,rapidity,bweight;

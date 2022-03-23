@@ -7,9 +7,9 @@
 
 using namespace std;
 
-CSampler::CSampler(CB3D *b3dset){
-	b3d=b3dset;
-	parmap=&(b3d->parmap);
+CSampler::CSampler(CMSU_Boltzmann *boltzmannset){
+	boltzmann=boltzmannset;
+	parmap=&(boltzmann->parmap);
 	xyfptr=NULL;
 #ifdef __SAMPLER_WRITE_XY__
 	xyfptr=fopen("xy.txt","w");
@@ -18,17 +18,17 @@ CSampler::CSampler(CB3D *b3dset){
 	TRIANGLE_FORMAT=false;
 	//CvolumeElement2D::sampler=this;
 	CHyperElement::sampler=this;
-	randy=b3d->randy;
-	reslist=b3d->reslist;
+	randy=boltzmann->randy;
+	reslist=boltzmann->reslist;
 	cummulative_N=0.0;
 	nevents=0;
 	cummulative_random=-log(randy->ran());
-	Tf=b3d->parmap.getD("FREEZEOUT_TEMP",155);
-	ETAMAX=b3d->parmap.getD("B3D_ETAMAX",1.0);
-	NBOSE=b3d->parmap.getI("B3D_NBOSE",1);
-	NSAMPLE=b3d->parmap.getI("B3D_NSAMPLE",1);
-	TRIANGLE_FORMAT=b3d->parmap.getB("SAMPLER_TRIANGLE_FORMAT",false);
-	OSU_FORMAT=b3d->parmap.getB("SAMPLER_OSU_FORMAT",true);
+	Tf=boltzmann->parmap.getD("FREEZEOUT_TEMP",155);
+	ETAMAX=boltzmann->parmap.getD("B3D_ETAMAX",1.0);
+	NBOSE=boltzmann->parmap.getI("B3D_NBOSE",1);
+	NSAMPLE=boltzmann->parmap.getI("B3D_NSAMPLE",1);
+	TRIANGLE_FORMAT=boltzmann->parmap.getB("SAMPLER_TRIANGLE_FORMAT",false);
+	OSU_FORMAT=boltzmann->parmap.getB("SAMPLER_OSU_FORMAT",true);
 	densityf.clear();
 	maxweightf.clear();
 	densityf.resize(reslist->resmap.size());
@@ -108,10 +108,10 @@ void CSampler::ReadHyperElements2D_OSU(){
 	char dummy[300];
 	hyper.clear();
 	nelements=0;
-	b3d->TotalVolume=0.0;
+	boltzmann->TotalVolume=0.0;
 	bool oldhyperformat=parmap->getB("B3D_OLDHYPERFORMAT",false);
 	string hyperdata_home=parmap->getS("B3D_HYPERDATA_HOME","hyperdata");
-	filename=hyperdata_home+"/"+b3d->qualifier+"/hyper.txt";
+	filename=hyperdata_home+"/"+boltzmann->qualifier+"/hyper.txt";
 	sprintf(message,"opening %s\n",filename.c_str());
 	CLog::Info(message);
 	FILE *fptr=fopen(filename.c_str(),"r");
@@ -121,7 +121,7 @@ void CSampler::ReadHyperElements2D_OSU(){
 		if(int(hyper.size())==ielement)
 			hyper.resize(hyper.size()+initarraysize);
 		elem=&hyper[ielement];
-		elem->T=b3d->parmap.getD("FREEZEOUT_TEMP",155);
+		elem->T=boltzmann->parmap.getD("FREEZEOUT_TEMP",155);
 		if(oldhyperformat){
 			fscanf(fptr,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 			&tau,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&dummy1,&dummy2,&pitildexx,&pitildeyy,&pitildexy);
@@ -144,10 +144,10 @@ void CSampler::ReadHyperElements2D_OSU(){
 				CLog::Fatal(message);
 			}
 			elem->tau=tau;
-			elem->dOmega0=dOmega0*2.0*b3d->ETAMAX;
-			elem->dOmegaX=dOmegaX*2.0*b3d->ETAMAX;
-			elem->dOmegaY=dOmegaY*2.0*b3d->ETAMAX;
-			elem->udotdOmega=udotdOmega*2.0*b3d->ETAMAX;
+			elem->dOmega0=dOmega0*2.0*boltzmann->ETAMAX;
+			elem->dOmegaX=dOmegaX*2.0*boltzmann->ETAMAX;
+			elem->dOmegaY=dOmegaY*2.0*boltzmann->ETAMAX;
+			elem->udotdOmega=udotdOmega*2.0*boltzmann->ETAMAX;
 		
 			elem->x=x;
 			elem->y=y;
@@ -171,8 +171,8 @@ void CSampler::ReadHyperElements2D_OSU(){
 				CLog::Fatal(message);
 			}
 			ielement+=1;
-			b3d->TotalVolume+=udotdOmega;
-			if(b3d->MUTCALC){
+			boltzmann->TotalVolume+=udotdOmega;
+			if(boltzmann->MUTCALC){
 				int ix,iy;
 				CMuTInfo::GetIxIy(elem->x,elem->y,ix,iy);
 				if(ix<CMuTInfo::NXY && iy<CMuTInfo::NXY){
@@ -184,6 +184,6 @@ void CSampler::ReadHyperElements2D_OSU(){
 	}
 	nelements=ielement;
 	sprintf(message,"Exiting ReadHyperElements2D_OSU() happily, TotalVolume=%g\n",
-		b3d->TotalVolume);
+		boltzmann->TotalVolume);
 	CLog::Info(message);
 }

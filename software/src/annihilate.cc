@@ -1,4 +1,4 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "cell.h"
 #include "resonances.h"
@@ -6,13 +6,13 @@
 #include "constants.h"
 #include "misc.h"
 
-int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
+int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
 	CPart *dptr;
 	int i,alpha,ibody,netq,nets,nK0bar,nK0,nKplus,nKminus,npi0,npiplus,npiminus;
 	int nu,nubar,nd,ndbar,ns,nsbar,nbodies=5;
 	FourVector u;
 	double etabar,rbar[4]={0.0};
-	CB3DCell *newcell;
+	CMSU_BoltzmannCell *newcell;
 	FourVector P,pprime;
 	//
 	ndaughters=nbodies;
@@ -173,7 +173,7 @@ int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &
 }
 
 /*
-int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
+int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
 	CPart *dptr;
 	int netq,nets,nK0bar,nK0,nKplus,nKminus,npi0,npiplus,npiminus,npions,nkaons,npaircheck,qpions;
 	FourVector *pa,*pb,pc,u;
@@ -184,7 +184,7 @@ int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &
 	double MM,P[4]={0.0},PP[4],T;
 	const double g[4]={1.0,-1.0,-1.0,-1.0};
 	CPartMap::iterator ppos;
-	CB3DCell *newcell;
+	CMSU_BoltzmannCell *newcell;
 	ndaughters=0;
 	if(BJORKEN && fabs(part1->eta)>ETAMAX)
 		bjtranslate=true;
@@ -393,7 +393,7 @@ int CB3D::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &
 */
 
 
-double CB3D::GetAnnihilationSigma(CPart *part1,CPart *part2){
+double CMSU_Boltzmann::GetAnnihilationSigma(CPart *part1,CPart *part2){
 	const double g[4]={1,-1,-1,-1};
 	double Plab,p1dotp2,triangle,sigma_annihilation,rstrange,m1squared,m2squared;
 	int alpha;
@@ -417,7 +417,7 @@ double CB3D::GetAnnihilationSigma(CPart *part1,CPart *part2){
 	return sigma_annihilation;
 }
 
-bool CB3D::CancelAnnihilation(CPart *part1,CPart *part2){
+bool CMSU_Boltzmann::CancelAnnihilation(CPart *part1,CPart *part2){
 	double mupi,muK,muB,muQtot,betaEtot,netK,netpi;
 	double taumin1,taumin2;
 	double betaB,betameson,EB,Emeson;

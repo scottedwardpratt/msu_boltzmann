@@ -7,12 +7,12 @@ void CAction::PerformActivate(){
 	ppos=partmap.begin();
 	part=ppos->second;
 	part->active=true;
-	part->ChangeMap(&(b3d->PartMap));
+	part->ChangeMap(&(boltzmann->PartMap));
 	part->ChangeCell(part->FindCell());
 	part->CyclicReset();
 	part->tau_lastint=tau;
-	part->actionmother=b3d->nactions;
+	part->actionmother=boltzmann->nactions;
 	part->FindActions();
-	b3d->nactivate+=1;
+	boltzmann->nactivate+=1;
 	part->SetMass();
 }

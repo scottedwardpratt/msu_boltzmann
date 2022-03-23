@@ -1,10 +1,10 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "cell.h"
 #include "resonances.h"
 #include "constants.h"
 
-bool CB3D::CheckKinematics(CPart *part1,CPart *part2,
+bool CMSU_Boltzmann::CheckKinematics(CPart *part1,CPart *part2,
 	double &Minv2,double &pibsquared,double &taucoll){
 	
 	double p1dotp2=0.0,m1squared,m2squared,rsquared=0.0;
@@ -61,7 +61,7 @@ bool CB3D::CheckKinematics(CPart *part1,CPart *part2,
 	return possible;
 }
 
-double CB3D::GetSigma(CPart *part1,CPart *part2,double Minv2,
+double CMSU_Boltzmann::GetSigma(CPart *part1,CPart *part2,double Minv2,
 		double &sigma_scatter,double &sigma_merge,double &sigma_annihilation,double &sigma_inel,
 		vector<double> &dsigma_merge){
 	double sigmatot=0,MR,M,Gamma,b,jR,j1,j2,qR2,q2,q3,q4,tan2delta,G,dsigma;
@@ -118,7 +118,7 @@ double CB3D::GetSigma(CPart *part1,CPart *part2,double Minv2,
 	return sigmatot;
 }
 
-bool CB3D::FindCollision(CPart *part1,CPart *part2,double &taucoll){
+bool CMSU_Boltzmann::FindCollision(CPart *part1,CPart *part2,double &taucoll){
 	if((part1->balanceID>=0) && (part2->balanceID>=0)){
 		return false;
 	}
@@ -143,7 +143,7 @@ bool CB3D::FindCollision(CPart *part1,CPart *part2,double &taucoll){
 	return collide;
 }		
 
-void CB3D::FindAllCollisions(){
+void CMSU_Boltzmann::FindAllCollisions(){
 	double taucoll;
 	CPartMap::iterator ppos1,ppos2;
 	CPart *part1,*part2;

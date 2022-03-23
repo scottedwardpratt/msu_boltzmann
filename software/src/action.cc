@@ -1,7 +1,7 @@
-#include  "b3d.h"
+#include  "boltzmann.h"
 #include "action.h"
 
-CB3D *CAction::b3d=NULL;
+CMSU_Boltzmann *CAction::boltzmann=NULL;
 char *CAction::message=new char[500];
 
 CAction::CAction(){
@@ -12,10 +12,10 @@ CAction::CAction(int keyset){
 	listid=key;
 	tau=0.0;
 	type=-1;
-	currentmap=&b3d->DeadActionMap;
-	b3d->DeadActionMap.insert(CActionPair(key,this));
+	currentmap=&boltzmann->DeadActionMap;
+	boltzmann->DeadActionMap.insert(CActionPair(key,this));
 	partmap.clear();
-	b3d->nactionstot+=1;
+	boltzmann->nactionstot+=1;
 }
 
 // type=0(creation) 1(decay) 2(collision) 3(VizWrite) 4(DensCalc)
@@ -39,51 +39,51 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 
 void CAction::MoveToActionMap(){
 	CActionMap::iterator epos,eepos;
-	if(currentmap==&b3d->ActionMap){
+	if(currentmap==&boltzmann->ActionMap){
 		sprintf(message,"trying to move action to ActionMap even though action is already in ActionMap\n");
 		sprintf(message,"%sWrong current map\n",message);
 		CLog::Fatal(message);
 	}
-	if(currentmap==&b3d->DeadActionMap){
+	if(currentmap==&boltzmann->DeadActionMap){
 		epos=GetPos(currentmap);
 		if(epos!=currentmap->end()){
-			b3d->DeadActionMap.erase(epos);
+			boltzmann->DeadActionMap.erase(epos);
 			partmap.clear();
 		}
 		else{
 			sprintf(message,"cannot find epos for action in DeadActionMap!!!\n");
-			sprintf(message,"%sDeadActionMap.size=%d\n",message,int(b3d->DeadActionMap.size()));
+			sprintf(message,"%sDeadActionMap.size=%d\n",message,int(boltzmann->DeadActionMap.size()));
 			CLog::Fatal(message);
 		}
 		key=tau;
-		AddToMap(&b3d->ActionMap);
+		AddToMap(&boltzmann->ActionMap);
 	}
 }
 
 void CAction::Kill(){
 	CPart *part;
 	CPartMap::iterator ppos;
-	if(currentmap==&b3d->ActionMap){
+	if(currentmap==&boltzmann->ActionMap){
 		CActionMap::iterator eepos,epos=GetPos(currentmap);
 		if(epos==currentmap->end()){
 			sprintf(message,"in CAction::Kill(), not in map\n");
-			sprintf(message,"%sb3d->ActionMap.size()=%d\n",message,int(b3d->ActionMap.size()));
+			sprintf(message,"%sboltzmann->ActionMap.size()=%d\n",message,int(boltzmann->ActionMap.size()));
 			CLog::Info(message);
 			ppos=partmap.begin();
 			part=ppos->second;
 			part->Print();
-			epos=GetPos(&b3d->DeadActionMap);
-			if(epos!=b3d->DeadActionMap.end()){
+			epos=GetPos(&boltzmann->DeadActionMap);
+			if(epos!=boltzmann->DeadActionMap.end()){
 				sprintf(message,"found action in DeadActionMap\n");
 			}
 			sprintf(message,"%snot in DeadActionMap either\n",message);
 			CLog::Fatal(message);
 		}
 		currentmap->erase(epos);
-		b3d->nactionkills+=1;
+		boltzmann->nactionkills+=1;
 		key=0;
-		AddToMap(b3d->DeadActionMap.end(),&b3d->DeadActionMap);
-		//AddToMap(&b3d->DeadActionMap);
+		AddToMap(boltzmann->DeadActionMap.end(),&boltzmann->DeadActionMap);
+		//AddToMap(&boltzmann->DeadActionMap);
 		ppos=partmap.begin();
 		while(ppos!=partmap.end()){
 			part=ppos->second;
@@ -133,8 +133,8 @@ void CAction::CheckPartList(){
 	ppos=partmap.begin();
 	while(ppos!=partmap.end()){
 		part=ppos->second;
-		ppos2=part->GetPos(&(b3d->PartMap));
-		if(ppos2==b3d->PartMap.end()){
+		ppos2=part->GetPos(&(boltzmann->PartMap));
+		if(ppos2==boltzmann->PartMap.end()){
 			part->Print();
 			sprintf(message,"%s____________ CAction::CheckPartList FATAL, action type=%d ________________\n",message,type);
 			sprintf(message,"%siterator not in expected pmap\n",message);
@@ -146,17 +146,17 @@ void CAction::CheckPartList(){
 
 void CAction::PerformDensCalc(){
 	int itau;
-	itau=lrint(floor((tau-0.001)/b3d->DENSWRITE_DELTAU));
-	if(itau>=b3d->DENSWRITE_NTAU){
+	itau=lrint(floor((tau-0.001)/boltzmann->DENSWRITE_DELTAU));
+	if(itau>=boltzmann->DENSWRITE_NTAU){
 		sprintf(message,"trying to perform CAction::DensCalc() for itau>=DENSWRITE_NTAU, =%d",itau);
 		CLog::Fatal(message);
 	}
-	CB3DCell *cell;
+	CMSU_BoltzmannCell *cell;
 	int ix,iy,ieta;
-	for(ix=0;ix<2*b3d->NXY;ix++){
-		for(iy=0;iy<2*b3d->NXY;iy++){
-			for(ieta=0;ieta<2*b3d->NETA;ieta++){
-				cell=b3d->cell[ix][iy][ieta];
+	for(ix=0;ix<2*boltzmann->NXY;ix++){
+		for(iy=0;iy<2*boltzmann->NXY;iy++){
+			for(ieta=0;ieta<2*boltzmann->NETA;ieta++){
+				cell=boltzmann->cell[ix][iy][ieta];
 				cell->dens[itau]+=cell->partmap.size();
 			}
 		}

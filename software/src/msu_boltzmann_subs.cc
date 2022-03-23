@@ -1,4 +1,4 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "misc.h"
 #include "resonances.h"
@@ -7,7 +7,7 @@
 #include "randy.h"
 #include "action.h"
 
-void CB3D::WriteAnnihilationData(){
+void CMSU_Boltzmann::WriteAnnihilationData(){
 	if(BARYON_ANNIHILATION){
 		double total=0.0;
 		int iitau,imax=lrint(TAUCOLLMAX);
@@ -21,7 +21,7 @@ void CB3D::WriteAnnihilationData(){
 	}
 }
 
-void CB3D::PerformAllActions(){
+void CMSU_Boltzmann::PerformAllActions(){
 	int iitau;
 	if(DENSWRITE){
 		for(iitau=0;iitau<DENSWRITE_NTAU;iitau++){
@@ -42,7 +42,7 @@ void CB3D::PerformAllActions(){
 	}
 }
 
-void CB3D::KillAllActions(){
+void CMSU_Boltzmann::KillAllActions(){
 	CAction *action;
 	CActionMap::iterator epos=ActionMap.begin();
 	while(epos!=ActionMap.end()){
@@ -53,7 +53,7 @@ void CB3D::KillAllActions(){
 	nactions=0;
 }
 
-void CB3D::KillAllParts(){
+void CMSU_Boltzmann::KillAllParts(){
 	CPart *part;
 	CPartMap::iterator ppos;
 	
@@ -106,7 +106,7 @@ void CB3D::KillAllParts(){
 	}
 }
 
-void CB3D::PrintActionMap(CActionMap *actionmap){
+void CMSU_Boltzmann::PrintActionMap(CActionMap *actionmap){
 	CActionMap::iterator epos;
 	CAction *action;
 	sprintf(message,"_________________ ACTIONMAP %d actions _________________________\n",int(actionmap->size()));
@@ -118,7 +118,7 @@ void CB3D::PrintActionMap(CActionMap *actionmap){
 }
 
 /*
-void CB3D::FindAllCollisions(){
+void CMSU_Boltzmann::FindAllCollisions(){
 	double taucoll,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel;
 	CPartMap::iterator ppos1,ppos2;
 	CPart *part1,*part2;
@@ -140,7 +140,7 @@ void CB3D::FindAllCollisions(){
 }
 */
 
-void CB3D::PrintPartList(){
+void CMSU_Boltzmann::PrintPartList(){
 	CPartMap::iterator ppos2,ppos1=PartMap.begin();
 	while(ppos1!=PartMap.end()){
 		sprintf(message,"%d ",ppos1->second->listid);
@@ -155,7 +155,7 @@ void CB3D::PrintPartList(){
 	CLog::Info(message);
 }
 
-void CB3D::ListFutureCollisions(){
+void CMSU_Boltzmann::ListFutureCollisions(){
 	CActionMap::iterator epos=ActionMap.begin();
 	CAction *action;
 	CPartMap::iterator p1,p2;
@@ -173,9 +173,9 @@ void CB3D::ListFutureCollisions(){
 }
 
 // Note part2 is fake and part1 is real
-void CB3D::SplitPart(CPart *part1,CPart *part2){
+void CMSU_Boltzmann::SplitPart(CPart *part1,CPart *part2){
 	double oldeta,mt,g1,g2;
-	CB3DCell *ccell;
+	CMSU_BoltzmannCell *ccell;
 	part2->Copy(part1); // does not change reality or weights
 	if(BJORKEN){
 		oldeta=part1->eta;
@@ -212,7 +212,7 @@ void CB3D::SplitPart(CPart *part1,CPart *part2){
 		part2->ChangeMap(&PartMap);
 }
 
-CPart* CB3D::GetDeadPart(){
+CPart* CMSU_Boltzmann::GetDeadPart(){
 	if(DeadPartMap.size()==0){
 		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
 			new CPart(npartstot);
@@ -223,7 +223,7 @@ CPart* CB3D::GetDeadPart(){
 	return DeadPartMap.begin()->second;
 }
 
-void CB3D::GetDeadParts(CPart *&part1,CPart *&part2){
+void CMSU_Boltzmann::GetDeadParts(CPart *&part1,CPart *&part2){
 	int ipart;
 	while(DeadPartMap.size()<2){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
@@ -237,7 +237,7 @@ void CB3D::GetDeadParts(CPart *&part1,CPart *&part2){
 	part2=ppos->second;
 }
 
-void CB3D::GetDeadParts(array<CPart*,5> &product){
+void CMSU_Boltzmann::GetDeadParts(array<CPart*,5> &product){
 	int ipart;
 	while(DeadPartMap.size()<5){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
@@ -252,7 +252,7 @@ void CB3D::GetDeadParts(array<CPart*,5> &product){
 	}
 }
 
-CAction* CB3D::GetDeadAction(){
+CAction* CMSU_Boltzmann::GetDeadAction(){
 	if(DeadActionMap.size()==0){
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
 			new CAction(nactionstot);		
@@ -262,7 +262,7 @@ CAction* CB3D::GetDeadAction(){
 	return DeadActionMap.begin()->second;
 }
 
-void CB3D::CheckPartMap(){
+void CMSU_Boltzmann::CheckPartMap(){
 	CPartMap::iterator iter;
 	CPart *part;
 	for(iter=PartMap.begin();iter!=PartMap.end();iter++){
@@ -275,7 +275,7 @@ void CB3D::CheckPartMap(){
 	}
 }
 
-int CB3D::CountBaryons(){
+int CMSU_Boltzmann::CountBaryons(){
 	CPartMap::iterator iter;
 	CPart *part;
 	nbaryons=0;
@@ -287,9 +287,9 @@ int CB3D::CountBaryons(){
 	return nbaryons;
 }
 
-void CB3D::InitMuTCalc(){
+void CMSU_Boltzmann::InitMuTCalc(){
 	int ix,iy,ntau;
-	CMuTInfo::b3d=this;
+	CMuTInfo::boltzmann=this;
 	CMuTInfo::NXY=parmap.getI("B3D_MUTCALC_NXY",24);
 	CMuTInfo::DXY=parmap.getD("B3D_MUTCalc_DXY",1.0);
 	CMuTInfo::NMINCALC=parmap.getD("B3D_MUTCALC_NMINCALC",5);
@@ -323,7 +323,7 @@ void CB3D::InitMuTCalc(){
 	CMuTInfo::massB[0]=939.0;
 }
 
-void CB3D::CalcMuTU(){
+void CMSU_Boltzmann::CalcMuTU(){
 	int ix,iy,iitau,ntau;
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 	for(iitau=0;iitau<ntau;iitau++){

@@ -10,7 +10,7 @@ using namespace std;
 \version 1.0
 \date March 2011
 
-This class stores information about inelastic scattering channels for collisons in the CB3D routine. It contains the resonance information for two exit particles, and is designed to be referenced by the net charge, strangeness, and baryon number of the combined particles.
+This class stores information about inelastic scattering channels for collisons in the CMSU_Boltzmann routine. It contains the resonance information for two exit particles, and is designed to be referenced by the net charge, strangeness, and baryon number of the combined particles.
 */
 class CInelasticInfo{
 public:
@@ -57,7 +57,7 @@ class CInelasticList{
 public:
 	//!Filename where inelastic data is stored.
 	string filename;
-	//!Number of resonances in CB3D class. Repetitive, but simpler.
+	//!Number of resonances in CMSU_Boltzmann class. Repetitive, but simpler.
 	int NResonances;
 	//!Constructor
 	CInelasticList();
@@ -85,7 +85,7 @@ public:
 	\param[in] res4 A CResInfo object corresponding to the second outgoing particle.
 	*/
 	bool AddToArrayCheck(CResInfo res1, CResInfo res2, CResInfo res3, CResInfo res4);
-	CparameterMap *parmap;	/*!< The parameter map for the given CB3D run. */
+	CparameterMap *parmap;	/*!< The parameter map for the given CMSU_Boltzmann run. */
 	//!A more detailed array of CInelasticInfo objects, designed to be referenced by CResInfo resonance number.
 	/*!
 	This is an optional array, dynamically allocated to be a NResonances by NResonances array of C++ list containers of CInelasticInfo objects. Similar to the MergeArray array in the CResList class, this is designed to be referenced by the resonance numbers of the incoming particles, and should (in theory) allow for completely individualized defining of exit channels. However, unlike the MergeArray, the sheer number of CInelasticInfo objects in the array mean that it is extremely computationally intensive to create and store the array. As such, this method is basically depreciated, and will be addressed in future revisions.
@@ -98,10 +98,10 @@ public:
 	This array stores all the inelastic scattering exit channels. The indices are in referenced in alphabetical order; \f$|b|\f$ (baryon number), \f$|q|\f$ (charge), \f$|s|\f$ (strangeness), \f$Sign(b)\f$ baryon sign, \f$Sign(q)\f$ charge sign, and \f$Sign(s)\f$ strangeness sign.
 	*/
 	list<CInelasticInfo> ThermalArray[3][5][7][2][2][2];
-	static CB3D *b3d;	/*!< A pointer to the CB3D object the list belongs to. */
+	static CMSU_Boltzmann *boltzmann;	/*!< A pointer to the CMSU_Boltzmann object the list belongs to. */
 	
-	static bool UseFile;	/*!< Determines whether or not to read in info from file. Set in CB3D constructor from parmap. */
-	static bool UseInelasticArray;	/*!< Determines whether or not to define InelasticArray. Set in CB3D constructor from parmap. */
+	static bool UseFile;	/*!< Determines whether or not to read in info from file. Set in CMSU_Boltzmann constructor from parmap. */
+	static bool UseInelasticArray;	/*!< Determines whether or not to define InelasticArray. Set in CMSU_Boltzmann constructor from parmap. */
 };
 
 #endif

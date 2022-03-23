@@ -1,11 +1,11 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "randy.h"
 #include "resonances.h"
 #include "part.h"
 #include "misc.h"
 #include "constants.h"
 
-void CB3D::Decay(CPart *mother,int &nbodies,array<CPart *,5> &daughter){
+void CMSU_Boltzmann::Decay(CPart *mother,int &nbodies,array<CPart *,5> &daughter){
 	int ibody,alpha;
 	double mtot;
 	CPart *dptr;

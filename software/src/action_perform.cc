@@ -4,32 +4,32 @@
 void CAction::Perform(){
 	CPartMap::iterator ppos;
 	CPart *part;
-	CB3DCell *cell;
+	CMSU_BoltzmannCell *cell;
 
 	//sprintf(message,"Performing Action of type %d\n",type);
 	//CLog::Info(message);
 
-	b3d->nactions+=1;
+	boltzmann->nactions+=1;
 	Kill();
-	b3d->tau=tau;
+	boltzmann->tau=tau;
 
 	for(ppos=partmap.begin();ppos!=partmap.end();++ppos){
 		part=ppos->second;
 		part->Propagate(tau);
-		if(part->currentmap != &(b3d->PartMap)){
+		if(part->currentmap != &(boltzmann->PartMap)){
 			sprintf(message,"wrong map for part in Action List\n");
 			CLog::Info(message);
 			part->Print();
 			part->active=true;
-			part->ChangeMap(&(b3d->PartMap));
+			part->ChangeMap(&(boltzmann->PartMap));
 			cell=part->FindCell();
 			if(part->cell!=cell){
 				part->ChangeCell(cell);
 			}
 		}
 	}
-	if(tau+1.0E-4<b3d->tau){
-		sprintf(message,"FATAL:: action earlier than tau!!!!, b3d->tau=%15.10e, action tau=%15.10e\n",b3d->tau,tau);
+	if(tau+1.0E-4<boltzmann->tau){
+		sprintf(message,"FATAL:: action earlier than tau!!!!, boltzmann->tau=%15.10e, action tau=%15.10e\n",boltzmann->tau,tau);
 		CLog::Fatal(message);
 	}
 	if(type==6){

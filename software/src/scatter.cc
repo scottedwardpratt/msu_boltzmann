@@ -1,4 +1,4 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "misc.h"
 #include "randy.h"
 #include "part.h"
@@ -13,7 +13,7 @@ converts the two incoming particles to outgoing particles and then scatters them
 elastically.
 */
 
-void CB3D::InelasticScatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4,CInelasticInfo inelinfo){
+void CMSU_Boltzmann::InelasticScatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4,CInelasticInfo inelinfo){
 	double m0squared,m3squared,m4squared,m0,mtot,cthet,sthet,phi,q;
 	FourVector *p3=&part3->p,*p4=&part4->p;
 	FourVector p0tot,u,pprime;
@@ -67,7 +67,7 @@ void CB3D::InelasticScatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4,
 Scatter: Elastically scatters two CPart objects with s-wave angular distribution
 */
 
-void CB3D::Scatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4){
+void CMSU_Boltzmann::Scatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4){
 	double roots=0.0;
 	double ctheta,stheta,phi,qmag,m1,m2;
 	FourVector ptot,u,q,qprime;
@@ -114,7 +114,7 @@ void CB3D::Scatter(CPart *part1,CPart *part2,CPart *part3,CPart *part4){
 /*
 If resonance can decay, A->B+C, then if B+C collide, this will merge B+C->A
 */
-bool CB3D::Merge(CPart *part1,CPart *part2,CPart *part3,CResInfo *resinfo){
+bool CMSU_Boltzmann::Merge(CPart *part1,CPart *part2,CPart *part3,CResInfo *resinfo){
 	int alpha;
 	double ptot[4],s;
 	FourVector *p1=&part1->p,*p2=&part2->p;

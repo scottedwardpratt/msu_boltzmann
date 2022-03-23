@@ -1,4 +1,4 @@
-#include "b3d.h"
+#include "boltzmann.h"
 #include "part.h"
 #include "resonances.h"
 #include "randy.h"
@@ -7,8 +7,8 @@
 
 using namespace std;
 
-double CB3D::WriteOSCAR(int ievent){
-	CB3DBinaryPartInfo bpart;
+double CMSU_Boltzmann::WriteOSCAR(int ievent){
+	CMSU_BoltzmannBinaryPartInfo bpart;
 	double dnchdy=0;
 	int ipart;
 	CPart *part;
@@ -24,7 +24,7 @@ double CB3D::WriteOSCAR(int ievent){
 			oscarfile=fopen(oscarfilename.c_str(),"w");
 			fprintf(oscarfile,":OSCAR1997a\n");
 			fprintf(oscarfile,"ipart -- id -- p[4] -- m -- x[4]\n");
-			fprintf(oscarfile,"b3d output\n");
+			fprintf(oscarfile,"boltzmann output\n");
 		}
 	}
 	if(BINARY_RW){
@@ -67,7 +67,7 @@ double CB3D::WriteOSCAR(int ievent){
 	return dnchdy/(2.0*ETAMAX);
 }
 
-void CB3D::ReadOSCARHeader(){
+void CMSU_Boltzmann::ReadOSCARHeader(){
 	int ndead=3,idead;
 	char dummy[200];
 	oscarfilename="model_output/"+run_name+"/"+qualifier+"/oscar.txt";
@@ -80,8 +80,8 @@ void CB3D::ReadOSCARHeader(){
 	}
 }
 
-int CB3D::ReadOSCAR(int ievent){
-	CB3DBinaryPartInfo bpart;
+int CMSU_Boltzmann::ReadOSCAR(int ievent){
+	CMSU_BoltzmannBinaryPartInfo bpart;
 	CResInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID;
@@ -135,8 +135,8 @@ int CB3D::ReadOSCAR(int ievent){
 	return nparts_read;
 }
 
-double CB3D::WriteBalanceParts(int ievent){
-	CB3DBinaryBalancePartInfo bpart;
+double CMSU_Boltzmann::WriteBalanceParts(int ievent){
+	CMSU_BoltzmannBinaryBalancePartInfo bpart;
 	double sigma=0;
 	int nsigma=0;
 	if(oscarfile==NULL){
@@ -146,7 +146,7 @@ double CB3D::WriteBalanceParts(int ievent){
 			oscarfile=fopen(oscarfilename.c_str(),"w");
 			fprintf(oscarfile,":OSCAR1997a\n");
 			fprintf(oscarfile,"ipart -- id -- p[4] -- m -- x[4]\n");
-			fprintf(oscarfile,"b3d output\n");
+			fprintf(oscarfile,"boltzmann output\n");
 		}
 	}
 	int nparts=PartMap.size();
@@ -196,8 +196,8 @@ double CB3D::WriteBalanceParts(int ievent){
 	return dnchdy/(2.0*ETAMAX);
 }
 
-int CB3D::ReadBalanceParts(int ievent){
-	CB3DBinaryBalancePartInfo bpart;
+int CMSU_Boltzmann::ReadBalanceParts(int ievent){
+	CMSU_BoltzmannBinaryBalancePartInfo bpart;
 	CResInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID,balanceID;
@@ -253,7 +253,7 @@ int CB3D::ReadBalanceParts(int ievent){
 	return nparts_read;
 }
 
-void CB3D::WriteDens(){
+void CMSU_Boltzmann::WriteDens(){
 	string densfilename="model_output/"+run_name+"/"+qualifier+"/dens.txt";
 	FILE *densfile = fopen(densfilename.c_str(),"w");
 	fprintf(densfile,"#ix iy  dens[itau=0] dens[itau=1]...\n");
@@ -275,7 +275,7 @@ void CB3D::WriteDens(){
 	fclose(densfile);
 }
 
-void CB3D::WriteMuTInfo(){
+void CMSU_Boltzmann::WriteMuTInfo(){
 	char dummy[500];
 	int ix,iy,iitau,ntau,btype;
 	double tau_print;
@@ -361,7 +361,7 @@ void CB3D::WriteMuTInfo(){
 	}
 }
 
-void CB3D::ReadMuTInfo(){
+void CMSU_Boltzmann::ReadMuTInfo(){
 	char dummy[500];
 	int ix,iy,iitau,N,NB,ntau,btype;
 	double T,Ux,Uy,mu,rho,epsilon;

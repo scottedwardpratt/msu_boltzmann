@@ -2,12 +2,12 @@
 #include "part.h"
 #include "cell.h"
 
-void CB3D::AddAction_Activate(CPart *part){
+void CMSU_Boltzmann::AddAction_Activate(CPart *part){
 	CActionMap::iterator epos;
 	part->active=false;
 	CAction *action;
 	if(BJORKEN && fabs(part->eta)>ETAMAX){
-		sprintf(message,"CB3D::AddAction_Activate, eta out of bounds, =%g\n",fabs(part->eta));
+		sprintf(message,"CMSU_Boltzmann::AddAction_Activate, eta out of bounds, =%g\n",fabs(part->eta));
 		CLog::Fatal(message);
 	}
 	action=GetDeadAction();
@@ -26,7 +26,7 @@ void CB3D::AddAction_Activate(CPart *part){
 	part->actionmap.insert(CActionPair(action->key,action));
 }
 
-void CB3D::AddAction_Decay(CPart *part,double taudecay){
+void CMSU_Boltzmann::AddAction_Decay(CPart *part,double taudecay){
 	CAction *action=GetDeadAction();
 	action->tau=taudecay;
 	action->partmap.clear();
@@ -37,12 +37,12 @@ void CB3D::AddAction_Decay(CPart *part,double taudecay){
 	if(action->tau<tau){
 		part->Print();
 		part->cell->Print();
-		sprintf(message,"CB3D::AddAction_Decay, trying to AddAction_Decay at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
+		sprintf(message,"CMSU_Boltzmann::AddAction_Decay, trying to AddAction_Decay at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
 	}
 }
 
-void CB3D::AddAction_ExitCell(CPart *part){
+void CMSU_Boltzmann::AddAction_ExitCell(CPart *part){
 	CAction *action;
 	action=GetDeadAction();
 	if(part->tauexit<TAUCOLLMAX){
@@ -56,13 +56,13 @@ void CB3D::AddAction_ExitCell(CPart *part){
 		if(action->tau<tau-1.0E-10){
 			part->Print();
 			part->cell->Print();
-			sprintf(message,"CB3D::AddAction_ExitCell, trying to AddAction_ExitCell at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
+			sprintf(message,"CMSU_Boltzmann::AddAction_ExitCell, trying to AddAction_ExitCell at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 			CLog::Fatal(message);
 		}
 	}
 }
 
-void CB3D::AddAction_Collision(CPart *part1,CPart *part2,double taucoll,double pibsquared,
+void CMSU_Boltzmann::AddAction_Collision(CPart *part1,CPart *part2,double taucoll,double pibsquared,
 	double sigma_scatter,double sigma_merge,double sigma_annihilation,
 	double sigma_inel,vector<double> dsigma_merge){
 	CAction *action=GetDeadAction();
@@ -87,7 +87,7 @@ void CB3D::AddAction_Collision(CPart *part1,CPart *part2,double taucoll,double p
 	part2->actionmap.insert(CActionPair(action->key,action));
 }
 
-void CB3D::AddAction_DensCalc(double taucalc){
+void CMSU_Boltzmann::AddAction_DensCalc(double taucalc){
 	CAction *action;
 	action=GetDeadAction();
 	action->type=4;
@@ -101,7 +101,7 @@ void CB3D::AddAction_DensCalc(double taucalc){
 	}
 }
 
-void CB3D::AddAction_MuTCalc_UpdateNPE(double taucalc){
+void CMSU_Boltzmann::AddAction_MuTCalc_UpdateNPE(double taucalc){
 	CAction *action;
 	action=GetDeadAction();
 	action->type=5;

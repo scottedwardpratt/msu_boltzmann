@@ -1,5 +1,5 @@
 #include "part.h"
-#include "b3d.h"
+#include "boltzmann.h"
 #include "balancearrays.h"
 #include "resonances.h"
 #include "cell.h"
@@ -7,7 +7,7 @@
 #include "misc.h"
 #include "randy.h"
 
-CB3D *CPart::b3d=NULL;
+CMSU_Boltzmann *CPart::boltzmann=NULL;
 CBalance *CPart::cb=NULL;
 char *CPart::message=new char[500];
 
@@ -29,19 +29,19 @@ CPart::CPart(int keyset){
 	tauexit=0.0;
 	tau_lastint=0.0;
 	taudecay=0.0;
-	currentmap=&b3d->DeadPartMap;
+	currentmap=&boltzmann->DeadPartMap;
 	cell=NULL;
 	actionmap.clear();
 	active=false;
-	resinfo=b3d->reslist->GetResInfoPtr(211);
+	resinfo=boltzmann->reslist->GetResInfoPtr(211);
 	for(int alpha=0;alpha<4;alpha++){
 		r[alpha]=p[alpha]=0.0;
 	}
 	y=eta=0.0;
 	nscatt=0;
 	balanceID=-999;
-	b3d->DeadPartMap.insert(CPartPair(key,this));
-	b3d->npartstot+=1;
+	boltzmann->DeadPartMap.insert(CPartPair(key,this));
+	boltzmann->npartstot+=1;
 }
 
 CPart::~CPart(){
@@ -95,7 +95,7 @@ void CPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset
 	double et;
 	CResInfo *resinfoptr;
 	int ID;
-	resinfo=b3d->reslist->GetResInfoPtr(IDset);
+	resinfo=boltzmann->reslist->GetResInfoPtr(IDset);
 	ID=resinfo->code;
 	if(ID!=IDset){
 		sprintf(message,"ID mismatch, ID=%d, resinfo->codeID=%d\n",IDset,ID);
@@ -108,13 +108,13 @@ void CPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset
 	tau_lastint=tau0-1.0E-6;
 	nscatt=0;
 	bweight=bweightset;
-	if(fabs(eta)>b3d->ETAMAX && b3d->BJORKEN){
+	if(fabs(eta)>boltzmann->ETAMAX && boltzmann->BJORKEN){
 		sprintf(message,"in part->init, eta out of bounds, =%g\n",eta);
 		CLog::Info(message);
-		sprintf(message,"b3d->ETAMAX=%g\n",b3d->ETAMAX);
+		sprintf(message,"boltzmann->ETAMAX=%g\n",boltzmann->ETAMAX);
 		CLog::Fatal(message);
 	}
-	resinfoptr=b3d->reslist->GetResInfoPtr(ID);
+	resinfoptr=boltzmann->reslist->GetResInfoPtr(ID);
 	if(resinfoptr->decay==false){
 		msquared=resinfoptr->mass*resinfoptr->mass;
 	}
@@ -128,15 +128,15 @@ void CPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset
 		sprintf(message,"FATAL: tau0<0, tau0^2=%g\n",tau0);
 		CLog::Fatal(message);
 	}
-	if(b3d->BJORKEN && fabs(eta)>b3d->ETAMAX){
+	if(boltzmann->BJORKEN && fabs(eta)>boltzmann->ETAMAX){
 		CyclicReset();
 		sprintf(message,"performed cyclic reset in CPart::Init()\n");
 		CLog::Fatal(message);
 	}
 	active=false;
-	ChangeMap(&(b3d->PartMap));
-	b3d->AddAction_Activate(this);
-	actionmother=b3d->nactions;
+	ChangeMap(&(boltzmann->PartMap));
+	boltzmann->AddAction_Activate(this);
+	actionmother=boltzmann->nactions;
 }
 
 void CPart::CheckRapidity(){
@@ -148,7 +148,7 @@ void CPart::CheckRapidity(){
 }
 
 void CPart::CyclicReset(){
-	double eta_offset,etamax=b3d->ETAMAX;
+	double eta_offset,etamax=boltzmann->ETAMAX;
 	double mt;
 	while(fabs(eta)>etamax){
 		eta_offset=2.0*etamax;
@@ -178,8 +178,8 @@ void CPart::Print(){
 	sprintf(message,"p=(%15.9e,%15.9e,%15.9e,%15.9e), y=%g =? %g\n",p[0],p[1],p[2],p[3],y,atanh(p[3]/p[0]));
 	CLog::Info(message);
 	string currentmapname="IN CELL";
-	if(currentmap==&(b3d->PartMap)) currentmapname="PartMap";
-	if(currentmap==&(b3d->DeadPartMap)) currentmapname="DeadPartMap";
+	if(currentmap==&(boltzmann->PartMap)) currentmapname="PartMap";
+	if(currentmap==&(boltzmann->DeadPartMap)) currentmapname="DeadPartMap";
 	sprintf(message,"currentmap=%s\n",currentmapname.c_str());
 	CLog::Info(message);
 	if(cell==NULL) sprintf(message,"CELL=NULL\n");
@@ -253,7 +253,7 @@ void CPart::AddAction(CAction *action){
 }
 
 void CPart::Propagate(double tau){
-	if(b3d->BJORKEN && fabs(eta)>b3d->ETAMAX){
+	if(boltzmann->BJORKEN && fabs(eta)>boltzmann->ETAMAX){
 		sprintf(message,"eta screwy before propagation\n");
 		CLog::Info(message);
 		sprintf(message,"eta=%g\n",eta);
@@ -263,14 +263,14 @@ void CPart::Propagate(double tau){
 	CPartMap::iterator neighbor;
 	if(active==true){
 		eta=GetEta(tau);//y-asinh((tau0/tau)*sinh(y-eta));
-		if(currentmap==&(b3d->PartMap) && b3d->tau<b3d->TAUCOLLMAX && fabs(eta)>b3d->ETAMAX && b3d->BJORKEN && b3d->COLLISIONS){
+		if(currentmap==&(boltzmann->PartMap) && boltzmann->tau<boltzmann->TAUCOLLMAX && fabs(eta)>boltzmann->ETAMAX && boltzmann->BJORKEN && boltzmann->COLLISIONS){
 			//sprintf(message,"eta out of bounds after propagation,correcting, etai=%g, etaf=%g, taui=%g, tauf=%g\n",etai,eta,tau0,tau);
 			//CLog::Info(message);
 			//Print();
-			if(eta>b3d->ETAMAX)
-				eta-=2.0*b3d->ETAMAX;
-			if(eta<-b3d->ETAMAX)
-				eta+=2.0*b3d->ETAMAX;
+			if(eta>boltzmann->ETAMAX)
+				eta-=2.0*boltzmann->ETAMAX;
+			if(eta<-boltzmann->ETAMAX)
+				eta+=2.0*boltzmann->ETAMAX;
 			r[0]=tau0*cosh(eta);
 			r[3]=tau0*sinh(eta);
 			//Misc::Pause();
@@ -298,11 +298,11 @@ void CPart::CheckMap(CPartMap *expectedpartmap){
 	if(currentmap!=expectedpartmap){
 		
 		Print();
-		if(currentmap==&(b3d->DeadPartMap)){
+		if(currentmap==&(boltzmann->DeadPartMap)){
 			sprintf(message,"particle in DeadPartMap\n");
 			CLog::Info(message);
 		}
-		if(currentmap==&(b3d->PartMap)){
+		if(currentmap==&(boltzmann->PartMap)){
 			sprintf(message,"particlein PartMap\n");
 			CLog::Info(message);
 		}
@@ -377,32 +377,32 @@ void CPart::Kill(){
 	eta=0.0;
 	nscatt=0;
 	tau0=tau_lastint=tauexit=-1.0;
-	AddToMap(b3d->DeadPartMap.begin(),&(b3d->DeadPartMap));
+	AddToMap(boltzmann->DeadPartMap.begin(),&(boltzmann->DeadPartMap));
 	bweight=1.0;
 	active=false;
 	balanceID=-1;
 }
 
 void CPart::BjorkenTranslate(){
-	if(eta<-b3d->ETAMAX || eta>b3d->ETAMAX){
+	if(eta<-boltzmann->ETAMAX || eta>boltzmann->ETAMAX){
 		sprintf(message,"eta out of bounds before translation\n");
 		CLog::Info(message);
 		Print();
-		if(eta>b3d->ETAMAX)
-			eta=b3d->ETAMAX;
-		if(eta<-b3d->ETAMAX)
-			eta=-b3d->ETAMAX;
+		if(eta>boltzmann->ETAMAX)
+			eta=boltzmann->ETAMAX;
+		if(eta<-boltzmann->ETAMAX)
+			eta=-boltzmann->ETAMAX;
 		r[0]=tau0*cosh(eta);
 		r[3]=tau0*sinh(eta);
 	}
 	double mt;
 	if(cell->ieta==0){
-		eta+=2.0*b3d->ETAMAX;
-		y+=2.0*b3d->ETAMAX;
+		eta+=2.0*boltzmann->ETAMAX;
+		y+=2.0*boltzmann->ETAMAX;
 	}
 	else{
-		eta-=2.0*b3d->ETAMAX;
-		y-=2.0*b3d->ETAMAX;
+		eta-=2.0*boltzmann->ETAMAX;
+		y-=2.0*boltzmann->ETAMAX;
 	}
 	mt=sqrt(p[0]*p[0]-p[3]*p[3]);
 	p[3]=mt*sinh(y);
@@ -414,13 +414,13 @@ void CPart::BjorkenTranslate(){
 
 void CPart::BjorkenUnTranslate(){
 	double mt;
-	if(eta>b3d->ETAMAX-1.0E-10){
-		eta-=2.0*b3d->ETAMAX;
-		y-=2.0*b3d->ETAMAX;
+	if(eta>boltzmann->ETAMAX-1.0E-10){
+		eta-=2.0*boltzmann->ETAMAX;
+		y-=2.0*boltzmann->ETAMAX;
 	}
 	else{
-		eta+=2.0*b3d->ETAMAX;
-		y+=2.0*b3d->ETAMAX;
+		eta+=2.0*boltzmann->ETAMAX;
+		y+=2.0*boltzmann->ETAMAX;
 	}
 	mt=sqrt(p[0]*p[0]-p[3]*p[3]);
 	p[3]=mt*sinh(y);
@@ -435,7 +435,7 @@ void CPart::FindCollisions(){
 	double taucoll;
 	CPart *part2,*part1=this;
 	CPartMap::iterator ppos;
-	CB3DCell *cell2;
+	CMSU_BoltzmannCell *cell2;
 
 	for(ix=0;ix<3;ix++){
 		for(iy=0;iy<3;iy++){
@@ -447,7 +447,7 @@ void CPart::FindCollisions(){
 						part2=ppos->second;
 						if(part1!=part2 && part1->actionmother!=part2->actionmother){
 							if(part1->balanceID<0 || part2->balanceID<0){
-								b3d->FindCollision(part1,part2,taucoll);
+								boltzmann->FindCollision(part1,part2,taucoll);
 							}
 						}
 						++ppos;
@@ -458,40 +458,40 @@ void CPart::FindCollisions(){
 	}
 }
 
-CB3DCell *CPart::FindCell(){
-	if(tau0>b3d->TAUCOLLMAX || !b3d->COLLISIONS){
+CMSU_BoltzmannCell *CPart::FindCell(){
+	if(tau0>boltzmann->TAUCOLLMAX || !boltzmann->COLLISIONS){
 		return NULL;
 	}
 	int ieta,ix,iy;
-	double deta=b3d->ETAMAX/double(b3d->NETA);
-	ieta=lrint(floor((eta+b3d->ETAMAX)/deta));
-	if(ieta<0 ||ieta>=2*b3d->NETA){
+	double deta=boltzmann->ETAMAX/double(boltzmann->NETA);
+	ieta=lrint(floor((eta+boltzmann->ETAMAX)/deta));
+	if(ieta<0 ||ieta>=2*boltzmann->NETA){
 		return NULL;
 	}
-	double dx=b3d->XYMAX/double(b3d->NXY);
+	double dx=boltzmann->XYMAX/double(boltzmann->NXY);
 	double dy=dx;
-	ix=lrint(floor((r[1]+b3d->XYMAX)/dx));
-	if(ix<0 || ix>=2*b3d->NXY){
+	ix=lrint(floor((r[1]+boltzmann->XYMAX)/dx));
+	if(ix<0 || ix>=2*boltzmann->NXY){
 		return NULL;
 	}
-	iy=lrint(floor((r[2]+b3d->XYMAX)/dy));
-	if(iy<0 || iy>=2*b3d->NXY){
+	iy=lrint(floor((r[2]+boltzmann->XYMAX)/dy));
+	if(iy<0 || iy>=2*boltzmann->NXY){
 		return NULL;
 	}
-	return b3d->cell[ix][iy][ieta];
+	return boltzmann->cell[ix][iy][ieta];
 }
 
 void CPart::FindDecay(){
 	double t,gamma,vz,newt,newz;
 	t=HBARC/resinfo->width;
 	gamma=p[0]/sqrt(msquared);
-	t=-t*gamma*log(b3d->randy->ran());
+	t=-t*gamma*log(boltzmann->randy->ran());
 	vz=p[3]/p[0];
 	newt=r[0]+t;
 	newz=r[3]+vz*t;
 	taudecay=sqrt(newt*newt-newz*newz);
-	if(taudecay<tauexit || tauexit>b3d->TAUCOLLMAX || cell==NULL){
-		b3d->AddAction_Decay(this,taudecay);
+	if(taudecay<tauexit || tauexit>boltzmann->TAUCOLLMAX || cell==NULL){
+		boltzmann->AddAction_Decay(this,taudecay);
 	}
 }
 
@@ -548,8 +548,8 @@ void CPart::FindCellExit(){
 			else
 				nextcell=cell->neighbor[1][1][2];
 		}
-		if(tauexit<b3d->TAUCOLLMAX)
-			b3d->AddAction_ExitCell(this);
+		if(tauexit<boltzmann->TAUCOLLMAX)
+			boltzmann->AddAction_ExitCell(this);
 	}
 }
 
@@ -570,7 +570,7 @@ void CPart::FindActions(){
 	}
 
 	if(cell!=NULL){
-		if(b3d->COLLISIONS && tau0<b3d->TAUCOLLMAX){
+		if(boltzmann->COLLISIONS && tau0<boltzmann->TAUCOLLMAX){
 			FindCellExit();
 			FindCollisions();
 		}
@@ -580,7 +580,7 @@ void CPart::FindActions(){
 	}
 	if(resinfo->decay)
 		FindDecay();
-	if(currentmap!=&(b3d->PartMap)){
+	if(currentmap!=&(boltzmann->PartMap)){
 		sprintf(message,"FindActions: part in wrong map\n");
 		Print();
 		CLog::Fatal(message);
@@ -649,7 +649,7 @@ void CPart::CheckCell(){
 	}
 }
 
-void CPart::ChangeCell(CB3DCell *newcell){
+void CPart::ChangeCell(CMSU_BoltzmannCell *newcell){
 	if(newcell!=cell){
 		if(cell!=NULL)
 			RemoveFromCell();

@@ -39,7 +39,7 @@ public:
 
 class CBalanceArrays{
 public:
-	CB3D *b3d;
+	CMSU_Boltzmann *boltzmann;
 	double NSAMPLE_HYDRO2UDS;
 	int NSAMPLE_UDS2BAL,Nchi,NPHI,NEVENTS;
 	bool FROM_UDS,NoKsNoPhi;  // FROM_UDS=true means BF from uds charges, if false, then brute forcd
@@ -51,7 +51,7 @@ public:
 	string bf_results_dirname;
 	CAcceptance *acceptance;
 	string acceptance_description;
-	CBalanceArrays(CB3D *b3dset);
+	CBalanceArrays(CMSU_Boltzmann *boltzmannset);
 	void Reset();
 	void InitArrays();
 	double gammap,gammapnorm,v2perfect,v2perfectnorm,v2,normtest,v2norm,v2prime,v2primenorm,dNdeta;

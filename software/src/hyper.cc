@@ -64,7 +64,7 @@ int CHyperElement::MakeParts(){
 			while(sampler->cummulative_N>sampler->cummulative_random){
 				//printf("howdy, code=%d\n",resinfo->code);
 				GetP(resinfo,plab,mass,(*maxweight)[ires]);
-				part=sampler->b3d->GetDeadPart();	
+				part=sampler->boltzmann->GetDeadPart();	
 #ifdef __XY_REFLECT__	
 				if(randy->ran()<0.5){
 					r[1]=-r[1];
