@@ -1,0 +1,23 @@
+reading model_output/fixed_parameters.txt
+reading model_output/default_0/parameters.txt
+will read res info from ../progdata/resinfo/resonances_pdg_weak.txt
+will read decay info from ../progdata/resinfo/decays_pdg_weak.txt
+ievent0=0, ieventf=0
+_________________ iqual=0, nevents=1 ________________
+opening hyperdata/alice_cent0_10/hyper.txt
+Exiting ReadHyperElements2D_OSU() happily, TotalVolume=4883.15
+------ beginning, ievent=0 --------
+made new parts, npartstot=5000, tau=0
+created 10000 new actions, nactionstot=10000
+made new parts, npartstot=10000, tau=0
+made new parts, npartstot=15000, tau=0
+created 10000 new actions, nactionstot=20000
+made new parts, npartstot=20000, tau=0
+Event    0 sampling: 15800 parts created from Hyper Surface
+created 10000 new actions, nactionstot=30000
+made new parts, npartstot=25000, tau=17.7336
+made new parts, npartstot=30000, tau=406160
+------ beginning, ievent=0 --------
+nparts=27160=?15800
+nscatter=9416, nbscatter=0, nmerges=12600, ndecays=22391,  ncellexits=439593, nregenerate=0
+nparts=27160, <# collisions>=22016 
