@@ -9,7 +9,7 @@
 using namespace std;
 
 CAcceptance_CHEAP::CAcceptance_CHEAP(CparameterMap *parmapin) : CAcceptance(){
-	ETAMAX=parmapin->getD("B3D_ETAMAX",6.0);
+	ETAMAX=parmapin->getD("MSU_BOLTZMANN_ETAMAX",6.0);
 	ETAMIN=-ETAMAX;
 	ptmin=200.0;
 	ptmax=20000000.0;

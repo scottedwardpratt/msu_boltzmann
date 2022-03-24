@@ -20,7 +20,7 @@ void CResList::ReadResInfo(){
 	FILE *resinfofile;
 	FILE * decayinfofile;
 	char dummy[200],cname[200];
-	filename=parmap->getS("B3D_RESONANCES_INFO_FILE",string("../resinfo/resonances_standardhadrons.txt"));
+	filename=parmap->getS("MSU_BOLTZMANN_RESONANCES_INFO_FILE",string("../resinfo/resonances_standardhadrons.txt"));
 	sprintf(message,"will read res info from %s\n",filename.c_str());
 	CLog::Info(message);
 	resinfofile=fopen(filename.c_str(),"r");
@@ -65,7 +65,7 @@ void CResList::ReadResInfo(){
 	} 
 	fclose(resinfofile);
 
-	filename=parmap->getS("B3D_RESONANCES_DECAYS_FILE",string("../resinfo/decays_pdg_weak.txt"));
+	filename=parmap->getS("MSU_BOLTZMANN_RESONANCES_DECAYS_FILE",string("../resinfo/decays_pdg_weak.txt"));
 	sprintf(message,"will read decay info from %s\n",filename.c_str());
 	CLog::Info(message);
 	decayinfofile=fopen(filename.c_str(),"r");

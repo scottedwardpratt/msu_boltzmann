@@ -290,9 +290,9 @@ int CMSU_Boltzmann::CountBaryons(){
 void CMSU_Boltzmann::InitMuTCalc(){
 	int ix,iy,ntau;
 	CMuTInfo::boltzmann=this;
-	CMuTInfo::NXY=parmap.getI("B3D_MUTCALC_NXY",24);
-	CMuTInfo::DXY=parmap.getD("B3D_MUTCalc_DXY",1.0);
-	CMuTInfo::NMINCALC=parmap.getD("B3D_MUTCALC_NMINCALC",5);
+	CMuTInfo::NXY=parmap.getI("MSU_BOLTZMANN_MUTCALC_NXY",24);
+	CMuTInfo::DXY=parmap.getD("MSU_BOLTZMANN_MUTCalc_DXY",1.0);
+	CMuTInfo::NMINCALC=parmap.getD("MSU_BOLTZMANN_MUTCALC_NMINCALC",5);
 	CMuTInfo::taumin.resize(NXY);
 	//CMuTInfo::massB.resize(8);
 	//CMuTInfo::degenB.resize(8);

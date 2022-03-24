@@ -365,7 +365,7 @@ void CBalanceArrays::ProcessBFPartMap(){
 
 void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from cascade
 	multimap<double,CPart *> ppartmap;
-	double ya,yb,dely,delymax,B3D_ETAMAX=boltzmann->ETAMAX;
+	double ya,yb,dely,delymax,MSU_BOLTZMANN_ETAMAX=boltzmann->ETAMAX;
 	CPartMap::iterator it;
 	multimap<double,CPart *>::iterator ita,itb;
 	int pida,pidb;
@@ -388,10 +388,10 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 			
 			if(parta->balanceID<0){
 				ya=atanh(parta->p[3]/parta->p[0]);
-				while(ya<-B3D_ETAMAX)
-					ya+=2.0*B3D_ETAMAX;
-				while(ya>B3D_ETAMAX)
-					ya-=2.0*B3D_ETAMAX;
+				while(ya<-MSU_BOLTZMANN_ETAMAX)
+					ya+=2.0*MSU_BOLTZMANN_ETAMAX;
+				while(ya>MSU_BOLTZMANN_ETAMAX)
+					ya-=2.0*MSU_BOLTZMANN_ETAMAX;
 				ppartmap.insert(pair<double,CPart* >(ya,parta));
 			}
 		}
@@ -413,7 +413,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 						yb=itb->first;
 						dely=yb-ya;
 						if(dely<0.0)
-							dely+=2.0*B3D_ETAMAX;
+							dely+=2.0*MSU_BOLTZMANN_ETAMAX;
 				
 						// See Jinjin's thesis, page 31
 						pidb=partb->resinfo->code;
@@ -426,7 +426,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 					++itb;
 					if(itb==ppartmap.end())
 						itb=ppartmap.begin();
-				}while(dely<2.0*BF_YMAX && dely<B3D_ETAMAX);
+				}while(dely<2.0*BF_YMAX && dely<MSU_BOLTZMANN_ETAMAX);
 			}
 			++ita;
 		}while(ita!=ppartmap.end());
@@ -520,7 +520,7 @@ void CBalanceArrays::IncrementDenom(CPart *part){
 void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 	double effa,effb,effaNoID,effbNoID,ya,dely,phia,phib,delyb=0.0,Minv;
 	bool accepta,acceptb,acceptaNoID,acceptbNoID;
-	double B3D_ETAMAX=boltzmann->ETAMAX;
+	double MSU_BOLTZMANN_ETAMAX=boltzmann->ETAMAX;
 	int pida,pidb;
 	CRandy *randy=boltzmann->randy;
 	CPart partaa,partbb;
@@ -542,11 +542,11 @@ void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
 		acceptance->CalcAcceptanceNoID(acceptaNoID,effaNoID,&partaa);
 		if(accepta || acceptaNoID){
 			delyb=0.0;
-			if(partb->y+dely>B3D_ETAMAX){
-				delyb=-2.0*B3D_ETAMAX;
+			if(partb->y+dely>MSU_BOLTZMANN_ETAMAX){
+				delyb=-2.0*MSU_BOLTZMANN_ETAMAX;
 			}
-			if(partb->y+dely<-B3D_ETAMAX)
-				delyb=2.0*B3D_ETAMAX;
+			if(partb->y+dely<-MSU_BOLTZMANN_ETAMAX)
+				delyb=2.0*MSU_BOLTZMANN_ETAMAX;
 			partbb.Copy(partb);
 			partbb.BoostRap(dely+delyb);
 			acceptance->CalcAcceptance(acceptb,effb,&partbb);
