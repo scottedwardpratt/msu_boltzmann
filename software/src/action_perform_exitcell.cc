@@ -1,10 +1,10 @@
 #include "action.h"
-#include "part.h"
+#include "msupart.h"
 #include "cell.h"
 
 void CAction::PerformExitCell(){
-	CPart *part;
-	CPartMap::iterator ppos;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos;
 	double mt;
 	
 	ppos=partmap.begin();

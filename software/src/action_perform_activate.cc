@@ -1,9 +1,9 @@
 #include "action.h"
-#include "part.h"
+#include "msupart.h"
 
 void CAction::PerformActivate(){
-	CPart *part;
-	CPartMap::iterator ppos,pend;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos,pend;
 	ppos=partmap.begin();
 	part=ppos->second;
 	part->active=true;

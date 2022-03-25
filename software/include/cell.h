@@ -21,8 +21,8 @@ public:
 	class CMSU_BoltzmannCell *creflection;
 	int ireflection;
 	double xmin,xmax,ymin,ymax,etamin,etamax;
-	CPartMap partmap;
-	void PrintPartMap(CPartMap *partmap);
+	CMSUPartMap partmap;
+	void PrintPartMap(CMSUPartMap *partmap);
 	void KillAllParts();
 	void ReKeyAllParts();
 	void Print();

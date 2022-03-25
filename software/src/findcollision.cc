@@ -1,10 +1,10 @@
 #include "boltzmann.h"
-#include "part.h"
+#include "msupart.h"
 #include "cell.h"
 #include "resonances.h"
 #include "constants.h"
 
-bool CMSU_Boltzmann::CheckKinematics(CPart *part1,CPart *part2,
+bool CMSU_Boltzmann::CheckKinematics(CMSUPart *part1,CMSUPart *part2,
 	double &Minv2,double &pibsquared,double &taucoll){
 	
 	double p1dotp2=0.0,m1squared,m2squared,rsquared=0.0;
@@ -61,7 +61,7 @@ bool CMSU_Boltzmann::CheckKinematics(CPart *part1,CPart *part2,
 	return possible;
 }
 
-double CMSU_Boltzmann::GetSigma(CPart *part1,CPart *part2,double Minv2,
+double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 		double &sigma_scatter,double &sigma_merge,double &sigma_annihilation,double &sigma_inel,
 		vector<double> &dsigma_merge){
 	double sigmatot=0,MR,M,Gamma,b,jR,j1,j2,qR2,q2,q3,q4,tan2delta,G,dsigma;
@@ -107,7 +107,7 @@ double CMSU_Boltzmann::GetSigma(CPart *part1,CPart *part2,double Minv2,
 		//q3=q4=1.0;
 			G=Gamma*(MR/M)*q3*1.2/(1.0+0.2*q4);
 			tan2delta=pow(0.5*G/(M-MR),2);
-			dsigma=b*((4.0*PI*HBARC*HBARC/q2)*(tan2delta/(1.0+tan2delta))
+			dsigma=b*((4.0*PI*HBARC_GEV*HBARC_GEV/q2)*(tan2delta/(1.0+tan2delta))
 				*((2.0*jR+1.0)/((2.0*j1+1.0)*(2.0*j2+1.0))));
 			dsigma_merge.push_back(dsigma);
 			sigma_merge+=dsigma;
@@ -118,7 +118,7 @@ double CMSU_Boltzmann::GetSigma(CPart *part1,CPart *part2,double Minv2,
 	return sigmatot;
 }
 
-bool CMSU_Boltzmann::FindCollision(CPart *part1,CPart *part2,double &taucoll){
+bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &taucoll){
 	if((part1->balanceID>=0) && (part2->balanceID>=0)){
 		return false;
 	}
@@ -145,8 +145,8 @@ bool CMSU_Boltzmann::FindCollision(CPart *part1,CPart *part2,double &taucoll){
 
 void CMSU_Boltzmann::FindAllCollisions(){
 	double taucoll;
-	CPartMap::iterator ppos1,ppos2;
-	CPart *part1,*part2;
+	CMSUPartMap::iterator ppos1,ppos2;
+	CMSUPart *part1,*part2;
 	CActionMap::iterator epos;
 	for(ppos1=PartMap.begin();ppos1!=PartMap.end();++ppos1){
 		part1=ppos1->second;

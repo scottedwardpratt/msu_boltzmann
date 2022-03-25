@@ -1,11 +1,11 @@
 #include "action.h"
-#include "part.h"
+#include "msupart.h"
 
 void CAction::PerformCollide(){
 	int colltype,iproduct,nproducts;
 	double sigmatot;
-	CPart *part1,*part2,*part;
-	CPartMap::iterator ppos;
+	CMSUPart *part1,*part2,*part;
+	CMSUPartMap::iterator ppos;
 	CMSU_BoltzmannCell *cell;
 	ppos=partmap.begin();
 	part1=ppos->second;

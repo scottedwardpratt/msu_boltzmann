@@ -13,39 +13,53 @@
 #include "commondefs.h"
 #include "log.h"
 #include "action.h"
+#include "part.h"
 
 using namespace std;
 //using namespace boost;
 
-class CPart{
+class CMSUPart : Cpart{
 public:
-	CPart();
-	CPart(int keyset);
-	~CPart();
+	/* These are inher
+	CMSUPart();
+	~CMSUPart();
+	int pid;
+	double msquared;
+	FourVector p,r;
+	void Print();
+	double GetMass();
+	void AddPart(int pid,FourVector &p,FourVector &r);
+	void Setp0();
+	void SetMsquared();
+	void Boost(FourVector &u);
+	void BoostP(FourVector &u);
+	void BoostR(FourVector &u);
+	*/
+	// Additional below are for Boltzmann
+
+	CMSUPart(int keyset);
 	CMSU_BoltzmannCell *cell,*nextcell;
 	double tau0,tau_lastint,tauexit,taudecay;
-	double y,eta,msquared,weight;
-	int badmother;
-	FourVector p,r;
+	double y,eta;
+	double weight,bweight;
 	double eta0,phi0;
 	int listid,nscatt,balanceID,key;
-	double bweight;
 	int actionmother; //refers to action from which particle was created
 	CResInfo *resinfo;
 	bool active;
-	CPartMap *currentmap; // PartList for a Cell, or boltzmann->DeadPartList
+	CMSUPartMap *currentmap; // PartList for a Cell, or boltzmann->DeadPartList
 	
 	void InitBalance(int ID,double x,double y,double tau,double eta,double px,double py,double mass,double rapidity,double bweight,int balanceid);
 	void Propagate(double tau);
 	void FindDecay();
 	void FindCellExit();
+
 	void Init(int ID,double x,double y,double tau,double eta,double px,double py,double mass,double rapidity,double bweight);
-	void Init_NoColls(int ID,double x,double y,double tau,double eta,double px,double py,double mass,double rapidity,double bweight);
 	void Setp0();
 	void SetMass();
-	void Copy(CPart *part);
-	void CopyPositionInfo(CPart *part);
-	void CopyMomentumInfo(CPart *part);
+	void Copy(CMSUPart *part);
+	void CopyPositionInfo(CMSUPart *part);
+	void CopyMomentumInfo(CMSUPart *part);
 	double GetMass();
 	void CyclicReset();
 	void SetInitialKey();
@@ -57,17 +71,14 @@ public:
 	void AddAction(CAction *actionptr);
 	void KillActions();
 	void Print();
-	void CheckMap(CPartMap *expectedpartmap);
+	void CheckMap(CMSUPartMap *expectedpartmap);
 	void CheckCell();
-	void ChangeMap(CPartMap *newmap);
+	void ChangeMap(CMSUPartMap *newmap);
 	void BjorkenTranslate();
 	void BjorkenUnTranslate();
-	void Boost(FourVector &u);
-	void BoostP(FourVector &u);
-	void BoostR(FourVector &u);
 	void CalcDCA(double *dca);
 	void BoostRap(double dely);
-	//~CPart();
+	//~CMSUPart();
 
 	// These are the actions involving these particles
 	CActionMap actionmap;
@@ -86,15 +97,15 @@ public:
 	void GetHBTPars(double &t,double &rout,double &rside,double &rlong);
 	void FindCollisions();
 
-	CPartMap::iterator GetPos(CPartMap *pmap);
-	CPartMap::iterator DeleteFromMap(CPartMap *partmap);
+	CMSUPartMap::iterator GetPos(CMSUPartMap *pmap);
+	CMSUPartMap::iterator DeleteFromMap(CMSUPartMap *partmap);
 	void ChangeCell(CMSU_BoltzmannCell *newcell);
 	void RemoveFromCell();
 
-	void ChangePartMap(CPartMap *newmap);
-	CPartMap::iterator DeleteFromCurrentMap();
-	void AddToMap(CPartMap *newmap);
-	void AddToMap(CPartMap::iterator guess,CPartMap *newmap);
+	void ChangePartMap(CMSUPartMap *newmap);
+	CMSUPartMap::iterator DeleteFromCurrentMap();
+	void AddToMap(CMSUPartMap *newmap);
+	void AddToMap(CMSUPartMap::iterator guess,CMSUPartMap *newmap);
 };
 
 class CMSU_BoltzmannBinaryPartInfo{

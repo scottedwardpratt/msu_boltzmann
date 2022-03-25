@@ -1,6 +1,6 @@
 #include "hyper.h"
 #include "sampler.h"
-#include "part.h"
+#include "msupart.h"
 #include "randy.h"
 #include "misc.h"
 
@@ -40,7 +40,7 @@ void CHyperElement::Print(){
 
 int CHyperElement::MakeParts(){
 	int nparts=0;
-	CPart *part;
+	CMSUPart *part;
 	double bweight,mass,eta,rapidity;
 	int ires,nsample=sampler->NSAMPLE;
 	FourVector plab;
@@ -54,7 +54,7 @@ int CHyperElement::MakeParts(){
 	if(sampler->cummulative_N+delNtot > sampler->cummulative_random){
 		for(rpos=resmap->begin();rpos!=resmap->end();rpos++){
 			resinfo=rpos->second;
-			if(resinfo->code==22){
+			if(resinfo->pid==22){
 				rpos++;
 				resinfo=rpos->second;
 			}
@@ -62,7 +62,7 @@ int CHyperElement::MakeParts(){
 			delN=(*density)[ires]*udotdOmega*nsample;
 			sampler->cummulative_N+=delN;
 			while(sampler->cummulative_N>sampler->cummulative_random){
-				//printf("howdy, code=%d\n",resinfo->code);
+				//printf("howdy, pid=%d\n",resinfo->pid);
 				GetP(resinfo,plab,mass,(*maxweight)[ires]);
 				part=sampler->boltzmann->GetDeadPart();	
 #ifdef __XY_REFLECT__	
@@ -84,7 +84,7 @@ int CHyperElement::MakeParts(){
 					sprintf(message,"eta=%g ??, ETAMAX=%g\n",eta,ETAMAX);
 					CLog::Fatal(message);
 				}
-				part->InitBalance(resinfo->code,r[1],r[2],r[0],eta,plab[1],plab[2],mass,rapidity,bweight,-1);
+				part->InitBalance(resinfo->pid,r[1],r[2],r[0],eta,plab[1],plab[2],mass,rapidity,bweight,-1);
 				/*
 				if(part->balanceID<0){
 					for(int a=0;a<3;a++){

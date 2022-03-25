@@ -1,5 +1,5 @@
 #include "acceptance.h"
-#include "part.h"
+#include "msupart.h"
 #include "parametermap.h"
 #include "resonances.h"
 
@@ -8,8 +8,8 @@ using namespace std;
 CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
 	ETAMIN=-0.9; // Don't bother calling Acceptance Routine if outside these boundaries.
 	ETAMAX=0.9;
-	PTMIN=200.0; 
-	PTMAX=1600.0;
+	PTMIN=0.2; 
+	PTMAX=1.600;
 	parmap=parmapin;
 	CENTRALITY=parmap->getI("STARCENTRALITY",0);   // CENTRALITY=0 is most central
 	//  cen=0 0-5%	
@@ -58,10 +58,10 @@ CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
     
 }
 
-void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *part){
 	double eta,pt,pmag;
 	double dca[4];
-	int pid=part->resinfo->code,starpid;
+	int pid=part->resinfo->pid,starpid;
 	if(abs(pid)==211) starpid=1;
 	else if(abs(pid)==321) starpid=2;
 	else if(pid==-2212) starpid=3;
@@ -89,10 +89,10 @@ void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CPart *par
 	}
 }
 
-void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPart *part){
 	double eta,pt,pmag;
 	double dca[4];
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 	if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
 		sprintf(message,"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
 		CLog::Fatal(message);

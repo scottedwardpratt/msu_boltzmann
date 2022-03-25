@@ -73,11 +73,11 @@ void CHyperElement::GetP(CResInfo *resinfo,FourVector &p,double &mass,double mw)
 	}
 	
 	Misc::Boost(u,p);
-	if(abs(resinfo->code)==2212 || abs(resinfo->code)==2112){
+	if(abs(resinfo->pid)==2212 || abs(resinfo->pid)==2112){
 		sampler->MEANPT+=sqrt(p[1]*p[1]+p[2]*p[2]);
 		sampler->MEANPT_NORM+=1.0;
 		sampler->NP+=1.0;
 	}
-	if(abs(resinfo->code)==211)
+	if(abs(resinfo->pid)==211)
 		sampler->NPI+=1.0;
 }

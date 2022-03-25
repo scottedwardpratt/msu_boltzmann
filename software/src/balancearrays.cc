@@ -1,6 +1,6 @@
 #include "balancearrays.h"
 #include "boltzmann.h"
-#include "part.h"
+#include "msupart.h"
 #include "acceptance.h"
 #include "randy.h"
 #include "resonances.h"
@@ -86,7 +86,7 @@ void CBalanceArrays::Reset(){
 	denom_allcharges_phi90->Reset();
 }
 
-void CBalanceArrays::IncrementGammaP(CPart *parta,CPart *partb,double effa,double effb){
+void CBalanceArrays::IncrementGammaP(CMSUPart *parta,CMSUPart *partb,double effa,double effb){
 	double phia,phib;
 	double QaQb;
 	QaQb=(parta->resinfo->charge*parta->bweight)*(partb->resinfo->charge*partb->bweight);
@@ -319,15 +319,15 @@ void CBalanceArrays::WriteDenoms(){
 void CBalanceArrays::ProcessBFPartMap(){
 	int balanceID,pida,pidb,maxbid=-1;
 	double delymax=1.6,dely,ya,yb;
-	pair<CPartMap::iterator,CPartMap::iterator> itpair_even,itpair_odd;
-	CPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
-	CPart *parta,*partb,*part;
+	pair<CMSUPartMap::iterator,CMSUPartMap::iterator> itpair_even,itpair_odd;
+	CMSUPartMap::iterator it,ita0,itaf,itb0,itbf,ita,itb;
+	CMSUPart *parta,*partb,*part;
 	for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 		part=it->second;
 		if(part->balanceID>maxbid)
 			maxbid=part->balanceID;
 		if(part->balanceID>=0)
-			bfpartmap.insert(CPartPair(part->balanceID,part));
+			bfpartmap.insert(CMSUPartPair(part->balanceID,part));
 	}
 	sprintf(message,"maxbid=%d, bfpartmap.size=%d\n",maxbid,int(bfpartmap.size()));
 	CLog::Info(message);
@@ -343,11 +343,11 @@ void CBalanceArrays::ProcessBFPartMap(){
 			for(ita=ita0;ita!=itaf;++ita){
 				parta=ita->second;
 				ya=atanh(parta->p[3]/parta->p[0]);
-				pida=parta->resinfo->code;
+				pida=parta->resinfo->pid;
 				if(abs(pida)==211 || abs(pida)==321 || abs(pida)==2212){
 					for(itb=itb0;itb!=itbf;++itb){
 						partb=itb->second;
-						pidb=partb->resinfo->code;
+						pidb=partb->resinfo->pid;
 						yb=atanh(partb->p[3]/partb->p[0]);
 						dely=fabs(ya-yb);
 						delymax=acceptance->GetDelYMax(pida,pidb);
@@ -364,13 +364,13 @@ void CBalanceArrays::ProcessBFPartMap(){
 }
 
 void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from cascade
-	multimap<double,CPart *> ppartmap;
+	multimap<double,CMSUPart *> ppartmap;
 	double ya,yb,dely,delymax,MSU_BOLTZMANN_ETAMAX=boltzmann->ETAMAX;
-	CPartMap::iterator it;
-	multimap<double,CPart *>::iterator ita,itb;
+	CMSUPartMap::iterator it;
+	multimap<double,CMSUPart *>::iterator ita,itb;
 	int pida,pidb;
-	CPart *parta,*partb;
-	pair<CPartMap::iterator,CPartMap::iterator> itpair;
+	CMSUPart *parta,*partb;
+	pair<CMSUPartMap::iterator,CMSUPartMap::iterator> itpair;
 	sprintf(message,"processing %d parts in PartMap\n",int(boltzmann->PartMap.size()));
 	CLog::Info(message);
 	NEVENTS+=1;
@@ -392,14 +392,14 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 					ya+=2.0*MSU_BOLTZMANN_ETAMAX;
 				while(ya>MSU_BOLTZMANN_ETAMAX)
 					ya-=2.0*MSU_BOLTZMANN_ETAMAX;
-				ppartmap.insert(pair<double,CPart* >(ya,parta));
+				ppartmap.insert(pair<double,CMSUPart* >(ya,parta));
 			}
 		}
 		ita=ppartmap.begin();
 		do{
 			parta=ita->second;
 			if(abs(parta->resinfo->charge)==1){
-				pida=parta->resinfo->code;
+				pida=parta->resinfo->pid;
 				IncrementDenom(parta);
 				ya=ita->first;
 				itb=ita;
@@ -416,7 +416,7 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 							dely+=2.0*MSU_BOLTZMANN_ETAMAX;
 				
 						// See Jinjin's thesis, page 31
-						pidb=partb->resinfo->code;
+						pidb=partb->resinfo->pid;
 						delymax=acceptance->GetDelYMax(pida,pidb);
 						if(dely<delymax){
 							IncrementNumer(parta,partb);
@@ -436,9 +436,9 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 
 void CBalanceArrays::ProcessV2Perfect(){
 	double phi,eta,pmag;
-	CPart boostedpart;
-	CPartMap::iterator it;
-	CPart *part;
+	CMSUPart boostedpart;
+	CMSUPartMap::iterator it;
+	CMSUPart *part;
 	for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 		part=it->second;
 		if(abs(part->resinfo->charge)>0){
@@ -463,13 +463,13 @@ void CBalanceArrays::ProcessV2Perfect(){
 	}
 }
 
-void CBalanceArrays::IncrementDenom(CPart *part){
+void CBalanceArrays::IncrementDenom(CMSUPart *part){
 	int pid;
 	bool accepta;
 	double effa,dely,ya,phia;
 	CRandy *randy=boltzmann->randy;
-	CPart parta;
-	pid=part->resinfo->code;
+	CMSUPart parta;
+	pid=part->resinfo->pid;
 	int iy=5+floorl(part->y);
 	if(abs(pid)==211)
 		denom_pi->dNdy+=1.0/(4.0*boltzmann->NSAMPLE*boltzmann->ETAMAX);
@@ -517,15 +517,15 @@ void CBalanceArrays::IncrementDenom(CPart *part){
 	}
 }
 
-void CBalanceArrays::IncrementNumer(CPart *parta,CPart *partb){
+void CBalanceArrays::IncrementNumer(CMSUPart *parta,CMSUPart *partb){
 	double effa,effb,effaNoID,effbNoID,ya,dely,phia,phib,delyb=0.0,Minv;
 	bool accepta,acceptb,acceptaNoID,acceptbNoID;
 	double MSU_BOLTZMANN_ETAMAX=boltzmann->ETAMAX;
 	int pida,pidb;
 	CRandy *randy=boltzmann->randy;
-	CPart partaa,partbb;
-	pida=parta->resinfo->code;
-	pidb=partb->resinfo->code;
+	CMSUPart partaa,partbb;
+	pida=parta->resinfo->pid;
+	pidb=partb->resinfo->pid;
 	if(abs(pida)!=211 && abs(pida)!=321 && abs(pida)!=2212){
 		return;
 	}
@@ -639,7 +639,7 @@ void CBalanceArrays::SetQualifier(string qualifier_set){
 
 }
 
-double CBalanceArrays::GetMinv(CPart *parta,CPart *partb){
+double CBalanceArrays::GetMinv(CMSUPart *parta,CMSUPart *partb){
 	FourVector *pa=&(parta->p);
 	FourVector *pb=&(partb->p);
 	FourVector P;

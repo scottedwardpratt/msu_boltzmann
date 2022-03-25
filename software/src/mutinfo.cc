@@ -1,5 +1,5 @@
 #include "mutinfo.h"
-#include "part.h"
+#include "msupart.h"
 #include "boltzmann.h"
 #include "cell.h"
 #include "log.h"
@@ -91,7 +91,7 @@ void CMuTInfo::CalcAllMuTU(){
 		gamma=sqrt(1.0+Uxpi*Uxpi+Uypi*Uypi);
 		rhopi=double(Npi)/(gamma*volume);
 		degen=3.0;
-		GetMuT(PionMass,degen,rhopi,epsilonpi,Tpi,mupi);
+		GetMuT(PionMass_GEV,degen,rhopi,epsilonpi,Tpi,mupi);
 	}
 	else{
 		Tpi=-1.0;
@@ -109,7 +109,7 @@ void CMuTInfo::CalcAllMuTU(){
 		gamma=sqrt(1.0+UxK*UxK+UyK*UyK);
 		rhoK=double(NK)/(gamma*volume);
 		degen=4.0;
-		GetMuT(KaonMass,degen,rhoK,epsilonK,TK,muK);
+		GetMuT(KaonMass_GEV,degen,rhoK,epsilonK,TK,muK);
 	}
 	else{
 		TK=-1.0;

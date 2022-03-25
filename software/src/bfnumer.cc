@@ -1,5 +1,5 @@
 #include "balancearrays.h"
-#include "part.h"
+#include "msupart.h"
 #include "resonances.h"
 #include "parametermap.h"
 #include "misc.h"
@@ -82,8 +82,8 @@ void CBFNumer::Reset(){
 	}
 }
 
-void CBFNumer::Increment(CPart *parta,CPart *partb,double effa,double effb){
-	int ibin,iphi,iy,pida=parta->resinfo->code,pidb=partb->resinfo->code;
+void CBFNumer::Increment(CMSUPart *parta,CMSUPart *partb,double effa,double effb){
+	int ibin,iphi,iy,pida=parta->resinfo->pid,pidb=partb->resinfo->pid;
 	double qinv,qout,qside,qlong,deleta,dely,delphi,deletas;
 	double QaQb,CaCb,cphi;
 	Misc::outsidelong(parta->p,partb->p,qinv,qout,qside,qlong,deleta,dely,delphi);
@@ -175,7 +175,7 @@ void CBFDenom::Reset(){
 	Nplus=Nminus=dNdy=0.0;
 }
 
-void CBFDenom::Increment(CPart *part,double eff){
+void CBFDenom::Increment(CMSUPart *part,double eff){
 	int charge=part->resinfo->charge;
 	if(charge==1)
 		Nplus+=eff;

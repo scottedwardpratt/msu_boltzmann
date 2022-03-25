@@ -43,15 +43,15 @@ void CResInfo::DecayGetResInfoPtr(int &nbodies,array<CResInfo *,5> &daughterresi
 	}
 }
 
-bool CResInfo::CheckForDaughters(int codecheck){
-	//checks to see if any decay daughters match code, for code=0, checking for charged parts
+bool CResInfo::CheckForDaughters(int pidcheck){
+	//checks to see if any decay daughters match pid, for pid=0, checking for charged parts
 	int ibody,nbodies,ibranch;
 	bool exists=false;
 	CResInfo *daughter;
 	CBranchInfo *bptr;
 	CBranchList::iterator bpos;
-	if(codecheck!=0){
-		if(code==codecheck){
+	if(pidcheck!=0){
+		if(pid==pidcheck){
 			exists=true;
 			return exists;
 		}
@@ -63,11 +63,11 @@ bool CResInfo::CheckForDaughters(int codecheck){
 				nbodies=bptr->resinfoptr.size();
 				for(ibody=0;ibody<nbodies;ibody++){
 					daughter=bptr->resinfoptr[ibody];
-					if(daughter->code==codecheck){
+					if(daughter->pid==pidcheck){
 						exists=true;
 						return exists;
 					}
-					if(daughter->CheckForDaughters(codecheck)){
+					if(daughter->CheckForDaughters(pidcheck)){
 						exists=true;
 						return exists;
 					}
@@ -93,7 +93,7 @@ bool CResInfo::CheckForDaughters(int codecheck){
 						exists=true;
 						return exists;
 					}
-					if(daughter->CheckForDaughters(codecheck)){
+					if(daughter->CheckForDaughters(pidcheck)){
 						exists=true;
 						return exists;
 					}
@@ -182,7 +182,7 @@ double CResInfo::GenerateThermalMass(double maxweight, double T){
 }
 
 void CResInfo::Print(){
-	sprintf(message,"+++++++ ID=%d, M=%g, M_min=%g, %s +++++++++\n",code,mass,minmass,name.c_str());
+	sprintf(message,"+++++++ ID=%d, M=%g, M_min=%g, %s +++++++++\n",pid,mass,minmass,name.c_str());
 	CLog::Info(message);
 	sprintf(message,"Gamma=%g, Spin=%g, Decay=%d\n",width,spin,int(decay));
 	CLog::Info(message);
@@ -201,7 +201,7 @@ void CResInfo::FindFinalProducts(double taumax){
 	double netbranching=0.0;
 	finalproductslist.clear();
 	bptr=new CBranchInfo();
-	if(decay && (HBARC/width)<taumax){
+	if(decay && (HBARC_GEV/width)<taumax){
 		finalproductslist=branchlist;
 		ibranch=0;
 		foundsplit=true;
@@ -211,7 +211,7 @@ void CResInfo::FindFinalProducts(double taumax){
 			bptr=finalproductslist[ibranch];
 			iires=0;
 			do{
-				if(bptr->resinfoptr[iires]->decay && (HBARC/bptr->resinfoptr[iires]->width)<taumax){
+				if(bptr->resinfoptr[iires]->decay && (HBARC_GEV/bptr->resinfoptr[iires]->width)<taumax){
 					foundsplit=true;
 					resinfo=bptr->resinfoptr[iires];
 					for(iibranch=1;iibranch<resinfo->finalproductslist.size();iibranch++){
@@ -252,18 +252,18 @@ void CResInfo::FindFinalProducts(double taumax){
 		netB=double(q[0]+q[1]+q[2])/3.0-double(netq[0]+netq[1]+netq[2])/3.0;
 		netQ=(double(2.0*q[0]-q[1]-q[2])/3.0)-double(2*netq[0]-netq[1]-netq[2])/3.0;
 		if(fabs(netB)>1.0E-7 || fabs(netQ)>1.0E-7){
-			sprintf(message,"In FindFinalProducs, charge not conserved for %5d: netQ=%g, netB=%g\n",code,netQ,netB);
+			sprintf(message,"In FindFinalProducs, charge not conserved for %5d: netQ=%g, netB=%g\n",pid,netQ,netB);
 			CLog::Fatal(message);
 		}
 	}
-	if(decay && (HBARC/width)<taumax && fabs(netbranching-1.0)>1.0E-5){
-		sprintf(message,"oops, netbranching for final states=%g, pid=%d\n",netbranching,code);
+	if(decay && (HBARC_GEV/width)<taumax && fabs(netbranching-1.0)>1.0E-5){
+		sprintf(message,"oops, netbranching for final states=%g, pid=%d\n",netbranching,pid);
 		CLog::Fatal(message);
 	}
 }
 
-bool CResInfo::FindContent(int codecheck,double weight0,double taumax,double &weight){
-	// finds how many hadrons of type codecheck result from decays
+bool CResInfo::FindContent(int pidcheck,double weight0,double taumax,double &weight){
+	// finds how many hadrons of type pidcheck result from decays
 	bool foundpart=false;
 	CBranchInfo *bptr;
 	CResInfo *resinfo1;
@@ -271,12 +271,12 @@ bool CResInfo::FindContent(int codecheck,double weight0,double taumax,double &we
 	if(!reslist->finalproductsfound)
 		reslist->FindFinalProducts(taumax);
 	weight=0.0;
-	if(decay && (HBARC/width)<taumax){
+	if(decay && (HBARC_GEV/width)<taumax){
 		for(ibranch=0;ibranch<finalproductslist.size();ibranch++){
 			bptr=finalproductslist[ibranch];
 			for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
 				resinfo1=bptr->resinfoptr[ibody1];
-				if(resinfo1->code==codecheck){
+				if(resinfo1->pid==pidcheck){
 					weight+=weight0*bptr->branching;
 					foundpart=true;
 				}
@@ -284,7 +284,7 @@ bool CResInfo::FindContent(int codecheck,double weight0,double taumax,double &we
 		}
 	}
 	else{
-		if(code==codecheck){
+		if(pid==pidcheck){
 			weight=weight0;
 			foundpart=true;
 		}
@@ -292,8 +292,8 @@ bool CResInfo::FindContent(int codecheck,double weight0,double taumax,double &we
 	return foundpart;	
 }
 
-bool CResInfo::FindContentPairs(int codecheck1,int codecheck2,double weight0,double taumax,double &weight){
-	// finds how many hadrons of type codecheck result from decays
+bool CResInfo::FindContentPairs(int pidcheck1,int pidcheck2,double weight0,double taumax,double &weight){
+	// finds how many hadrons of type pidcheck result from decays
 	bool foundpair=false;
 	CBranchInfo *bptr;
 	CResInfo *resinfo1,*resinfo2;
@@ -305,13 +305,13 @@ bool CResInfo::FindContentPairs(int codecheck1,int codecheck2,double weight0,dou
 		bptr=finalproductslist[ibranch];
 		for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
 			resinfo1=bptr->resinfoptr[ibody1];
-			if(abs(resinfo1->code)==abs(codecheck1)){
+			if(abs(resinfo1->pid)==abs(pidcheck1)){
 				for(ibody2=0;ibody2<bptr->resinfoptr.size();ibody2++){
 					if(ibody1!=ibody2){
 						resinfo2=bptr->resinfoptr[ibody2];
-						if(abs(resinfo2->code)==abs(codecheck2)){
+						if(abs(resinfo2->pid)==abs(pidcheck2)){
 							int sign=1;
-							if(resinfo1->code*resinfo2->code<0)
+							if(resinfo1->pid*resinfo2->pid<0)
 								sign=-1;
 							weight+=weight0*bptr->branching*sign;
 							foundpair=true;
@@ -336,7 +336,7 @@ void CResInfo::PrintFinalProducts(){
 		netbranching+=bptr->branching;
 		for(ibody1=0;ibody1<bptr->resinfoptr.size();ibody1++){
 			resinfo1=bptr->resinfoptr[ibody1];
-			sprintf(message,"%s%6d ",message,resinfo1->code);
+			sprintf(message,"%s%6d ",message,resinfo1->pid);
 		}
 		sprintf(message,"%s\n",message);	
 	}

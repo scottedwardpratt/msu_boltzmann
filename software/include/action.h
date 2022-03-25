@@ -25,10 +25,10 @@ public:
 	double key;
 	int type; // =0 for activation, 1 for decay, 2 for collision, ....  6 for ExitCell
 	// These are the particles in the action
-	CPartMap partmap;
+	CMSUPartMap partmap;
 
 	void Kill();
-	void AddPart(CPart *partptr);
+	void AddPart(CMSUPart *partptr);
 	void Print();
 
 	void Perform();
@@ -57,7 +57,7 @@ public:
 	void AddToMap(CActionMap::iterator guess,CActionMap *newmap);
 	void CheckPartList();
 	CActionMap *currentmap;
-	array<CPart *,5> product;
+	array<CMSUPart *,5> product;
 };
 
 #endif

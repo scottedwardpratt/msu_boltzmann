@@ -1,4 +1,4 @@
-#include "part.h"
+#include "msupart.h"
 #include "boltzmann.h"
 #include "balancearrays.h"
 #include "resonances.h"
@@ -7,11 +7,11 @@
 #include "misc.h"
 #include "randy.h"
 
-CMSU_Boltzmann *CPart::boltzmann=NULL;
-CBalance *CPart::cb=NULL;
-char *CPart::message=new char[500];
+CMSU_Boltzmann *CMSUPart::boltzmann=NULL;
+CBalance *CMSUPart::cb=NULL;
+char *CMSUPart::message=new char[500];
 
-CPart::CPart(){
+CMSUPart::CMSUPart(){
 	cell=NULL;
 	currentmap=NULL;
 	bweight=1.0;
@@ -22,7 +22,7 @@ CPart::CPart(){
 	balanceID=-999;
 }
 
-CPart::CPart(int keyset){
+CMSUPart::CMSUPart(int keyset){
 	bweight=1.0;
 	key=keyset;
 	tau0=0.0;
@@ -40,14 +40,14 @@ CPart::CPart(int keyset){
 	y=eta=0.0;
 	nscatt=0;
 	balanceID=-999;
-	boltzmann->DeadPartMap.insert(CPartPair(key,this));
+	boltzmann->DeadPartMap.insert(CMSUPartPair(key,this));
 	boltzmann->npartstot+=1;
 }
 
-CPart::~CPart(){
+CMSUPart::~CMSUPart(){
 }
 
-void CPart::Copy(CPart *part){  //copies all info except actionmap
+void CMSUPart::Copy(CMSUPart *part){  //copies all info except actionmap
 	int alpha;
 	tau0=part->tau0;
 	tau_lastint=part->tau_lastint;
@@ -67,7 +67,7 @@ void CPart::Copy(CPart *part){  //copies all info except actionmap
 	phi0=part->phi0;
 }
 
-void CPart::CopyPositionInfo(CPart *part){  //copies all info except actionmap
+void CMSUPart::CopyPositionInfo(CMSUPart *part){  //copies all info except actionmap
 	int alpha;
 	tau0=part->tau0;
 	eta=part->eta;
@@ -76,7 +76,7 @@ void CPart::CopyPositionInfo(CPart *part){  //copies all info except actionmap
 	}
 }
 
-void CPart::CopyMomentumInfo(CPart *part){  //copies all info except actionmap
+void CMSUPart::CopyMomentumInfo(CMSUPart *part){  //copies all info except actionmap
 	int alpha;
 	y=part->y;
 	msquared=part->msquared;
@@ -86,19 +86,19 @@ void CPart::CopyMomentumInfo(CPart *part){  //copies all info except actionmap
 	bweight=part->bweight;
 }
 
-void CPart::InitBalance(int IDset,double rxset,double ryset,double tauset,double etaset,double pxset,double pyset,double mset,double rapidityset,double bweightset,int balanceIDset){
+void CMSUPart::InitBalance(int IDset,double rxset,double ryset,double tauset,double etaset,double pxset,double pyset,double mset,double rapidityset,double bweightset,int balanceIDset){
 	Init(IDset,rxset,ryset,tauset,etaset,pxset,pyset,mset,rapidityset,bweightset);
 	balanceID=balanceIDset;
 }
 
-void CPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset,double pxset,double pyset,double mset,double rapidityset,double bweightset){
+void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset,double pxset,double pyset,double mset,double rapidityset,double bweightset){
 	double et;
 	CResInfo *resinfoptr;
 	int ID;
 	resinfo=boltzmann->reslist->GetResInfoPtr(IDset);
-	ID=resinfo->code;
+	ID=resinfo->pid;
 	if(ID!=IDset){
-		sprintf(message,"ID mismatch, ID=%d, resinfo->codeID=%d\n",IDset,ID);
+		sprintf(message,"ID mismatch, ID=%d, resinfo->pidID=%d\n",IDset,ID);
 		CLog::Info(message);
 	}
 	p[1]=pxset; p[2]=pyset; msquared=mset*mset; y=rapidityset;
@@ -130,7 +130,7 @@ void CPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset
 	}
 	if(boltzmann->BJORKEN && fabs(eta)>boltzmann->ETAMAX){
 		CyclicReset();
-		sprintf(message,"performed cyclic reset in CPart::Init()\n");
+		sprintf(message,"performed cyclic reset in CMSUPart::Init()\n");
 		CLog::Fatal(message);
 	}
 	active=false;
@@ -139,7 +139,7 @@ void CPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset
 	actionmother=boltzmann->nactions;
 }
 
-void CPart::CheckRapidity(){
+void CMSUPart::CheckRapidity(){
 	if(fabs(y-atanh(p[3]/p[0]))>0.001){
 		Print();
 		sprintf(message,"rapidity screwed up!\n");
@@ -147,7 +147,7 @@ void CPart::CheckRapidity(){
 	}
 }
 
-void CPart::CyclicReset(){
+void CMSUPart::CyclicReset(){
 	double eta_offset,etamax=boltzmann->ETAMAX;
 	double mt;
 	while(fabs(eta)>etamax){
@@ -164,13 +164,13 @@ void CPart::CyclicReset(){
 	}
 }
 
-void CPart::Print(){
+void CMSUPart::Print(){
 	sprintf(message,"________________ PART INFO FOR key=%d _____________________________\n",key);
 	CLog::Info(message);
-	sprintf(message,"Minv^2=%g, ID=%d -----  %s ------\n",p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],resinfo->code,resinfo->name.c_str());
+	sprintf(message,"Minv^2=%g, ID=%d -----  %s ------\n",p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],resinfo->pid,resinfo->name.c_str());
 	CLog::Info(message);
 	sprintf(message,"ID=%d, m_onshell=%g, M=%g, tau0=%g=?%g, tauexit=%g\n r=(%g,%g,%g,%g) eta=%g=?%g\n", 
-	resinfo->code,resinfo->mass,sqrt(msquared),double(tau0),sqrt(r[0]*r[0]-r[3]*r[3]),tauexit,r[0],r[1],r[2],r[3],eta,GetEta(tau0));
+	resinfo->pid,resinfo->mass,sqrt(msquared),double(tau0),sqrt(r[0]*r[0]-r[3]*r[3]),tauexit,r[0],r[1],r[2],r[3],eta,GetEta(tau0));
 	CLog::Info(message);
 	sprintf(message,"bweight=%g, key=%d, actionmother=%d, active=%d, balanceID=%d\n",
 	bweight,key,actionmother,int(active),balanceID);
@@ -192,20 +192,20 @@ void CPart::Print(){
 	CLog::Info(message);CLog::Info(message);
 }
 
-void CPart::ChangeMap(CPartMap *newmap){
+void CMSUPart::ChangeMap(CMSUPartMap *newmap){
 	if(newmap!=currentmap){
 		DeleteFromCurrentMap();
 		AddToMap(newmap);
 	}
 }
 
-CPartMap::iterator CPart::DeleteFromCurrentMap(){
-	CPartMap::iterator neighbor;
-	CPartMap::iterator ppos=GetPos(currentmap);
+CMSUPartMap::iterator CMSUPart::DeleteFromCurrentMap(){
+	CMSUPartMap::iterator neighbor;
+	CMSUPartMap::iterator ppos=GetPos(currentmap);
 	neighbor=ppos;
 	neighbor++;
 	if(ppos==currentmap->end()){
-		sprintf(message,"FATAL: In CPart::DeleteFromCurrentMap, can't find ppos!!!\n");
+		sprintf(message,"FATAL: In CMSUPart::DeleteFromCurrentMap, can't find ppos!!!\n");
 		Print();
 		sprintf(message,"currentmap has length %d\n",int(currentmap->size()));
 		CLog::Fatal(message);
@@ -215,13 +215,13 @@ CPartMap::iterator CPart::DeleteFromCurrentMap(){
 	return neighbor;
 }
 
-CPartMap::iterator CPart::DeleteFromMap(CPartMap *partmap){
-	CPartMap::iterator neighbor;
-	CPartMap::iterator ppos=GetPos(partmap);
+CMSUPartMap::iterator CMSUPart::DeleteFromMap(CMSUPartMap *partmap){
+	CMSUPartMap::iterator neighbor;
+	CMSUPartMap::iterator ppos=GetPos(partmap);
 	neighbor=ppos;
 	if(ppos==partmap->end()){
 		Print();
-		sprintf(message,"FATAL: In CPart::DeleteFromMap, can't find ppos!!!\n");
+		sprintf(message,"FATAL: In CMSUPart::DeleteFromMap, can't find ppos!!!\n");
 		CLog::Fatal(message);
 	}
 	else{
@@ -232,27 +232,27 @@ CPartMap::iterator CPart::DeleteFromMap(CPartMap *partmap){
 	return neighbor;
 }
 
-void CPart::AddToMap(CPartMap *newmap){
-	newmap->insert(CPartPair(key,this));
+void CMSUPart::AddToMap(CMSUPartMap *newmap){
+	newmap->insert(CMSUPartPair(key,this));
 	currentmap=newmap;
 }
 
-void CPart::AddToMap(CPartMap::iterator guess,CPartMap *newmap){
-	newmap->insert(guess,CPartPair(key,this));
+void CMSUPart::AddToMap(CMSUPartMap::iterator guess,CMSUPartMap *newmap){
+	newmap->insert(guess,CMSUPartPair(key,this));
 	currentmap=newmap;
 }
 
-void CPart::SubtractAction(CAction *action){
+void CMSUPart::SubtractAction(CAction *action){
 	CActionMap::iterator epos=action->GetPos(&actionmap);
 	if(epos!=actionmap.end())
 		actionmap.erase(epos);
 }
 
-void CPart::AddAction(CAction *action){
+void CMSUPart::AddAction(CAction *action){
 	actionmap.insert(CActionPair(action->key,action));
 }
 
-void CPart::Propagate(double tau){
+void CMSUPart::Propagate(double tau){
 	if(boltzmann->BJORKEN && fabs(eta)>boltzmann->ETAMAX){
 		sprintf(message,"eta screwy before propagation\n");
 		CLog::Info(message);
@@ -260,7 +260,7 @@ void CPart::Propagate(double tau){
 		CLog::Info(message);
 	}
 	double t0;
-	CPartMap::iterator neighbor;
+	CMSUPartMap::iterator neighbor;
 	if(active==true){
 		eta=GetEta(tau);//y-asinh((tau0/tau)*sinh(y-eta));
 		if(currentmap==&(boltzmann->PartMap) && boltzmann->tau<boltzmann->TAUCOLLMAX && fabs(eta)>boltzmann->ETAMAX && boltzmann->BJORKEN && boltzmann->COLLISIONS){
@@ -289,12 +289,12 @@ void CPart::Propagate(double tau){
 	}
 }
 
-CPartMap::iterator CPart::GetPos(CPartMap *pmap){
-	CPartMap::iterator ppos=pmap->find(key);
+CMSUPartMap::iterator CMSUPart::GetPos(CMSUPartMap *pmap){
+	CMSUPartMap::iterator ppos=pmap->find(key);
 	return ppos;
 }
 
-void CPart::CheckMap(CPartMap *expectedpartmap){
+void CMSUPart::CheckMap(CMSUPartMap *expectedpartmap){
 	if(currentmap!=expectedpartmap){
 		
 		Print();
@@ -311,8 +311,8 @@ void CPart::CheckMap(CPartMap *expectedpartmap){
 	}
 }
 
-double CPart::GetMass(){
-	if(resinfo->code==22)
+double CMSUPart::GetMass(){
+	if(resinfo->pid==22)
 		return 0.0;
 	else
 		return sqrt(msquared);
@@ -320,19 +320,19 @@ double CPart::GetMass(){
 
 /* in sampler there is an array of densities and temperature. also make array of densities of minmass*/
 
-void CPart::Setp0(){
+void CMSUPart::Setp0(){
 	p[0]=sqrt(p[1]*p[1]+p[2]*p[2]+p[3]*p[3]+msquared);
 }
 
-void CPart::SetY(){
+void CMSUPart::SetY(){
 	y=asinh(p[3]/GetMT());
 }
 
-void CPart::SetMass(){
+void CMSUPart::SetMass(){
 	msquared=p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3];
 }
 
-double CPart::GetEta(double tau){
+double CMSUPart::GetEta(double tau){
 	double dy,deta,dtau0,dtau;
 	if(active){
 		dy=y;
@@ -345,16 +345,16 @@ double CPart::GetEta(double tau){
 	else return eta;
 }
 
-double CPart::GetMT(){
+double CMSUPart::GetMT(){
 	if(p[0]<fabs(p[3])){
 		Print();
-		sprintf(message,"CPart::GetMT, catastrophe\n");
+		sprintf(message,"CMSUPart::GetMT, catastrophe\n");
 		CLog::Fatal(message);
 	}
 	return sqrt(p[0]*p[0]-p[3]*p[3]);
 }
 
-void CPart::KillActions(){
+void CMSUPart::KillActions(){
 	CActionMap::iterator ep,epp;
 	CAction *action;
 	ep=actionmap.begin();
@@ -367,7 +367,7 @@ void CPart::KillActions(){
 	actionmap.clear();
 }
 
-void CPart::Kill(){
+void CMSUPart::Kill(){
 	KillActions();
 	if(cell!=NULL){
 		RemoveFromCell();
@@ -383,7 +383,7 @@ void CPart::Kill(){
 	balanceID=-1;
 }
 
-void CPart::BjorkenTranslate(){
+void CMSUPart::BjorkenTranslate(){
 	if(eta<-boltzmann->ETAMAX || eta>boltzmann->ETAMAX){
 		sprintf(message,"eta out of bounds before translation\n");
 		CLog::Info(message);
@@ -412,7 +412,7 @@ void CPart::BjorkenTranslate(){
 	SetMass();
 }
 
-void CPart::BjorkenUnTranslate(){
+void CMSUPart::BjorkenUnTranslate(){
 	double mt;
 	if(eta>boltzmann->ETAMAX-1.0E-10){
 		eta-=2.0*boltzmann->ETAMAX;
@@ -430,11 +430,11 @@ void CPart::BjorkenUnTranslate(){
 	SetMass();
 }
 
-void CPart::FindCollisions(){
+void CMSUPart::FindCollisions(){
 	int ix,iy,ieta;
 	double taucoll;
-	CPart *part2,*part1=this;
-	CPartMap::iterator ppos;
+	CMSUPart *part2,*part1=this;
+	CMSUPartMap::iterator ppos;
 	CMSU_BoltzmannCell *cell2;
 
 	for(ix=0;ix<3;ix++){
@@ -458,7 +458,7 @@ void CPart::FindCollisions(){
 	}
 }
 
-CMSU_BoltzmannCell *CPart::FindCell(){
+CMSU_BoltzmannCell *CMSUPart::FindCell(){
 	if(tau0>boltzmann->TAUCOLLMAX || !boltzmann->COLLISIONS){
 		return NULL;
 	}
@@ -481,9 +481,9 @@ CMSU_BoltzmannCell *CPart::FindCell(){
 	return boltzmann->cell[ix][iy][ieta];
 }
 
-void CPart::FindDecay(){
+void CMSUPart::FindDecay(){
 	double t,gamma,vz,newt,newz;
-	t=HBARC/resinfo->width;
+	t=HBARC_GEV/resinfo->width;
 	gamma=p[0]/sqrt(msquared);
 	t=-t*gamma*log(boltzmann->randy->ran());
 	vz=p[3]/p[0];
@@ -495,7 +495,7 @@ void CPart::FindDecay(){
 	}
 }
 
-void CPart::FindCellExit(){
+void CMSUPart::FindCellExit(){
 	if(active){
 		double t,taux,tauy,taueta,z;
 		double etamax=cell->etamax,etamin=cell->etamin;
@@ -553,14 +553,14 @@ void CPart::FindCellExit(){
 	}
 }
 
-void CPart::FindActions(){
+void CMSUPart::FindActions(){
 	KillActions();
 	if(active!=true){
-		sprintf(message,"CPart::FindActions(), trying to Reset Inactive particle\n");
+		sprintf(message,"CMSUPart::FindActions(), trying to Reset Inactive particle\n");
 		CLog::Info(message);
 		KillActions();
 	}
-	if(resinfo->code!=22 && msquared<resinfo->minmass*resinfo->minmass){
+	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass){
 		sprintf(message,"msquared too small, =%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
 		CLog::Info(message);
 		Print();
@@ -587,23 +587,23 @@ void CPart::FindActions(){
 	}
 }
 
-double CPart::GetPseudoRapidity(){
+double CMSUPart::GetPseudoRapidity(){
 	double pmag,eta_ps;
 	pmag=sqrt(p[1]*p[1]+p[2]*p[2]+p[3]*p[3]);
 	eta_ps=atanh(p[3]/pmag);
 	return eta_ps;
 }
 
-double CPart::GetRapidity(){
+double CMSUPart::GetRapidity(){
 	return 0.5*log((p[0]+p[3])/(p[0]-p[3]));
 }
 
-void CPart::Boost(FourVector &u){
+void CMSUPart::Boost(FourVector &u){
 	BoostP(u);
 	BoostR(u);
 }
 
-void CPart::BoostP(FourVector &u){
+void CMSUPart::BoostP(FourVector &u){
 	int alpha;
 	FourVector pprime;
 	Misc::Boost(u,p,pprime);
@@ -612,7 +612,7 @@ void CPart::BoostP(FourVector &u){
 	y=atanh(p[3]/p[0]);
 }
 
-void CPart::BoostR(FourVector &u){
+void CMSUPart::BoostR(FourVector &u){
 	int alpha;
 	FourVector rprime;
 	Misc::Boost(u,r,rprime);
@@ -622,11 +622,11 @@ void CPart::BoostR(FourVector &u){
 	tau0=sqrt(r[0]*r[0]-r[3]*r[3]);
 }
 
-void CPart::RemoveFromCell(){
+void CMSUPart::RemoveFromCell(){
 	if(cell!=NULL){
-		CPartMap::iterator ppos=GetPos(&(cell->partmap));
+		CMSUPartMap::iterator ppos=GetPos(&(cell->partmap));
 		if(ppos==cell->partmap.end()){
-			sprintf(message,"FATAL: In CPart::RemoveFromCell, can't find ppos!!!\n");
+			sprintf(message,"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
 			Print();
 			sprintf(message,"cell partmap has length %d\n",int(cell->partmap.size()));
 			CLog::Fatal(message);
@@ -637,11 +637,11 @@ void CPart::RemoveFromCell(){
 	}
 }
 
-void CPart::CheckCell(){
+void CMSUPart::CheckCell(){
 	if(cell!=NULL){
-		CPartMap::iterator ppos=GetPos(&(cell->partmap));
+		CMSUPartMap::iterator ppos=GetPos(&(cell->partmap));
 		if(ppos==cell->partmap.end()){
-			sprintf(message,"FATAL: In CPart::RemoveFromCell, can't find ppos!!!\n");
+			sprintf(message,"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
 			Print();
 			sprintf(message,"cell partmap has length %d\n",int(cell->partmap.size()));
 			CLog::Fatal(message);
@@ -649,18 +649,18 @@ void CPart::CheckCell(){
 	}
 }
 
-void CPart::ChangeCell(CMSU_BoltzmannCell *newcell){
+void CMSUPart::ChangeCell(CMSU_BoltzmannCell *newcell){
 	if(newcell!=cell){
 		if(cell!=NULL)
 			RemoveFromCell();
 		if(newcell!=NULL){
-			newcell->partmap.insert(CPartPair(key,this));
+			newcell->partmap.insert(CMSUPartPair(key,this));
 		}
 		cell=newcell;
 	}
 }
 
-void CPart::GetHBTPars(double &t,double &rout,double &rside,double &rlong){
+void CMSUPart::GetHBTPars(double &t,double &rout,double &rside,double &rlong){
 	const double tcompare=15.0;
 	double pt,ptsquared,et;
 	rlong=tau0*sinh(eta-y);
@@ -673,7 +673,7 @@ void CPart::GetHBTPars(double &t,double &rout,double &rside,double &rlong){
 	rside=(p[1]*r[2]-p[2]*r[1])/pt;
 }
 
-void CPart::BoostRap(double dely){
+void CMSUPart::BoostRap(double dely){
 	double gamma=cosh(dely),gammav=sinh(dely);
 	double r0=r[0],p0=p[0];
 	y=y+dely;
@@ -684,7 +684,7 @@ void CPart::BoostRap(double dely){
 	p[3]=gamma*p[3]+gammav*p0;
 }
 
-void CPart::CalcDCA(double *dca){
+void CMSUPart::CalcDCA(double *dca){
 	int alpha;
 	char nantestc[20];
 	string nantests;

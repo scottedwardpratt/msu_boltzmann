@@ -5,7 +5,7 @@
 #include "boltzmann.h"
 //#include "hist.h"
 #include "pow.h"
-#include "part.h"
+#include "msupart.h"
 #include "resonances.h"
 #include "cell.h"
 #include "sampler.h"
@@ -39,7 +39,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	ibalmax=0;
 	npartstot=nactionstot=0;
 	CResList::boltzmann=this;
-	CPart::boltzmann=this;
+	CMSUPart::boltzmann=this;
 	tau=0.0;
 	chitotH.setZero();
 	chitotQ.setZero();
@@ -50,7 +50,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	DeadActionMap.clear();
 	randy=new CRandy(-1234);
 	CAction::boltzmann=this;
-	CPart::boltzmann=this;
+	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
 	oscarfile=NULL;
 	reslist=new CResList(&parmap);

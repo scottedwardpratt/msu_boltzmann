@@ -1,13 +1,13 @@
 #include "boltzmann.h"
-#include "part.h"
+#include "msupart.h"
 #include "cell.h"
 #include "resonances.h"
 #include "randy.h"
 #include "constants.h"
 #include "misc.h"
 
-int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
-	CPart *dptr;
+int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,array<CMSUPart*,5> &daughter){
+	CMSUPart *dptr;
 	int i,alpha,ibody,netq,nets,nK0bar,nK0,nKplus,nKminus,npi0,npiplus,npiminus;
 	int nu,nubar,nd,ndbar,ns,nsbar,nbodies=5;
 	FourVector u;
@@ -173,8 +173,8 @@ int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<C
 }
 
 /*
-int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<CPart*,5> &daughter){
-	CPart *dptr;
+int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,array<CMSUPart*,5> &daughter){
+	CMSUPart *dptr;
 	int netq,nets,nK0bar,nK0,nKplus,nKminus,npi0,npiplus,npiminus,npions,nkaons,npaircheck,qpions;
 	FourVector *pa,*pb,pc,u;
 	double ma,mb,q,cthet,sthet,phi;
@@ -183,7 +183,7 @@ int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<C
 	double Minv;
 	double MM,P[4]={0.0},PP[4],T;
 	const double g[4]={1.0,-1.0,-1.0,-1.0};
-	CPartMap::iterator ppos;
+	CMSUPartMap::iterator ppos;
 	CMSU_BoltzmannCell *newcell;
 	ndaughters=0;
 	if(BJORKEN && fabs(part1->eta)>ETAMAX)
@@ -393,7 +393,7 @@ int CMSU_Boltzmann::Annihilate(CPart *part1,CPart *part2,int &ndaughters,array<C
 */
 
 
-double CMSU_Boltzmann::GetAnnihilationSigma(CPart *part1,CPart *part2){
+double CMSU_Boltzmann::GetAnnihilationSigma(CMSUPart *part1,CMSUPart *part2){
 	const double g[4]={1,-1,-1,-1};
 	double Plab,p1dotp2,triangle,sigma_annihilation,rstrange,m1squared,m2squared;
 	int alpha;
@@ -410,14 +410,14 @@ double CMSU_Boltzmann::GetAnnihilationSigma(CPart *part1,CPart *part2){
 	triangle=p1dotp2*p1dotp2-m1squared*m2squared;
 	Plab=0.5*(m1squared+m2squared)*triangle/(m1squared*m2squared);
 	Plab=sqrt(Plab);
-	sigma_annihilation=6.7*pow(Plab/1000.0,-0.7)/double(NSAMPLE);
+	sigma_annihilation=6.7*pow(Plab,-0.7)/double(NSAMPLE);
 	rstrange=0.5*sqrt(sigma_annihilation);
 	rstrange*=pow(ANNIHILATION_SREDUCTION,abs(part1->resinfo->strange))+pow(ANNIHILATION_SREDUCTION,abs(part2->resinfo->strange));
 	sigma_annihilation=rstrange*rstrange;
 	return sigma_annihilation;
 }
 
-bool CMSU_Boltzmann::CancelAnnihilation(CPart *part1,CPart *part2){
+bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	double mupi,muK,muB,muQtot,betaEtot,netK,netpi;
 	double taumin1,taumin2;
 	double betaB,betameson,EB,Emeson;
@@ -498,7 +498,7 @@ bool CMSU_Boltzmann::CancelAnnihilation(CPart *part1,CPart *part2){
 			reduction_factor=1.0-exp(muQtot-betaEtot);
 			/*
 			if(reduction_factor<0.0){
-				printf("reduction factor=%g, (%d,%d)\n",reduction_factor,part1->resinfo->code,part2->resinfo->code);
+				printf("reduction factor=%g, (%d,%d)\n",reduction_factor,part1->resinfo->pid,part2->resinfo->pid);
 				printf("T=%g\n",0.5*(mut1->Tpi+mut2->Tpi));
 			}
 			*/

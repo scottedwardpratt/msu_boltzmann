@@ -1,5 +1,5 @@
 #include "boltzmann.h"
-#include "part.h"
+#include "msupart.h"
 #include "resonances.h"
 #include "randy.h"
 #include "cell.h"
@@ -11,8 +11,8 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 	CMSU_BoltzmannBinaryPartInfo bpart;
 	double dnchdy=0;
 	int ipart;
-	CPart *part;
-	CPartMap::iterator ppos;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos;
 	
 	int nparts=PartMap.size();
 	sprintf(message,"writing %d particles to %s\n",nparts,oscarfilename.c_str());
@@ -44,7 +44,7 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 		if(part->resinfo->baryon!=0)
 			nbaryons+=1;
 		if(BINARY_RW){
-			bpart.ID=part->resinfo->code;
+			bpart.ID=part->resinfo->pid;
 			bpart.tau=part->tau0;
 			bpart.x=part->r[1];
 			bpart.y=part->r[2];
@@ -57,7 +57,7 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 		}
 		else
 			fprintf(oscarfile,"%5d %5d %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %g\n",
-		ipart,part->resinfo->code,part->p[1],part->p[2],part->p[3],part->p[0],sqrt(part->msquared),part->r[1],part->r[2],part->r[3],part->r[0],part->weight);
+		ipart,part->resinfo->pid,part->p[1],part->p[2],part->p[3],part->p[0],sqrt(part->msquared),part->r[1],part->r[2],part->r[3],part->r[0],part->weight);
 		if(ppos==PartMap.end()){
 			sprintf(message,"ppos shouldn't be here\n");
 			CLog::Fatal(message);
@@ -88,7 +88,7 @@ int CMSU_Boltzmann::ReadOSCAR(int ievent){
 	int nparts_read,ipart=0;
 	int ievent_read;
 	double bmin,bmax; // impact parameter
-	CPart *mother;
+	CMSUPart *mother;
 	tau=0.0;
 	if(oscarfile==NULL){
 		ReadOSCARHeader();
@@ -159,8 +159,8 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 	parmap.getD("GLAUBER_B",0.0));
 	double dnchdy=0,rapidity;
 	int ipart;
-	CPart *part;
-	CPartMap::iterator ppos;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos;
 	ipart=0;
 	ppos=PartMap.begin();
 	do{
@@ -172,7 +172,7 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 		if(part->resinfo->baryon!=0)
 			nbaryons+=1;
 		if(BINARY_RW){
-			bpart.ID=part->resinfo->code;
+			bpart.ID=part->resinfo->pid;
 			bpart.balanceID=part->balanceID;
 			bpart.px=part->p[1];
 			bpart.py=part->p[2];
@@ -185,7 +185,7 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 			rapidity=0.5*log((part->p[0]+part->p[3])/(part->p[0]-part->p[3]));
 			if(bpart.balanceID!=-1){
 				fprintf(oscarfile,"%5d %5d %7d %12.6e %12.6e %12.6e\n",
-				ipart,part->resinfo->code,part->balanceID,part->p[1],part->p[2],rapidity);
+				ipart,part->resinfo->pid,part->balanceID,part->p[1],part->p[2],rapidity);
 			}
 		}
 		++ppos;
@@ -204,7 +204,7 @@ int CMSU_Boltzmann::ReadBalanceParts(int ievent){
 	int nparts_read,ipart=0;
 	int ievent_read;
 	double bmin,bmax; // impact parameter
-	CPart *mother;
+	CMSUPart *mother;
 	tau=0.0;
 	if(oscarfile==NULL){
 		ReadOSCARHeader();

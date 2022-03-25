@@ -64,6 +64,7 @@ public:
 	double ChiTilde(double T,double vmax); // Integral used by ChiOmega
 	CResInfo();
 	void SetBtype();
+	void FindFinalProducts(double taumax);
 	static char *message;
 	static CRandy *randy;
 	static CResList *reslist;
@@ -89,7 +90,6 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 	void freegascalc_onespecies_finitewidth(double m, double m1, double m2, double T,double width,double &epsilon,double &P,double &dens,double &sigma2,double &dedt, double &maxweight);
 	double GetLambda(double T,double P,double epsilon);
 	void freegascalc_onespecies(double m,double T,double &e,double &p,double &dens,double &sigma2,double &dedt,double &Jtot);
-	void FindFinalProducts(double taumax);
 	char message[500];
 	bool finalproductsfound;
 	CparameterMap *parmap;

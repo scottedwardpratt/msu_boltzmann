@@ -1,14 +1,14 @@
 #include "action.h"
 #include "cell.h"
 #include "mutinfo.h"
-#include "part.h"
+#include "msupart.h"
 #include "resonances.h"
 
 void CAction::PerformMuTCalcUpdateNPE(){
 	int ix,iy,itau,btype,pid;
 	itau=lrint(floor(tau/boltzmann->MUTCALC_DELTAU));
-	CPartMap::iterator ppos;
-	CPart *part;
+	CMSUPartMap::iterator ppos;
+	CMSUPart *part;
 	CResInfo *resinfo;
 	CMuTInfo *mti;
 	double gamma,gammav,E,px,py,eta,t,x,y;
@@ -17,7 +17,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 		part=ppos->second;
 		
 		resinfo=part->resinfo;
-		pid=abs(resinfo->code);
+		pid=abs(resinfo->pid);
 		btype=CMuTInfo::GetBtype(pid);
 		if(pid==111 || pid==211 || pid==311 || pid==321 || btype>=0){
 			eta=part->GetEta(tau);
@@ -36,7 +36,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 					if(ix<CMuTInfo::NXY && iy<CMuTInfo::NXY){
 						mti=boltzmann->muTinfo[itau][ix][iy];
 
-						if(resinfo->code==111 || abs(resinfo->code)==211){
+						if(resinfo->pid==111 || abs(resinfo->pid)==211){
 							gamma=cosh(eta);
 							gammav=sinh(eta);
 							mti->Npi+=1;
@@ -48,7 +48,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 							mti->Tyypi+=py*py/E;
 							mti->Txypi+=px*py/E;
 						}
-						else if(abs(part->resinfo->code)==321 || abs(part->resinfo->code)==311){
+						else if(abs(part->resinfo->pid)==321 || abs(part->resinfo->pid)==311){
 							gamma=cosh(eta);
 							gammav=sinh(eta);
 							mti->NK+=1;

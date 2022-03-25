@@ -1,5 +1,5 @@
 #include "boltzmann.h"
-#include "part.h"
+#include "msupart.h"
 #include "resonances.h"
 #include "cell.h"
 #include "misc.h"
@@ -9,14 +9,14 @@
 
 // If two particles pass one another, Collide will determine whether to scatter and how
 
-int CMSU_Boltzmann::Collide_Scatter(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Scatter(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart*,5> &product){
 	bool bjtranslate=false;
 	int colltype;
 	if(BJORKEN && ((part1->cell->ieta==0 && part2->cell->ieta==2*NETA-1) || (part1->cell->ieta==2*NETA-1 && part2->cell->ieta==0))){
 		bjtranslate=true;
 		part1->BjorkenTranslate();
 	}
-	CPart *part3=NULL,*part4=NULL;
+	CMSUPart *part3=NULL,*part4=NULL;
 	part3=product[0];
 	part4=product[1];
 	part3->Copy(part1);
@@ -41,7 +41,7 @@ int CMSU_Boltzmann::Collide_Scatter(CPart *part1,CPart *part2,int &nproducts,arr
 	return colltype;
 }
 
-int CMSU_Boltzmann::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,vector<double> &dsigma_merge,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Merge(CMSUPart *part1,CMSUPart *part2,double sigma_merge,vector<double> &dsigma_merge,int &nproducts,array<CMSUPart*,5> &product){
 	bool bjtranslate=false,msuccess;
 	int ir1,ir2,irflip,colltype,imerge;
 	double r,sigmatot;
@@ -50,7 +50,7 @@ int CMSU_Boltzmann::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,v
 		bjtranslate=true;
 		part1->BjorkenTranslate();
 	}
-	CPart *part3=product[0];
+	CMSUPart *part3=product[0];
 	part3->CopyPositionInfo(part2);
 	ir1=part1->resinfo->ires;
 	ir2=part2->resinfo->ires;
@@ -97,7 +97,7 @@ int CMSU_Boltzmann::Collide_Merge(CPart *part1,CPart *part2,double sigma_merge,v
 	return colltype;
 }
 
-int CMSU_Boltzmann::Collide_Annihilate(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Annihilate(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart*,5> &product){
 	bool bjtranslate=false;
 	int colltype;
 	if(BJORKEN && ((part1->cell->ieta==0 && part2->cell->ieta==2*NETA-1) || (part1->cell->ieta==2*NETA-1 && part2->cell->ieta==0))){
@@ -125,13 +125,13 @@ int CMSU_Boltzmann::Collide_Annihilate(CPart *part1,CPart *part2,int &nproducts,
 }
 
 // warning Inelastic Scattering NEEDS to be tested
-int CMSU_Boltzmann::Collide_Inelastic(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product){
+int CMSU_Boltzmann::Collide_Inelastic(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart*,5> &product){
 	sprintf(message,"INELASTIC IS UNTESTED!!!!\n");
 	CLog::Fatal(message);
 	const int NWMAX=5000;
 	const double g[4]={1,-1,-1,-1};
-	CPart *part3=product[0];
-	CPart *part4=product[1];
+	CMSUPart *part3=product[0];
+	CMSUPart *part4=product[1];
 	nproducts=2;
 	int colltype;
 	double inel_weight[NWMAX]={0.0};
@@ -234,8 +234,8 @@ int CMSU_Boltzmann::Collide_Inelastic(CPart *part1,CPart *part2,int &nproducts,a
 
 
 /*
-int CMSU_Boltzmann::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart*,5> &product,double pibsquared){
-	CPart *part3=NULL,*part4=NULL;
+int CMSU_Boltzmann::Collide(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart*,5> &product,double pibsquared){
+	CMSUPart *part3=NULL,*part4=NULL;
 	const double g[4]={1,-1,-1,-1};
 	double sigma=0.0,sigma_annihilation,Gamma,G,MR,M,b,q2=0.0,q3,q4,qR2;
 	double tan2delta,j1,j2,jR;
@@ -338,7 +338,7 @@ int CMSU_Boltzmann::Collide(CPart *part1,CPart *part2,int &nproducts,array<CPart
 		G=Gamma*(MR/M)*q3*1.2/(1.0+0.2*q4);
 		tan2delta=pow(0.5*G/(M-MR),2);
 
-		sigma+=b*((4.0*PI*HBARC*HBARC/q2)*(tan2delta/(1.0+tan2delta))
+		sigma+=b*((4.0*PI*HBARC_GEV*HBARC_GEV/q2)*(tan2delta/(1.0+tan2delta))
 			*((2.0*jR+1.0)/((2.0*j1+1.0)*(2.0*j2+1.0))))/double(NSAMPLE);
 		if(sigma>pibsquared){
 			part3=product[0];

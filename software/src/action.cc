@@ -61,8 +61,8 @@ void CAction::MoveToActionMap(){
 }
 
 void CAction::Kill(){
-	CPart *part;
-	CPartMap::iterator ppos;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos;
 	if(currentmap==&boltzmann->ActionMap){
 		CActionMap::iterator eepos,epos=GetPos(currentmap);
 		if(epos==currentmap->end()){
@@ -110,15 +110,15 @@ void CAction::AddToMap(CActionMap::iterator guess,CActionMap *newmap){
 	newmap->insert(guess,CActionPair(key,this));
 }
 
-void CAction::AddPart(CPart *part){
-	partmap.insert(CPartPair(part->key,part));
+void CAction::AddPart(CMSUPart *part){
+	partmap.insert(CMSUPartPair(part->key,part));
 }
 
 void CAction::Print(){
 	sprintf(message,"___________ type=%d, tau=%g, nparts=%d ___________\n",type,tau,int(partmap.size()));
 	CLog::Info(message);
-	CPartMap::iterator ppos;
-	CPart *part;
+	CMSUPartMap::iterator ppos;
+	CMSUPart *part;
 	for(ppos=partmap.begin();ppos!=partmap.end();++ppos){
 		part=ppos->second;
 		part->Print();
@@ -128,8 +128,8 @@ void CAction::Print(){
 }
 
 void CAction::CheckPartList(){
-	CPart *part;
-	CPartMap::iterator ppos,ppos2;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos,ppos2;
 	ppos=partmap.begin();
 	while(ppos!=partmap.end()){
 		part=ppos->second;

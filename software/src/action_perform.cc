@@ -1,9 +1,9 @@
 #include "action.h"
-#include "part.h"
+#include "msupart.h"
 
 void CAction::Perform(){
-	CPartMap::iterator ppos;
-	CPart *part;
+	CMSUPartMap::iterator ppos;
+	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
 
 	//sprintf(message,"Performing Action of type %d\n",type);

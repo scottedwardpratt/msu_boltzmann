@@ -18,7 +18,7 @@ public:
 	CparameterMap *parmap;
 	CBFNumer(CparameterMap *parmapset);
 	void Reset();
-	void Increment(CPart *parta,CPart *partb,double effa,double effb);
+	void Increment(CMSUPart *parta,CMSUPart *partb,double effa,double effb);
 	void WriteNumer(string dirname,string numertype,bool NoQ);
 	void Print();
 	static CAcceptance *acceptance;
@@ -33,7 +33,7 @@ public:
 	CparameterMap *parmap;
 	CBFDenom(CparameterMap *parmapset);
 	void Reset();
-	void Increment(CPart *parta,double eff);
+	void Increment(CMSUPart *parta,double eff);
 	static char *message;
 };
 
@@ -44,7 +44,7 @@ public:
 	int NSAMPLE_UDS2BAL,Nchi,NPHI,NEVENTS;
 	bool FROM_UDS,NoKsNoPhi;  // FROM_UDS=true means BF from uds charges, if false, then brute forcd
 	double BF_YMAX,BF_YMIN,DELY,BF_PHICUT;
-	CPartMap bfpartmap;
+	CMSUPartMap bfpartmap;
 	CResList *reslist;
 	CparameterMap *parmap;
 	string qualifier;
@@ -70,9 +70,9 @@ public:
 	void ProcessBFPartMap();
 	void ProcessV2Perfect();
 	
-	void IncrementNumer(CPart *parta,CPart *partb);
-	void IncrementDenom(CPart *part);
-	void IncrementGammaP(CPart *parta,CPart *partb,double effa,double effb);
+	void IncrementNumer(CMSUPart *parta,CMSUPart *partb);
+	void IncrementDenom(CMSUPart *part);
+	void IncrementGammaP(CMSUPart *parta,CMSUPart *partb,double effa,double effb);
 	
 	void SetQualifier(string qualifier_set);
 	void PrintBFNumer();
@@ -84,7 +84,7 @@ public:
 	void WriteBFs();
 	void WriteGammaP();
 	void WriteDenoms();
-	double GetMinv(CPart *parta,CPart *partb);
+	double GetMinv(CMSUPart *parta,CMSUPart *partb);
 	char message[500];
 };
 

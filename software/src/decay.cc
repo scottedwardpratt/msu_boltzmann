@@ -1,14 +1,14 @@
 #include "boltzmann.h"
 #include "randy.h"
 #include "resonances.h"
-#include "part.h"
+#include "msupart.h"
 #include "misc.h"
 #include "constants.h"
 
-void CMSU_Boltzmann::Decay(CPart *mother,int &nbodies,array<CPart *,5> &daughter){
+void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
 	int ibody,alpha;
 	double mtot;
-	CPart *dptr;
+	CMSUPart *dptr;
 	vector<double> mass(6);
 	vector<FourVector> p(5);
 	FourVector u,pprime;

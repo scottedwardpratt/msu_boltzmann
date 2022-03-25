@@ -2,7 +2,7 @@
 //  acceptance_CHEAP.cc
 //
 #include "acceptance.h"
-#include "part.h"
+#include "msupart.h"
 #include "resonances.h"
 #include "parametermap.h"
 
@@ -11,11 +11,11 @@ using namespace std;
 CAcceptance_CHEAP::CAcceptance_CHEAP(CparameterMap *parmapin) : CAcceptance(){
 	ETAMAX=parmapin->getD("MSU_BOLTZMANN_ETAMAX",6.0);
 	ETAMIN=-ETAMAX;
-	ptmin=200.0;
+	ptmin=0.2;
 	ptmax=20000000.0;
 }
 
-void CAcceptance_CHEAP::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_CHEAP::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *part){
 	double pt;
 	double eta,pmag;
 	
@@ -24,7 +24,7 @@ void CAcceptance_CHEAP::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 	pmag=sqrt(pt*pt+part->p[3]*part->p[3]);
 	eta=atanh(part->p[3]/pmag);
 	/*
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 	double y,gammav,m,A0,ctau_kaon=3.7,ctau_pion=7.8,lmin=1.0;
 	if(dca[0]<1.5){
 	efficiency=0.0;
@@ -98,14 +98,14 @@ void CAcceptance_CHEAP::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 	}
 }
 
-void CAcceptance_CHEAP::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_CHEAP::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPart *part){
 	double pt,eta,pmag;
 	accept=false;
 	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	pmag=sqrt(pt*pt+part->p[3]*part->p[3]);
 	eta=atanh(part->p[3]/pmag);
 	/* accept=false;
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 	double gammav,m;
 	double ctau_kaon=3.7,ctau_pion=7.8,lmin=1.0;
 	double A0;

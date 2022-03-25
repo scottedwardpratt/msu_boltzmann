@@ -43,7 +43,7 @@ CBranchInfo::CBranchInfo(){
 }
 
 void CResList::freegascalc_onespecies(double m,double T,double &epsilon,double &P,double &dens,double &sigma2,double &dedt){
-	const double prefactor=1.0/(2.0*PI*PI*pow(HBARC,3));
+	const double prefactor=1.0/(2.0*PI*PI*pow(HBARC_GEV,3));
 	double k0,k1,z,k0prime,k1prime,m2,m3,m4,t2,t3,I1,I2,Iomega;
 	char message[100];
 	m2=m*m;
@@ -70,7 +70,7 @@ void CResList::freegascalc_onespecies(double m,double T,double &epsilon,double &
 		k0prime=-k1;
 		k1prime=-k0-k1/z;
 		dedt=prefactor*(6.0*m2*T*k0+(m3+18.0*m*t2)*k1-3.0*m3*k0prime-((m4/T)+6.0*m2*T)*k1prime);
-		Iomega=exp(-z)/(30.0*PI*PI*HBARC*HBARC*HBARC);
+		Iomega=exp(-z)/(30.0*PI*PI*HBARC_GEV*HBARC_GEV*HBARC_GEV);
 		I1=pow(m,1.5)*pow(T,3.5)*7.5*sqrt(2.0*PI);
 		I2=24.0*pow(T,5);
 		sigma2=Iomega*(I1+I2+0.5*sqrt(I1*I2));  // this is an approximation (+/-2%) to messy integral
@@ -124,13 +124,13 @@ double &dedt,double &maxweight){
 	dedt=dedtsum/norm;
 }
 
-CResInfo* CResList::GetResInfoPtr(int code){
+CResInfo* CResList::GetResInfoPtr(int pid){
 	CResInfoMap::iterator rpos;
-	rpos=resmap.find(code);
+	rpos=resmap.find(pid);
 	if(rpos!=resmap.end())
 		return rpos->second;
 	else{
-		sprintf(message,"Warning GetResInfoPtr() can't find match for PID=%d\n",code);
+		sprintf(message,"Warning GetResInfoPtr() can't find match for PID=%d\n",pid);
 		CLog::Fatal(message);
 		return NULL;
 	}
@@ -150,7 +150,7 @@ void CResList::CalcConductivity(double T,double &P,double &epsilon,double &nh,ve
 	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
 		resinfoptr=rpos->second;
 		ires=resinfoptr->ires;
-		if(resinfoptr->code!=22){
+		if(resinfoptr->pid!=22){
 			degen=2.0*resinfoptr->spin+1.0;
 			m=resinfoptr->mass;
 			if(USEPOLEMASS){
@@ -214,7 +214,7 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 		resinfoptr=rpos->second;
 		ires=resinfoptr->ires;
 		
-		if(resinfoptr->code!=22){
+		if(resinfoptr->pid!=22){
 			degen=2.0*resinfoptr->spin+1.0;
 			m=resinfoptr->mass;
 			if(USEPOLEMASS){
@@ -304,11 +304,11 @@ double &nh,vector<double> &density,vector<double> &maxweight,Eigen::Matrix3d &ch
 			if(resinfoptr->baryon!=0)
 				Nud=3-Nstrange;
 			else{
-				if(resinfoptr->code!=22)
+				if(resinfoptr->pid!=22)
 					Nud=2-Nstrange;
 			}
 		}		
-		if(resinfoptr->code!=22){
+		if(resinfoptr->pid!=22){
 			degen=2.0*resinfoptr->spin+1.0;
 			m=resinfoptr->mass;
 			if(USEPOLEMASS){
@@ -374,7 +374,7 @@ double CResList::GetLambda(double T,double P,double epsilon){
 	CResInfoMap::iterator rpos;
 	for(rpos=resmap.begin();rpos!=resmap.end();rpos++){
 		resinfo=rpos->second;
-		if(resinfo->code!=22){
+		if(resinfo->pid!=22){
 			m=resinfo->mass;
 			degen=(2.0*resinfo->spin+1);
 			z=m/T;
@@ -396,13 +396,13 @@ double CResList::GetLambda(double T,double P,double epsilon){
 				if(n>0) nfact*=(2.0*n-1.0);
 			}
 			dIpp=degen*exp(alpha)*pow(m,4)*(-z*J+15.0*gsl_sf_bessel_Kn(2,z)/(z*z));
-			dIpp=dIpp/(60.0*PI*PI*HBARC*HBARC*HBARC);
+			dIpp=dIpp/(60.0*PI*PI*HBARC_GEV*HBARC_GEV*HBARC_GEV);
 			/*
 			dIpptest=0.0;
 			for(p=0.5*dp;p<3000;p+=dp){
 			e=sqrt(m*m+p*p);
-			dIpptest+=degen*(4.0*PI/(8.0*PI*PI*PI*HBARC*HBARC*HBARC))*p*p*dp*exp(-e/T)*( (2.0/3.0)*(p*p/e) - (2.0/15.0)*pow(p,4)/pow(e,3) );
-			//dIpptest+=degen*(4.0*PI/(8.0*PI*PI*PI*HBARC*HBARC*HBARC))*p*p*dp*exp(-e/T)*((2.0/15.0)*pow(p,4)/pow(e,3) );
+			dIpptest+=degen*(4.0*PI/(8.0*PI*PI*PI*HBARC_GEV*HBARC_GEV*HBARC_GEV))*p*p*dp*exp(-e/T)*( (2.0/3.0)*(p*p/e) - (2.0/15.0)*pow(p,4)/pow(e,3) );
+			//dIpptest+=degen*(4.0*PI/(8.0*PI*PI*PI*HBARC_GEV*HBARC_GEV*HBARC_GEV))*p*p*dp*exp(-e/T)*((2.0/15.0)*pow(p,4)/pow(e,3) );
 			}
 			Ipptest+=dIpptest;
 			*/
@@ -436,7 +436,7 @@ void CResList::freegascalc_onespecies(double mass,double T,double &epsiloni,doub
 	}
 	Ji*=expeta;
 	freegascalc_onespecies(mass,T,epsiloni,Pi,densi,sigma2i,dedti);
-	double Jcon=1.0/(2.0*PI*PI*pow(HBARC,3));
+	double Jcon=1.0/(2.0*PI*PI*pow(HBARC_GEV,3));
 	Ji=densi-mass*mass*mass*Ji*Jcon;
 	Ji=Ji/(3.0*T);
 	
@@ -447,7 +447,7 @@ void CResList::freegascalc_onespecies(double mass,double T,double &epsiloni,doub
 		Jtest+=Jcon*exp(-E/T)*dp*p*p*p*p/(3.0*E*E*T);
 	}
 	*/
-	}
+}
 
 
 void CResList::FindFinalProducts(double taumax){

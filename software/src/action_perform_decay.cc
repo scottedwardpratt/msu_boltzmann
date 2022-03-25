@@ -1,11 +1,11 @@
 #include "action.h"
-#include "part.h"
+#include "msupart.h"
 #include "cell.h"
 #include "resonances.h"
 
 void CAction::PerformDecay(){
-	CPart *mother,*dptr;
-	CPartMap::iterator ppos;
+	CMSUPart *mother,*dptr;
+	CMSUPartMap::iterator ppos;
 	int ibody,nbodies;
 	double mtot,mt,etamax=boltzmann->ETAMAX,mothermass;
 	double deleta;

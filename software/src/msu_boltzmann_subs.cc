@@ -1,5 +1,5 @@
 #include "boltzmann.h"
-#include "part.h"
+#include "msupart.h"
 #include "misc.h"
 #include "resonances.h"
 #include "cell.h"
@@ -54,8 +54,8 @@ void CMSU_Boltzmann::KillAllActions(){
 }
 
 void CMSU_Boltzmann::KillAllParts(){
-	CPart *part;
-	CPartMap::iterator ppos;
+	CMSUPart *part;
+	CMSUPartMap::iterator ppos;
 	
 	ppos=PartMap.begin();
 	while(ppos!=PartMap.end()){
@@ -87,7 +87,7 @@ void CMSU_Boltzmann::KillAllParts(){
 
 	int ix,iy,ieta;
 	if(COLLISIONS){
-		CPartMap *partmap;
+		CMSUPartMap *partmap;
 		for(ix=0;ix<2*NXY;ix++){
 			for(iy=0;iy<2*NXY;iy++){
 				for(ieta=0;ieta<2*NETA;ieta++){
@@ -120,8 +120,8 @@ void CMSU_Boltzmann::PrintActionMap(CActionMap *actionmap){
 /*
 void CMSU_Boltzmann::FindAllCollisions(){
 	double taucoll,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel;
-	CPartMap::iterator ppos1,ppos2;
-	CPart *part1,*part2;
+	CMSUPartMap::iterator ppos1,ppos2;
+	CMSUPart *part1,*part2;
 	CActionMap::iterator epos;
 	for(ppos1=PartMap.begin();ppos1!=PartMap.end();++ppos1){
 		part1=ppos1->second;
@@ -141,7 +141,7 @@ void CMSU_Boltzmann::FindAllCollisions(){
 */
 
 void CMSU_Boltzmann::PrintPartList(){
-	CPartMap::iterator ppos2,ppos1=PartMap.begin();
+	CMSUPartMap::iterator ppos2,ppos1=PartMap.begin();
 	while(ppos1!=PartMap.end()){
 		sprintf(message,"%d ",ppos1->second->listid);
 		ppos2=ppos1; ++ppos2;
@@ -158,7 +158,7 @@ void CMSU_Boltzmann::PrintPartList(){
 void CMSU_Boltzmann::ListFutureCollisions(){
 	CActionMap::iterator epos=ActionMap.begin();
 	CAction *action;
-	CPartMap::iterator p1,p2;
+	CMSUPartMap::iterator p1,p2;
 	sprintf(message,"------------------- LIST OF FUTURE COLLISIONS ---------------------\n");
 	while(epos!=ActionMap.end()){
 		action=epos->second;
@@ -173,7 +173,7 @@ void CMSU_Boltzmann::ListFutureCollisions(){
 }
 
 // Note part2 is fake and part1 is real
-void CMSU_Boltzmann::SplitPart(CPart *part1,CPart *part2){
+void CMSU_Boltzmann::SplitPart(CMSUPart *part1,CMSUPart *part2){
 	double oldeta,mt,g1,g2;
 	CMSU_BoltzmannCell *ccell;
 	part2->Copy(part1); // does not change reality or weights
@@ -212,10 +212,10 @@ void CMSU_Boltzmann::SplitPart(CPart *part1,CPart *part2){
 		part2->ChangeMap(&PartMap);
 }
 
-CPart* CMSU_Boltzmann::GetDeadPart(){
+CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 	if(DeadPartMap.size()==0){
 		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
-			new CPart(npartstot);
+			new CMSUPart(npartstot);
 		}
 		sprintf(message,"made new parts, npartstot=%d, tau=%g\n",npartstot,tau);
 		CLog::Info(message);
@@ -223,29 +223,29 @@ CPart* CMSU_Boltzmann::GetDeadPart(){
 	return DeadPartMap.begin()->second;
 }
 
-void CMSU_Boltzmann::GetDeadParts(CPart *&part1,CPart *&part2){
+void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 	int ipart;
 	while(DeadPartMap.size()<2){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
-			new CPart(npartstot);
+			new CMSUPart(npartstot);
 		sprintf(message,"made new parts, npartstot=%d, tau=%g\n",npartstot,tau);
 		CLog::Info(message);
 	}
-	CPartMap::iterator ppos=DeadPartMap.begin();
+	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	part1=ppos->second;
 	++ppos;
 	part2=ppos->second;
 }
 
-void CMSU_Boltzmann::GetDeadParts(array<CPart*,5> &product){
+void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 	int ipart;
 	while(DeadPartMap.size()<5){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
-			new CPart(npartstot);
+			new CMSUPart(npartstot);
 		sprintf(message,"made new parts, npartstot=%d, tau=%g\n",npartstot,tau);
 		CLog::Info(message);
 	}
-	CPartMap::iterator ppos=DeadPartMap.begin();
+	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	for(ipart=0;ipart<5;ipart++){
 		product[ipart]=ppos->second;
 		++ppos;
@@ -263,8 +263,8 @@ CAction* CMSU_Boltzmann::GetDeadAction(){
 }
 
 void CMSU_Boltzmann::CheckPartMap(){
-	CPartMap::iterator iter;
-	CPart *part;
+	CMSUPartMap::iterator iter;
+	CMSUPart *part;
 	for(iter=PartMap.begin();iter!=PartMap.end();iter++){
 		part=iter->second;
 		if(part->currentmap!=&PartMap){
@@ -276,8 +276,8 @@ void CMSU_Boltzmann::CheckPartMap(){
 }
 
 int CMSU_Boltzmann::CountBaryons(){
-	CPartMap::iterator iter;
-	CPart *part;
+	CMSUPartMap::iterator iter;
+	CMSUPart *part;
 	nbaryons=0;
 	for(iter=PartMap.begin();iter!=PartMap.end();iter++){
 		part=iter->second;

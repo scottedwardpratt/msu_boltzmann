@@ -178,7 +178,7 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 										inelasticfile << i <<"\t"<< j << "\t"<< k << "\t"<< pm1 << "\t" << pm2 <<"\t"<< pm3 << "\t" << ThermalArray[i][j][k][pm1][pm2][pm3].size() << endl;
 										Th_iter = ThermalArray[i][j][k][pm1][pm2][pm3].begin();
 										while(Th_iter != ThermalArray[i][j][k][pm1][pm2][pm3].end()){
-											inelasticfile << "\t" << Th_iter->resinfo_1->code << "\t" << Th_iter->resinfo_2->code << endl;
+											inelasticfile << "\t" << Th_iter->resinfo_1->pid << "\t" << Th_iter->resinfo_2->pid << endl;
 											Th_iter++;
 										}
 										inelasticfile << endl;

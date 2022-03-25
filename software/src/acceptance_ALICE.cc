@@ -1,6 +1,6 @@
 #include "acceptance.h"
 #include "resonances.h"
-#include "part.h"
+#include "msupart.h"
 #include "parametermap.h"
 #include "misc.h"
 
@@ -9,8 +9,8 @@ using namespace std;
 CAcceptance_ALICE::CAcceptance_ALICE(CparameterMap *parmapin) : CAcceptance(){
 	ETAMIN=-0.9; // Don't bother calling Acceptance Routine if outside these boundaries.
 	ETAMAX=0.9;
-	PTMIN=200.0; 
-	PTMAX=2500.0;
+	PTMIN=0.2; 
+	PTMAX=2.5;
 	parmap=parmapin;    
 	CENTRALITY=parmap->getI("ALICE_CENTRALITY",0);   // CENTRALITY=0 is most central
 }
@@ -24,10 +24,10 @@ CAcceptance_ALICE_Perfect::CAcceptance_ALICE_Perfect(CparameterMap *parmapin) : 
 	CENTRALITY=parmap->getI("ALICE_CENTRALITY",0);   // CENTRALITY=0 is most central
 }
 
-void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *part){
 	double pt;
 	double dca[4],dcaxy;
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 	
 	efficiency=0.0;
 	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
@@ -56,10 +56,10 @@ void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CPart *pa
 	}
 }
 
-void CAcceptance_ALICE_Perfect::CalcAcceptance(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_ALICE_Perfect::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *part){
 	double pt;
 	double dca[4],dcaxy;
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 	
 	efficiency=0.0;
 	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
@@ -88,10 +88,10 @@ void CAcceptance_ALICE_Perfect::CalcAcceptance(bool &accept,double &efficiency,C
 	}
 }
 
-void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency,CMSUPart *part){
 	double pt,y=part->y;
 	double dca[4],dcaxy;
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 
 	sprintf(message,"this is dead code in acceptance_ALICE.cc, shouldn't be here\n");
 	CLog::Fatal(message);
@@ -125,10 +125,10 @@ void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency
 	}
 }
 
-void CAcceptance_ALICE_Perfect::CalcAcceptance_Realistic(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_ALICE_Perfect::CalcAcceptance_Realistic(bool &accept,double &efficiency,CMSUPart *part){
 	double pt,y=part->y;
 	double dca[4],dcaxy;
-	int pid=part->resinfo->code;
+	int pid=part->resinfo->pid;
 	sprintf(message,"this is dead code in acceptance_ALICE.cc, shouldn't be here\n");
 	CLog::Fatal(message);
 	
@@ -161,10 +161,10 @@ void CAcceptance_ALICE_Perfect::CalcAcceptance_Realistic(bool &accept,double &ef
 	}
 }
 
-void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPart *part){
 	double pt;
 	//double dca[4],dcaxy;
-	//int pid=part->resinfo->code;
+	//int pid=part->resinfo->pid;
 	efficiency=0.0;
 	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	accept=false;
@@ -174,10 +174,10 @@ void CAcceptance_ALICE::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart
 	}
 }
 
-void CAcceptance_ALICE_Perfect::CalcAcceptanceNoID(bool &accept,double &efficiency,CPart *part){
+void CAcceptance_ALICE_Perfect::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPart *part){
 	double pt;
 	//double dca[4],dcaxy;
-	//int pid=part->resinfo->code;
+	//int pid=part->resinfo->pid;
 	efficiency=0.0;
 	pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 	accept=false;

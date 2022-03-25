@@ -1,8 +1,8 @@
 #include "action.h"
-#include "part.h"
+#include "msupart.h"
 #include "cell.h"
 
-void CMSU_Boltzmann::AddAction_Activate(CPart *part){
+void CMSU_Boltzmann::AddAction_Activate(CMSUPart *part){
 	CActionMap::iterator epos;
 	part->active=false;
 	CAction *action;
@@ -18,7 +18,7 @@ void CMSU_Boltzmann::AddAction_Activate(CPart *part){
 	action->type=0;
 	action->tau=part->tau0;
 	action->MoveToActionMap();
-	action->partmap.insert(CPartPair(part->key,part));
+	action->partmap.insert(CMSUPartPair(part->key,part));
 	if(action->tau<tau){
 		sprintf(message,"trying to AddAction_Activate at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
@@ -26,13 +26,13 @@ void CMSU_Boltzmann::AddAction_Activate(CPart *part){
 	part->actionmap.insert(CActionPair(action->key,action));
 }
 
-void CMSU_Boltzmann::AddAction_Decay(CPart *part,double taudecay){
+void CMSU_Boltzmann::AddAction_Decay(CMSUPart *part,double taudecay){
 	CAction *action=GetDeadAction();
 	action->tau=taudecay;
 	action->partmap.clear();
 	action->type=1;
 	action->MoveToActionMap();
-	action->partmap.insert(CPartPair(part->key,part));
+	action->partmap.insert(CMSUPartPair(part->key,part));
 	part->actionmap.insert(CActionPair(action->key,action));
 	if(action->tau<tau){
 		part->Print();
@@ -42,7 +42,7 @@ void CMSU_Boltzmann::AddAction_Decay(CPart *part,double taudecay){
 	}
 }
 
-void CMSU_Boltzmann::AddAction_ExitCell(CPart *part){
+void CMSU_Boltzmann::AddAction_ExitCell(CMSUPart *part){
 	CAction *action;
 	action=GetDeadAction();
 	if(part->tauexit<TAUCOLLMAX){
@@ -51,7 +51,7 @@ void CMSU_Boltzmann::AddAction_ExitCell(CPart *part){
 		action->type=6;
 		action->tau=part->tauexit;
 		action->MoveToActionMap();
-		action->partmap.insert(CPartPair(part->key,part));
+		action->partmap.insert(CMSUPartPair(part->key,part));
 		part->actionmap.insert(CActionPair(action->key,action));
 		if(action->tau<tau-1.0E-10){
 			part->Print();
@@ -62,7 +62,7 @@ void CMSU_Boltzmann::AddAction_ExitCell(CPart *part){
 	}
 }
 
-void CMSU_Boltzmann::AddAction_Collision(CPart *part1,CPart *part2,double taucoll,double pibsquared,
+void CMSU_Boltzmann::AddAction_Collision(CMSUPart *part1,CMSUPart *part2,double taucoll,double pibsquared,
 	double sigma_scatter,double sigma_merge,double sigma_annihilation,
 	double sigma_inel,vector<double> dsigma_merge){
 	CAction *action=GetDeadAction();
@@ -80,8 +80,8 @@ void CMSU_Boltzmann::AddAction_Collision(CPart *part1,CPart *part2,double taucol
 		sprintf(message,"trying to AddAction_Collision at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
 	}
-	action->partmap.insert(CPartPair(part1->key,part1));
-	action->partmap.insert(CPartPair(part2->key,part2));
+	action->partmap.insert(CMSUPartPair(part1->key,part1));
+	action->partmap.insert(CMSUPartPair(part2->key,part2));
 
 	part1->actionmap.insert(CActionPair(action->key,action));
 	part2->actionmap.insert(CActionPair(action->key,action));
