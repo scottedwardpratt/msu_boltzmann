@@ -7,6 +7,24 @@
 
 using namespace std;
 
+double CMSU_Boltzmann::InputPartList(partList *input_partlist){
+	int ipart;
+	double tau0,eta,mass,rapidity;
+	CMSUPart *newpart;
+	Cpart *part;
+	for(ipart=0;ipart<int(input_partlist->partvec.size());ipart++){
+		part=partlist->partvec[ipart];
+		tau0=sqrt(part->r[0]*part->r[0]-part->r[1]*part->r[1]-part->r[2]*part->r[2]-part->r[3]*part->r[3]);
+		eta=asinh(part->r[3]/tau0);
+		mass=sqrt(part->msquared);
+		rapidity=atanh(part->p[3]/part->p[0]);
+		weight=1.0;
+		balanceID=-1;
+		newpart=GetDeadPart();
+		newpart->InitBalance(ID,part->r[1],part->r[2],tau0,eta,part->p[1],part->p[2],mass,rapidity,weight,balanceID);
+	}
+}
+
 double CMSU_Boltzmann::WriteOSCAR(int ievent){
 	CMSU_BoltzmannBinaryPartInfo bpart;
 	double dnchdy=0;

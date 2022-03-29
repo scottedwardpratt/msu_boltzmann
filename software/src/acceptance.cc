@@ -1,7 +1,3 @@
-//
-//  acceptance.cc
-//  
-
 #include "acceptance.h"
 
 using namespace std;

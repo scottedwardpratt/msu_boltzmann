@@ -1,4 +1,4 @@
-#include  "boltzmann.h"
+#include  "msu_boltzmann.h"
 #include "action.h"
 
 CMSU_Boltzmann *CAction::boltzmann=NULL;
