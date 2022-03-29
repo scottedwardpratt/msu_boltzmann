@@ -1,9 +1,9 @@
-#include "mutinfo.h"
-#include "msupart.h"
-#include "boltzmann.h"
-#include "cell.h"
-#include "log.h"
-#include "resonances.h"
+#include "msu_commonutils/log.h"
+#include "msu_boltzmann/mutinfo.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/msu)boltzmann.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_boltzmann/resonances.h"
 
 CMSU_Boltzmann *CMuTInfo::boltzmann=NULL;
 int CMuTInfo::NETEVENTS=0;

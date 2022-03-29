@@ -1,11 +1,11 @@
-#include "boltzmann.h"
-#include "msupart.h"
-#include "misc.h"
-#include "resonances.h"
-#include "cell.h"
-#include "constants.h"
-#include "randy.h"
-#include "action.h"
+#include "msu_commonutils/misc.h"
+#include "msu_commonutils/constants.h"
+#include "msu_commonutils/randy.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/esonances.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_boltzmann/action.h"
 
 void CMSU_Boltzmann::WriteAnnihilationData(){
 	if(BARYON_ANNIHILATION){

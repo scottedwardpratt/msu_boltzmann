@@ -1,11 +1,11 @@
-#include "msupart.h"
-#include "boltzmann.h"
-#include "balancearrays.h"
-#include "resonances.h"
-#include "cell.h"
-#include "constants.h"
-#include "misc.h"
-#include "randy.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/boltzmann.h"
+#include "msu_boltzmann/balancearrays.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_commonutils/constants.h"
+#include "msu_commonutils/misc.h"
+#include "msu_commonutils/randy.h"
 
 CMSU_Boltzmann *CMSUPart::boltzmann=NULL;
 CBalance *CMSUPart::cb=NULL;

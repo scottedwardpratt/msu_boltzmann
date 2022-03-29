@@ -1,9 +1,9 @@
-#include "boltzmann.h"
-#include "misc.h"
-#include "randy.h"
-#include "msupart.h"
-#include "resonances.h"
-#include "constants.h"
+#include "msu_commonutils/misc.h"
+#include "msu_commonutils/randy.h"
+#include "msu_commonutils/constants.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/resonances.h"
 
 using namespace Misc;
 

@@ -4,15 +4,13 @@
 #include <utility>
 #include "boltzmann.h"
 //#include "hist.h"
-#include "pow.h"
-#include "msupart.h"
-#include "resonances.h"
-#include "cell.h"
-#include "sampler.h"
-#include "balancearrays.h"
-#include "randy.h"
-#include "hyper.h"
-#include "action.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_sampler/msu_sampler.h"
+#include "msu_boltzmann/balancearrays.h"
+#include "msu_commonutils/randy.h"
+#include "msu_boltzmann/action.h"
 
 CMSU_Boltzmann::CMSU_Boltzmann(){
 };

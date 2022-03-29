@@ -1,10 +1,10 @@
 #include <cmath>
 #include <cstdlib>
-#include "resonances.h"
-#include "constants.h"
-#include "parametermap.h"
-#include "randy.h"
-#include "misc.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_commonutils/constants.h"
+#include "msu_commonutilsparametermap.h"
+#include "msu_commonutilsrandy.h"
+#include "msu_commonutilsmisc.h"
 
 using namespace std;
 
