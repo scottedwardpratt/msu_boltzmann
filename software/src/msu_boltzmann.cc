@@ -44,14 +44,13 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	DeadPartMap.clear();
 	ActionMap.clear();
 	DeadActionMap.clear();
-	randy=new rrandy(-1234);
+	randy=new Crandy(-1234);
 	CAction::boltzmann=this;
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
 	oscarfile=NULL;
 	reslist=new CResList(&parmap);
 
-	mastersampler=new CMasterSamplre(&parmap);
 	decay_nbody=new CDecay_NBody(randy);
 }
 

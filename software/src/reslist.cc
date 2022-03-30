@@ -9,7 +9,6 @@
 using namespace std;
 //using namespace boost::math;
 
-CSampler* CResList::sampler=NULL;
 CMSU_Boltzmann* CResList::boltzmann=NULL;
 
 CResList::CResList(CparameterMap* parmap_in){
