@@ -1,7 +1,9 @@
-#include "inelastic.h"
-#include "boltzmann.h"
-#include "resonances.h"
-#include "misc.h"
+#include "msu_boltzmann/boltzmanndefs.h"
+#include "msu_boltzmann/inelastic.h"
+#include "msu_boltzmann/boltzmanndefs.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_commonutils/misc.h"
 
 CMSU_Boltzmann *CInelasticList::boltzmann=NULL;
 bool CInelasticList::UseFile = false;

@@ -1,5 +1,5 @@
-#include  "msu_boltzmann.h"
-#include "action.h"
+#include  "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/action.h"
 
 CMSU_Boltzmann *CAction::boltzmann=NULL;
 char *CAction::message=new char[500];

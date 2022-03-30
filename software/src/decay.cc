@@ -1,9 +1,9 @@
-#include "boltzmann.h"
-#include "randy.h"
-#include "resonances.h"
-#include "msupart.h"
-#include "misc.h"
-#include "constants.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_commonutils/randy.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_commonutils/misc.h"
+#include "msu_commonutils/constants.h"
 
 void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
 	int ibody,alpha;

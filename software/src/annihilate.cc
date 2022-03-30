@@ -1,10 +1,11 @@
-#include "boltzmann.h"
-#include "msupart.h"
-#include "cell.h"
-#include "resonances.h"
-#include "randy.h"
-#include "constants.h"
-#include "misc.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_commonutils/randy.h"
+#include "msu_commonutils/constants.h"
+#include "msu_commonutils/misc.h"
+
 
 int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,array<CMSUPart*,5> &daughter){
 	CMSUPart *dptr;

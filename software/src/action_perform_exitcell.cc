@@ -1,6 +1,6 @@
-#include "action.h"
-#include "msupart.h"
-#include "cell.h"
+#include "msu_boltzmann/action.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/cell.h"
 
 void CAction::PerformExitCell(){
 	CMSUPart *part;

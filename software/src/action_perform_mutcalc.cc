@@ -1,8 +1,8 @@
-#include "action.h"
-#include "cell.h"
-#include "mutinfo.h"
-#include "msupart.h"
-#include "resonances.h"
+#include "msu_boltzmann/action.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_boltzmann/mutinfo.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/resonances.h"
 
 void CAction::PerformMuTCalcUpdateNPE(){
 	int ix,iy,itau,btype,pid;

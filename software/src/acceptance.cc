@@ -1,4 +1,4 @@
-#include "acceptance.h"
+#include "msu_boltzmann/acceptance.h"
 
 using namespace std;
 

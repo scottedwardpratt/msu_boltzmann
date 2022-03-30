@@ -1,5 +1,6 @@
 #include <cmath>
 #include <cstdlib>
+#include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_boltzmann/resonances.h"
 #include "msu_commonutils/constants.h"
 #include "msu_commonutils/parametermap.h"
@@ -10,7 +11,7 @@ using namespace std;
 
 CResList *CResInfo::reslist=NULL;
 double **CResInfo::ChiA=NULL;
-CRandy *CResInfo::randy=new CRandy(-1234);
+Crandy *CResInfo::randy=new Crandy(-1234);
 char *CResInfo::message=new char[500];
 
 CResInfo::CResInfo(){

@@ -1,7 +1,7 @@
-#include "action.h"
-#include "msupart.h"
-#include "cell.h"
-#include "resonances.h"
+#include "msu_boltzmann/action.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_boltzmann/resonances.h"
 
 void CAction::PerformDecay(){
 	CMSUPart *mother,*dptr;

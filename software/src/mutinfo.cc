@@ -1,7 +1,9 @@
+#include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_commonutils/log.h"
+#include "msu_commonutils/constants.h"
 #include "msu_boltzmann/mutinfo.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/msu)boltzmann.h"
+#include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_boltzmann/resonances.h"
 
@@ -12,7 +14,7 @@ int CMuTInfo::NXY=0;
 double CMuTInfo::DXY=0.0;
 vector<vector<double>> CMuTInfo::taumin{};
 vector<CResInfo *> CMuTInfo::Bresinfo{};
-vector<double> CMuTInfo::massB{938.27,1189.37,1314.83,1115.68,1232.0,1385,1530,1672.43};
+vector<double> CMuTInfo::massB{0.938,1.18937,1.31483,1.11568,1.232,1.385,1.530,1.67243};
 vector<double> CMuTInfo::degenB{8,12,8,4,16,24,16,8};
 
 CMuTInfo::CMuTInfo(double tau_set){
@@ -91,7 +93,7 @@ void CMuTInfo::CalcAllMuTU(){
 		gamma=sqrt(1.0+Uxpi*Uxpi+Uypi*Uypi);
 		rhopi=double(Npi)/(gamma*volume);
 		degen=3.0;
-		GetMuT(PionMass_GEV,degen,rhopi,epsilonpi,Tpi,mupi);
+		GetMuT(PionMassGeV,degen,rhopi,epsilonpi,Tpi,mupi);
 	}
 	else{
 		Tpi=-1.0;
@@ -109,7 +111,7 @@ void CMuTInfo::CalcAllMuTU(){
 		gamma=sqrt(1.0+UxK*UxK+UyK*UyK);
 		rhoK=double(NK)/(gamma*volume);
 		degen=4.0;
-		GetMuT(KaonMass_GEV,degen,rhoK,epsilonK,TK,muK);
+		GetMuT(KaonMassGeV,degen,rhoK,epsilonK,TK,muK);
 	}
 	else{
 		TK=-1.0;

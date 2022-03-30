@@ -1,13 +1,11 @@
-#include "boltzmann.h"
+#include "msu_boltzmann/msu_boltzmann.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
-#include "boltzmann.h"
-//#include "hist.h"
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/resonances.h"
 #include "msu_boltzmann/cell.h"
-#include "msu_sampler/msu_sampler.h"
+#include "msu_sampler/sampler.h"
 #include "msu_boltzmann/balancearrays.h"
 #include "msu_commonutils/randy.h"
 #include "msu_boltzmann/action.h"
@@ -46,7 +44,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	DeadPartMap.clear();
 	ActionMap.clear();
 	DeadActionMap.clear();
-	randy=new CRandy(-1234);
+	randy=new rrandy(-1234);
 	CAction::boltzmann=this;
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;

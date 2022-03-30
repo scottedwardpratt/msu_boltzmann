@@ -1,11 +1,11 @@
-#include "balancearrays.h"
-#include "boltzmann.h"
-#include "msupart.h"
-#include "acceptance.h"
-#include "randy.h"
-#include "resonances.h"
-#include "constants.h"
-#include "misc.h"
+#include "msu_boltzmann/balancearrays.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/acceptance.h"
+#include "msu_commonutils/randy.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_commonutils/constants.h"
+#include "msu_commonutils/misc.h"
 
 using namespace std;
 
@@ -467,7 +467,7 @@ void CBalanceArrays::IncrementDenom(CMSUPart *part){
 	int pid;
 	bool accepta;
 	double effa,dely,ya,phia;
-	CRandy *randy=boltzmann->randy;
+	Crandy *randy=boltzmann->randy;
 	CMSUPart parta;
 	pid=part->resinfo->pid;
 	int iy=5+floorl(part->y);
@@ -522,7 +522,7 @@ void CBalanceArrays::IncrementNumer(CMSUPart *parta,CMSUPart *partb){
 	bool accepta,acceptb,acceptaNoID,acceptbNoID;
 	double MSU_BOLTZMANN_ETAMAX=boltzmann->ETAMAX;
 	int pida,pidb;
-	CRandy *randy=boltzmann->randy;
+	Crandy *randy=boltzmann->randy;
 	CMSUPart partaa,partbb;
 	pida=parta->resinfo->pid;
 	pidb=partb->resinfo->pid;

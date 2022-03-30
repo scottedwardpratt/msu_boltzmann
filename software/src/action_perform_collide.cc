@@ -1,5 +1,5 @@
-#include "action.h"
-#include "msupart.h"
+#include "msu_boltzmann/action.h"
+#include "msu_boltzmann/msupart.h"
 
 void CAction::PerformCollide(){
 	int colltype,iproduct,nproducts;

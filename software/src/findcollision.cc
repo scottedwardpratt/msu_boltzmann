@@ -1,8 +1,8 @@
-#include "boltzmann.h"
-#include "msupart.h"
-#include "cell.h"
-#include "resonances.h"
-#include "constants.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_commonutils/constants.h"
 
 bool CMSU_Boltzmann::CheckKinematics(CMSUPart *part1,CMSUPart *part2,
 	double &Minv2,double &pibsquared,double &taucoll){

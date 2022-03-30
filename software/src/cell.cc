@@ -1,5 +1,5 @@
-#include "boltzmann.h"
-#include "cell.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/cell.h"
 
 CMSU_Boltzmann *CMSU_BoltzmannCell::boltzmann=NULL;
 char *CMSU_BoltzmannCell::message=new char[500];

@@ -1,9 +1,10 @@
 #include <cmath>
 #include <cstdlib>
-#include "msu_boltzmannresonances.h"
-#include "msu_commonutilsconstants.h"
-#include "msu_commonutilsparametermap.h"
-#include "msu_commonutilsrandy.h"
+#include "msu_boltzmann/boltzmanndefs.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_commonutils/constants.h"
+#include "msu_commonutils/parametermap.h"
+#include "msu_commonutils/randy.h"
 
 using namespace std;
 //using namespace boost::math;

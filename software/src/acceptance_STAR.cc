@@ -1,7 +1,7 @@
-#include "acceptance.h"
-#include "msupart.h"
-#include "parametermap.h"
-#include "resonances.h"
+#include "msu_boltzmann/acceptance.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_commonutils/parametermap.h"
+#include "msu_boltzmann/resonances.h"
 
 using namespace std;
 

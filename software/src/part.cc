@@ -1,5 +1,6 @@
+#include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/boltzmann.h"
+#include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/balancearrays.h"
 #include "msu_boltzmann/resonances.h"
 #include "msu_boltzmann/cell.h"

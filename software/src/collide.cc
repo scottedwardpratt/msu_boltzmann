@@ -1,9 +1,9 @@
-#include "boltzmann.h"
-#include "msupart.h"
-#include "resonances.h"
-#include "cell.h"
-#include "misc.h"
-#include "constants.h"
+#include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_boltzmann/cell.h"
+#include "msu_commonutils/misc.h"
+#include "msu_commonutils/constants.h"
 
 //#define __SCATTERING_ON__
 

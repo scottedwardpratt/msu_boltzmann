@@ -1,8 +1,8 @@
-#include "acceptance.h"
-#include "resonances.h"
-#include "msupart.h"
-#include "parametermap.h"
-#include "misc.h"
+#include "msu_boltzmann/acceptance.h"
+#include "msu_boltzmann/resonances.h"
+#include "msu_boltzmann/msupart.h"
+#include "msu_commonutils/parametermap.h"
+#include "msu_commonutils/misc.h"
 
 using namespace std;
 

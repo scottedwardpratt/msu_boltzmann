@@ -1,13 +1,16 @@
+#include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_commonutils/randy.h"
 #include "msu_commonutils/misc.h"
-#include "msu_boltzmann/boltzmann.h"
+#include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/resonances.h"
 #include "msu_boltzmann/cell.h"
+#include "msu_sampler/classdefs.h"
+#include "msu_sampler/part.h"
 
 using namespace std;
 
-double CMSU_Boltzmann::InputPartList(partList *input_partlist){
+void CMSU_Boltzmann::InputPartList(CpartList *input_partlist){
 	int ipart;
 	double tau0,eta,mass,rapidity;
 	CMSUPart *newpart;
