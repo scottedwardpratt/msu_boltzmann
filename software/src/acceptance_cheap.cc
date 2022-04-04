@@ -3,7 +3,7 @@
 //
 #include "msu_boltzmann/acceptance.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_commonutils/parametermap.h"
 
 using namespace std;

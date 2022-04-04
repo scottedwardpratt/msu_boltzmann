@@ -3,7 +3,7 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/acceptance.h"
 #include "msu_commonutils/randy.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_commonutils/constants.h"
 #include "msu_commonutils/misc.h"
 
@@ -19,7 +19,7 @@ CBalanceArrays::CBalanceArrays(CMSU_Boltzmann *boltzmannset){
 }
 
 void CBalanceArrays::InitArrays(){
-	CResInfoMap::iterator itr;
+	CresInfoMap::iterator itr;
 	NSAMPLE_HYDRO2UDS=parmap->getD("NSAMPLE_HYDRO2UDS",1);
 	NSAMPLE_UDS2BAL=parmap->getD("NSAMPLE_UDS2BAL",1);
 	FROM_UDS=parmap->getB("BF_FROM_UDS",false);

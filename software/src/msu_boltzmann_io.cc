@@ -3,7 +3,7 @@
 #include "msu_commonutils/misc.h"
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_sampler/classdefs.h"
 #include "msu_sampler/part.h"
@@ -11,12 +11,12 @@
 using namespace std;
 
 void CMSU_Boltzmann::InputPartList(CpartList *input_partlist){
-	int ipart;
-	double tau0,eta,mass,rapidity;
+	int ipart,balanceID;
+	double tau0,eta,mass,rapidity,weight=1.0;
 	CMSUPart *newpart;
 	Cpart *part;
 	for(ipart=0;ipart<int(input_partlist->partvec.size());ipart++){
-		part=partlist->partvec[ipart];
+		part=&(input_partlist->partvec[ipart]);
 		tau0=sqrt(part->r[0]*part->r[0]-part->r[1]*part->r[1]-part->r[2]*part->r[2]-part->r[3]*part->r[3]);
 		eta=asinh(part->r[3]/tau0);
 		mass=sqrt(part->msquared);
@@ -24,7 +24,7 @@ void CMSU_Boltzmann::InputPartList(CpartList *input_partlist){
 		weight=1.0;
 		balanceID=-1;
 		newpart=GetDeadPart();
-		newpart->InitBalance(ID,part->r[1],part->r[2],tau0,eta,part->p[1],part->p[2],mass,rapidity,weight,balanceID);
+		newpart->InitBalance(part->pid,part->r[1],part->r[2],tau0,eta,part->p[1],part->p[2],mass,rapidity,weight,balanceID);
 	}
 }
 
@@ -103,7 +103,7 @@ void CMSU_Boltzmann::ReadOSCARHeader(){
 
 int CMSU_Boltzmann::ReadOSCAR(int ievent){
 	CMSU_BoltzmannBinaryPartInfo bpart;
-	CResInfo *resinfo;
+	CresInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID;
 	int nparts_read,ipart=0;
@@ -219,7 +219,7 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 
 int CMSU_Boltzmann::ReadBalanceParts(int ievent){
 	CMSU_BoltzmannBinaryBalancePartInfo bpart;
-	CResInfo *resinfo;
+	CresInfo *resinfo;
 	double p[4],r[4],mass,rapidity,eta,tau0;
 	int weight,ID,balanceID;
 	int nparts_read,ipart=0;

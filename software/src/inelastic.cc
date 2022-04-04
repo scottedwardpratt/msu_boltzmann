@@ -2,7 +2,7 @@
 #include "msu_boltzmann/inelastic.h"
 #include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_boltzmann/msu_boltzmann.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_commonutils/misc.h"
 
 CMSU_Boltzmann *CInelasticList::boltzmann=NULL;
@@ -41,7 +41,7 @@ CInelasticList::CInelasticList(){
 	}
 }
 
-CInelasticInfo::CInelasticInfo(CResInfo *resinfo_1_in, CResInfo *resinfo_2_in, int type_in){
+CInelasticInfo::CInelasticInfo(CresInfo *resinfo_1_in, CresInfo *resinfo_2_in, int type_in){
 	//by convention, resinfo_1 will have the lighter of the two particles
 	if(resinfo_1_in->mass <= resinfo_2_in->mass){
 		resinfo_1 = resinfo_1_in;
@@ -74,11 +74,11 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 	fstream inelasticfile;
 	int ires1, ires2, ires3, ires4, netq, netb, nets, pmq=0, pmb=0, pms=0, size, foobar=0, sum = 0;
 	double foo = 0;
-	CResInfo *resinfoptr_1 = NULL,*resinfoptr_2 = NULL;
-	CResInfoMap::iterator rpos1,rpos2;
+	CresInfo *resinfoptr_1 = NULL,*resinfoptr_2 = NULL;
+	CresInfoMap::iterator rpos1,rpos2;
 	CInelasticInfo *temp;
 	list<CInelasticInfo>::iterator Th_iter;
-	CResList *reslist=boltzmann->reslist;
+	CresList *reslist=boltzmann->reslist;
 	int nres=reslist->resmap.size();
 
 	if(FromFile){
@@ -229,7 +229,7 @@ void CInelasticList::SortedAdd(list<CInelasticInfo> &list_in, CInelasticInfo ine
 Method to check whether or not a given inelastic scattering is valid. Allows for more complex checks.
 Assumes that res1 and res2 are the incoming particles, while res3 and res4 are outgoing particles.
 */
-bool CInelasticList::AddToArrayCheck(CResInfo res1, CResInfo res2, CResInfo res3, CResInfo res4){
+bool CInelasticList::AddToArrayCheck(CresInfo res1, CresInfo res2, CresInfo res3, CresInfo res4){
 	bool add = true;
 	//check for charge, baryon number, and strangness conservation
 	if(res1.charge + res2.charge - res3.charge - res4.charge != 0){

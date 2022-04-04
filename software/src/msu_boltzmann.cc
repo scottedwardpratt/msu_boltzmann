@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <utility>
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_sampler/sampler.h"
 #include "msu_boltzmann/balancearrays.h"
@@ -34,7 +34,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	}
 	ibalmax=0;
 	npartstot=nactionstot=0;
-	CResList::boltzmann=this;
+	//CresList::boltzmann=this;
 	CMSUPart::boltzmann=this;
 	tau=0.0;
 	chitotH.setZero();
@@ -49,7 +49,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
 	oscarfile=NULL;
-	reslist=new CResList(&parmap);
+	reslist=new CresList(&parmap);
 
 	decay_nbody=new CDecay_NBody(randy);
 }
@@ -81,8 +81,6 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	INELASTIC=parmap.getB( "MSU_BOLTZMANN_INELASTIC",false);
 	NBOSE=parmap.getI("MSU_BOLTZMANN_NBOSE",1);
 	Q0=parmap.getD( "MSU_BOLTZMANN_INELASTIC_Q0", 0);
-	COOPERFRYE_CREATENEGPARTS=parmap.getB("MSU_BOLTZMANN_COOPERFRYE_CREATENEGPARTS","false");
-	COOPERFRYE_WMAX=parmap.getI("MSU_BOLTZMANN_COOPERFRYE_WMAX",1);
 	HYDRO_OCTANT_SYMMETRY=parmap.getI("HYDRO_OCTANT",2);
 	HYDRO_PURE_BJORKEN=parmap.getB("HYDRO_PURE_BJORKEN",false);
 	BARYON_ANNIHILATION=parmap.getB("MSU_BOLTZMANN_BARYON_ANNIHILATION",false);
@@ -203,8 +201,6 @@ void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
 	string command="mkdir -p model_output/"+run_name+"/"+qualifier;
 	system(command.c_str());
-	if(sampler!=NULL)
-		sampler->nevents=0;
 	if(oscarfile!=NULL){
 		fclose(oscarfile);
 		oscarfile=NULL;

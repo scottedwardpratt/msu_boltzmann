@@ -3,7 +3,7 @@
 #include "msu_commonutils/constants.h"
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 
 using namespace Misc;
 
@@ -114,7 +114,7 @@ void CMSU_Boltzmann::Scatter(CMSUPart *part1,CMSUPart *part2,CMSUPart *part3,CMS
 /*
 If resonance can decay, A->B+C, then if B+C collide, this will merge B+C->A
 */
-bool CMSU_Boltzmann::Merge(CMSUPart *part1,CMSUPart *part2,CMSUPart *part3,CResInfo *resinfo){
+bool CMSU_Boltzmann::Merge(CMSUPart *part1,CMSUPart *part2,CMSUPart *part3,CresInfo *resinfo){
 	int alpha;
 	double ptot[4],s;
 	FourVector *p1=&part1->p,*p2=&part2->p;

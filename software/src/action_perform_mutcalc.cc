@@ -2,14 +2,14 @@
 #include "msu_boltzmann/cell.h"
 #include "msu_boltzmann/mutinfo.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 
 void CAction::PerformMuTCalcUpdateNPE(){
 	int ix,iy,itau,btype,pid;
 	itau=lrint(floor(tau/boltzmann->MUTCALC_DELTAU));
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
-	CResInfo *resinfo;
+	CresInfo *resinfo;
 	CMuTInfo *mti;
 	double gamma,gammav,E,px,py,eta,t,x,y;
 

@@ -4,7 +4,7 @@
 #include "msu_commonutils/randy.h"
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_boltzmann/action.h"
 
@@ -313,8 +313,8 @@ void CMSU_Boltzmann::InitMuTCalc(){
 				muTinfo[itau][ix][iy]=new CMuTInfo((itau+0.5)*MUTCALC_DELTAU);
 		}
 	}
-	CResInfoMap::iterator rpos;
-	CResInfo *resinfo;
+	CresInfoMap::iterator rpos;
+	CresInfo *resinfo;
 	for(rpos=reslist->resmap.begin();rpos!=reslist->resmap.end();++rpos){
 		resinfo=rpos->second;
 		if(resinfo->baryon>0){

@@ -1,7 +1,7 @@
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/cell.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
 #include "msu_commonutils/randy.h"
 #include "msu_commonutils/constants.h"
 #include "msu_commonutils/misc.h"
@@ -20,7 +20,7 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 	vector<double> mass(6);
 	vector<FourVector> p(5);
 
-	CResInfo *resinfo1=part1->resinfo,*resinfo2=part2->resinfo,*resinfo;
+	CresInfo *resinfo1=part1->resinfo,*resinfo2=part2->resinfo,*resinfo;
 	if(resinfo1->baryon<0){
 		resinfo=resinfo2;
 		resinfo2=resinfo1;

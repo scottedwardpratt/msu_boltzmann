@@ -5,7 +5,8 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/cell.h"
-#include "msu_boltzmann/resonances.h"
+#include "msu_sampler/resonances.h"
+using namespace MSU_EOS;
 
 CMSU_Boltzmann *CMuTInfo::boltzmann=NULL;
 int CMuTInfo::NETEVENTS=0;
@@ -13,7 +14,7 @@ int CMuTInfo::NMINCALC=5;
 int CMuTInfo::NXY=0;
 double CMuTInfo::DXY=0.0;
 vector<vector<double>> CMuTInfo::taumin{};
-vector<CResInfo *> CMuTInfo::Bresinfo{};
+vector<CresInfo *> CMuTInfo::Bresinfo{};
 vector<double> CMuTInfo::massB{0.938,1.18937,1.31483,1.11568,1.232,1.385,1.530,1.67243};
 vector<double> CMuTInfo::degenB{8,12,8,4,16,24,16,8};
 
@@ -203,7 +204,7 @@ double &Ux,double &Uy,double &epsilon){
 }
 
 void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_target,double &T,double &mu){
-	double E,dEdT,ETarget=epsilon_target/rho_target,epsilon0,dedT,sigma2,P,rho0,dT;
+	double E,dEdT,ETarget=epsilon_target/rho_target,epsilon0,dedT,P,rho0,dT;
 	int ntry=0;
 	char message[100];
 	if(ETarget<mass+10.0){
@@ -214,7 +215,7 @@ void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_
 		T=90.0;
 		do{
 			ntry+=1;
-			CResList::freegascalc_onespecies(mass,T,epsilon0,P,rho0,sigma2,dedT);
+			MSU_EOS::freegascalc_onespecies(T,mass,epsilon0,P,rho0,dedT);
 			E=epsilon0/rho0;
 			dEdT=dedT/rho0-epsilon0*epsilon0/(rho0*rho0*T*T);
 			dT=(ETarget-E)/dEdT;
@@ -226,7 +227,7 @@ void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_
 			sprintf(message,"CMuTInfo::GetMuT did not converge!!!, T=%g, dT=%g\n",T,dT);
 			CLog::Info(message);
 		}
-		CResList::freegascalc_onespecies(mass,T,epsilon0,P,rho0,sigma2,dedT);
+		MSU_EOS::freegascalc_onespecies(T,mass,epsilon0,P,rho0,dedT);
 		mu=log(rho_target/(rho0*degen));
 	}
 }
