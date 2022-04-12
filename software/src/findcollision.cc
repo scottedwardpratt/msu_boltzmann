@@ -64,9 +64,9 @@ bool CMSU_Boltzmann::CheckKinematics(CMSUPart *part1,CMSUPart *part2,
 double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 		double &sigma_scatter,double &sigma_merge,double &sigma_annihilation,double &sigma_inel,
 		vector<double> &dsigma_merge){
-	double sigmatot=0,MR,M,Gamma,b,jR,j1,j2,qR2,q2,q3,q4,tan2delta,G,dsigma;
+	double sigmatot=0,MR,M,Gamma,b,degenR,degen1,degen2,qR2,q2,q3,q4,tan2delta,G,dsigma;
 	int L_merge,ir1,ir2;
-	CMerge *merge;
+	Cmerge *merge;
 	
 	if((part1->balanceID>=0 && part2->balanceID<0) || (part2->balanceID>=0 && part1->balanceID<0)){
 		sigma_scatter=SIGMABF;
@@ -91,14 +91,14 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 	merge=reslist->MergeArray[ir1][ir2];
 	dsigma_merge.clear();
 	while(merge!=NULL){
-		j1=part1->resinfo->spin;
-		j2=part2->resinfo->spin;
+		degen1=part1->resinfo->degen;
+		degen2=part2->resinfo->degen;
 		M=sqrt(Minv2);
 		if(M>merge->resinfo->minmass){
 			q2=Misc::triangle2(Minv2,part1->msquared,part2->msquared);
 			Gamma=merge->resinfo->width;
 			b=merge->branching;
-			jR=merge->resinfo->spin;
+			degenR=merge->resinfo->degen;
 			MR=merge->resinfo->mass;
 			L_merge = merge->L;
 			qR2=Misc::triangle2(MR*MR,part1->msquared,part2->msquared);
@@ -108,7 +108,7 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 			G=Gamma*(MR/M)*q3*1.2/(1.0+0.2*q4);
 			tan2delta=pow(0.5*G/(M-MR),2);
 			dsigma=b*((4.0*PI*HBARC_GEV*HBARC_GEV/q2)*(tan2delta/(1.0+tan2delta))
-				*((2.0*jR+1.0)/((2.0*j1+1.0)*(2.0*j2+1.0))));
+				*(degenR/(degen1*degen2)));
 			dsigma_merge.push_back(dsigma);
 			sigma_merge+=dsigma;
 		}

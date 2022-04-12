@@ -45,7 +45,7 @@ int CMSU_Boltzmann::Collide_Merge(CMSUPart *part1,CMSUPart *part2,double sigma_m
 	bool bjtranslate=false,msuccess;
 	int ir1,ir2,irflip,colltype,imerge;
 	double r,sigmatot;
-	CMerge *merge;
+	Cmerge *merge;
 	if(BJORKEN && ((part1->cell->ieta==0 && part2->cell->ieta==2*NETA-1) || (part1->cell->ieta==2*NETA-1 && part2->cell->ieta==0))){
 		bjtranslate=true;
 		part1->BjorkenTranslate();
@@ -136,7 +136,7 @@ int CMSU_Boltzmann::Collide_Inelastic(CMSUPart *part1,CMSUPart *part2,int &nprod
 	int colltype;
 	double inel_weight[NWMAX]={0.0};
 	//double inel_d=0.0;
-	double q_prime,j1_i,j2_i,M,P2,p1dotp2,r,wtot;
+	double q_prime,degen1_i,degen2_i,M,P2,p1dotp2,r,wtot;
 	list<CInelasticInfo>::iterator inel;
 	list<CInelasticInfo> inel_list;
 	int iw,ir1,ir2,irflip,alpha,G_Value,netq,netb,nets;
@@ -180,10 +180,10 @@ int CMSU_Boltzmann::Collide_Inelastic(CMSUPart *part1,CMSUPart *part2,int &nprod
 	while(inel!=inel_list.end()){
 		if((G_Parity && (inel->resinfo_1->G_Parity * inel->resinfo_2->G_Parity == G_Value)) || (!G_Parity)){
 			if(inel->resinfo_1->mass+inel->resinfo_2->mass<M){
-				j1_i=inel->resinfo_1->spin;
-				j2_i=inel->resinfo_2->spin;
+				degen1_i=inel->resinfo_1->degen;
+				degen2_i=inel->resinfo_2->degen;
 				q_prime = Misc::triangle(M,inel->resinfo_1->mass,inel->resinfo_2->mass);
-				inel_weight[iw] = (2.0*j1_i+1.0)*(2.0*j2_i+1.0)*q_prime;
+				inel_weight[iw] = degen1_i*degen2_i*q_prime;
 			}
 			else{
 				inel_weight[iw]=0.0;
@@ -241,7 +241,7 @@ int CMSU_Boltzmann::Collide(CMSUPart *part1,CMSUPart *part2,int &nproducts,array
 	double tan2delta,j1,j2,jR;
 	double P2;
 	int ir1,ir2,irflip,alpha,L_merge;
-	CMerge *merge;
+	Cmerge *merge;
 	
 	double p1dotp2,vrel;
 
