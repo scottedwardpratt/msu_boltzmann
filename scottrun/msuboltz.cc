@@ -1,10 +1,13 @@
 #include "msu_sampler/master.h"
+#include "msu_commonutils/qualifier.h"
+#include "msu_boltzmann/msu_boltzmann.h"
 #include <cstring>
 using namespace std;
 
 int main(){
 	CparameterMap parmap;
 	parmap.ReadParsFromFile("parameters_sampler.txt");
+	string run_name="default_0";
 
 	CresList *reslist=new CresList(&parmap);
 	CmasterSampler::meanfield=new CmeanField_Simple(&parmap);
@@ -15,7 +18,7 @@ int main(){
 	ms.randy->reset(time(NULL));
 	ms.ReadHyper_OSU_2D();
 
-	CMSU_Boltmann *msuboltz=new CMSU_Boltzmann(&parmap);
+	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name);
 	msuboltz->InitCascade();
 	
 	long long int nparts=0;
@@ -24,10 +27,10 @@ int main(){
 
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.txt");
-	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
+	for(int iqual=0;iqual<qualifiers.nqualifiers;iqual++){
 		for(int ievent=0;ievent<nevents;ievent++){
 			nparts+=ms.MakeEvent();
-			msuboltz->InputParts(pl);
+			msuboltz->InputPartList(pl);
 			pl->Clear();
 			printf("ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 		}
