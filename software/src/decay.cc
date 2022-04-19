@@ -20,7 +20,7 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 		mtot=0.0;
 		for(ibody=0;ibody<nbodies;ibody++){
 			if(daughter[ibody]->resinfo->decay)
-				mass[ibody+1]=daughter[ibody]->resinfo->GenerateMass();
+				mass[ibody+1]=daughter[ibody]->resinfo->GenerateMass_T0();
 			else
 				mass[ibody+1]=daughter[ibody]->resinfo->mass;
 			mtot+=mass[ibody+1];

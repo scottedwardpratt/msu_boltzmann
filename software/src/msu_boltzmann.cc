@@ -13,8 +13,9 @@
 CMSU_Boltzmann::CMSU_Boltzmann(){
 };
 
-CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
+CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set,CresList *reslist_set){
 	run_name=run_name_set;
+	reslist=reslist_set;
 	string parsfilename,dirname;
 	dirname="model_output/"+run_name;
 	parsfilename="model_output/fixed_parameters.txt";
@@ -49,7 +50,6 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set){
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
 	oscarfile=NULL;
-	reslist=new CresList(&parmap);
 
 	decay_nbody=new CDecay_NBody(randy);
 }
