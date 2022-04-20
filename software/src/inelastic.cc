@@ -16,7 +16,7 @@ CInelasticList::CInelasticList(){
 
 	if(boltzmann!=NULL){
 		NResonances = boltzmann->reslist->resmap.size();
-		filename = boltzmann->parmap.getS("MSU_BOLTZMANN_INELASTIC_INFO_FILE",string("inelastic.tmp"));
+		filename = boltzmann->parmap->getS("MSU_BOLTZMANN_INELASTIC_INFO_FILE",string("inelastic.tmp"));
 
 		//create a new NResonances x NResonances array to store lists of elements
 		InelasticArray = new list<CInelasticInfo> *[NResonances];

@@ -10,13 +10,13 @@
 
 using namespace std;
 
-void CMSU_Boltzmann::InputPartList(CpartList *input_partlist){
+void CMSU_Boltzmann::InputPartList(CpartList *partlist){
 	int ipart,balanceID;
 	double tau0,eta,mass,rapidity,weight=1.0;
 	CMSUPart *newpart;
 	Cpart *part;
-	for(ipart=0;ipart<int(input_partlist->partvec.size());ipart++){
-		part=&(input_partlist->partvec[ipart]);
+	for(ipart=0;ipart<partlist->nparts;ipart++){
+		part=&(partlist->partvec[ipart]);
 		tau0=sqrt(part->r[0]*part->r[0]-part->r[1]*part->r[1]-part->r[2]*part->r[2]-part->r[3]*part->r[3]);
 		eta=asinh(part->r[3]/tau0);
 		mass=sqrt(part->msquared);
@@ -53,8 +53,8 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 		fwrite(&nparts,sizeof(int),1,oscarfile);
 	}
 	else
-		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
-	parmap.getD("GLAUBER_B",0.0));
+		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap->getD("GLAUBER_B",0.0),
+	parmap->getD("GLAUBER_B",0.0));
 	ppos=PartMap.begin();
 	for(ipart=0;ipart<nparts;ipart++){
 		part=ppos->second;
@@ -176,8 +176,8 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 		fwrite(&nparts,sizeof(int),1,oscarfile);
 	}
 	else
-		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
-	parmap.getD("GLAUBER_B",0.0));
+		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap->getD("GLAUBER_B",0.0),
+	parmap->getD("GLAUBER_B",0.0));
 	double dnchdy=0,rapidity;
 	int ipart;
 	CMSUPart *part;

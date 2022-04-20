@@ -9,10 +9,8 @@ MSU_BOLTZMANN_XYMAX 30.0 # extent of collision mesh in xy plane (fm)
 MSU_BOLTZMANN_NXY 20 # number of cells in XY direction = 2*NXY, cell size = XYMAX/NXY
 MSU_BOLTZMANN_COOPERFRYE_CREATENEGPARTS false # neg. weighted particle from CF surface
 MSU_BOLTZMANN_NSCATT_MAX 0 # neg. weight tracing cut off after this no. of scatt.s
-MSU_BOLTZMANN_RESONANCES_DECAYS_FILE ../progdata/resinfo/decays_pdg_weak.txt
-MSU_BOLTZMANN_RESONANCES_INFO_FILE ../progdata/resinfo/resonances_pdg_weak.txt
-MSU_BOLTZMANN_DELNPARTSTOT 5000
-MSU_BOLTZMANN_DELNACTIONSTOT 10000
+MSU_BOLTZMANN_DELNPARTSTOT 2000
+MSU_BOLTZMANN_DELNACTIONSTOT 5000
 MSU_BOLTZMANN_INPUT_DATAROOT model_output # reads in CF info from this directory
 MSU_BOLTZMANN_OUTPUT_DATAROOT model_output # writes OSCAR info file in this directory
 MSU_BOLTZMANN_SIGMADEFAULT 1.0 # all scatterings use this s-wave scatttering
@@ -21,7 +19,7 @@ MSU_BOLTZMANN_ANNIHILATION_SREDUCTION 1.0
 MSU_BOLTZMANN_BARYON_ANNIHILATION true
 #parameters for inelastic 2<->2 scatterings
 MSU_BOLTZMANN_INELASTIC false
-MSU_BOLTZMANN_MUTCALC true
+MSU_BOLTZMANN_MUTCALC false
 MSU_BOLTZMANN_MUTCALC_DELTAU 1.0
 MSU_BOLTZMANN_MUTCALC_DXY 1.0
 MSU_BOLTZMANN_MUTCALC_NXY 24
@@ -33,8 +31,8 @@ MSU_BOLTZMANN_INELASTIC_Q0 200
 MSU_BOLTZMANN_INELASTIC_INFO_FILE inelastic.tmp
 MSU_BOLTZMANN_BINARY_RW true
 ######################
-RESONANCES_INFO_FILE ../software/resinfo/pdg-SMASH.dat
-RESONANCES_DECAYS_FILE ../software/resinfo/pdg-SMASH.dat
+RESONANCES_INFO_FILE ../progdata/resinfo/pdg-SMASH.dat
+RESONANCES_DECAYS_FILE ../progdata/resinfo/pdg-SMASH.dat
 RESONANCE_ALPHA 1.0
 RESONANCE_DECAYS true
 ######################
@@ -43,7 +41,7 @@ SAMPLER_SIGMAFMAX 0.093
 SAMPLER_NSIGMAF 0
 SAMPLER_SETMU0 true
 SAMPLER_NEVENTS_TOT 100
-SAMPLER_NPARTS_BLOCKSIZE 10000
+SAMPLER_NPARTS_BLOCKSIZE 2000
 SAMPLER_MEANFIELD simple
 SAMPLER_CALCMU false #true if hydro hyper info doesn't already have mu.
 SAMPLER_FINDT false
@@ -52,8 +50,9 @@ SAMPLER_N_BOSE_CORR 1
 SAMPLER_SFDIRNAME ../software/resinfo/spectralfunctions
 SAMPLER_USE_POLE_MASS true
 SAMPLER_USEPOLEMASS false
+SAMPLER_SFDIRNAME ../progdata/resinfo/spectralfunctions
 ######################
-HYPER_INFO_FILE ../hydrodata/surface_2D.dat
+HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
 HYPERDATA_FILENAME hyper.txt
 FREEZEOUT_TEMP   155
 NSAMPLE_HYDRO2UDS 10
@@ -75,5 +74,5 @@ BF_DQINV 10     # MeV
 BF_NPHIBINS 28
 BF_FROM_UDS false
 BF_NoKsNoPhi    false
-#BF_ACCEPTANCE PERFECT
+#BF_ACCEPTANCE PERFECTq
 BF_ACCEPTANCE ALICE

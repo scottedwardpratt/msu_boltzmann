@@ -13,24 +13,16 @@
 CMSU_Boltzmann::CMSU_Boltzmann(){
 };
 
-CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set,CresList *reslist_set){
+CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set,CparameterMap *parmap_set,CresList *reslist_set){
+	parmap=parmap_set;
 	run_name=run_name_set;
 	reslist=reslist_set;
-	string parsfilename,dirname;
-	dirname="model_output/"+run_name;
-	parsfilename="model_output/fixed_parameters.txt";
-	sprintf(message,"reading %s\n",parsfilename.c_str());
-	CLog::Info(message);
-	parmap.ReadParsFromFile(parsfilename);
-	parsfilename=dirname+"/parameters.txt";
-	sprintf(message,"reading %s\n",parsfilename.c_str());
-	CLog::Info(message);
-	parmap.ReadParsFromFile(parsfilename);
+
 	CopyParMapPars();
 	string command="mkdir -p model_output/"+run_name;
 	system(command.c_str());
 	if(BFCALC){
-		parmap.ReadParsFromFile("udsdata/udsparameters.txt");
+		parmap->ReadParsFromFile("udsdata/udsparameters.txt");
 		balancearrays=new CBalanceArrays(this);
 	}
 	ibalmax=0;
@@ -55,49 +47,49 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set,CresList *reslist_set){
 }
 
 void CMSU_Boltzmann::CopyParMapPars(){
-	NACTIONSMAX=parmap.getI("MSU_BOLTZMANN_NACTIONSMAX",100000);
-	NPARTSMAX=parmap.getI("MSU_BOLTZMANN_NPARTSMAX",200000);
-	TAUCOLLMAX=parmap.getD("MSU_BOLTZMANN_TAUCOLLMAX",50.0);
-	DENSWRITE=parmap.getB("MSU_BOLTZMANN_DENSWRITE",false);
-	DENSWRITE_NTAU=parmap.getI("MSU_BOLTZMANN_DENSWRITE_NTAU",20);
-	DENSWRITE_DELTAU=parmap.getD("MSU_BOLTZMANN_DENSWRITE_DELTAU",1.0);
-	input_dataroot=parmap.getS("MSU_BOLTZMANN_INPUT_DATAROOT","udsdata/boltzmann");
-	output_dataroot=parmap.getS("MSU_BOLTZMANN_OUTPUT_DATAROOT","udsdata/boltzmann");
-	NSAMPLE=parmap.getI("MSU_BOLTZMANN_NSAMPLE",1);
-	NSAMPLE_UDS2BAL=parmap.getI("NSAMPLE_UDS2BAL",1);
-	ERROR_PRINT=parmap.getB("MSU_BOLTZMANN_ERROR_PRINT",true);
-	XYMAX=parmap.getD("MSU_BOLTZMANN_XYMAX",15);
-	ETAMAX=parmap.getD("MSU_BOLTZMANN_ETAMAX",1.0);
-	NETA=parmap.getI("MSU_BOLTZMANN_NETA",10);
-	NXY=parmap.getI("MSU_BOLTZMANN_NXY",10);
-	SIGMAMAX=parmap.getD("MSU_BOLTZMANN_SIGMAMAX",30);
-	NRINGSMAX=parmap.getI("MSU_BOLTZMANN_NRINGSMAX",200);
-	NPRCELLSMAX=parmap.getI("MSU_BOLTZMANN_PR_NPRCELLSMAX",100000);
-	COLLISIONS=parmap.getB("MSU_BOLTZMANN_COLLISIONS",true);
-	BJORKEN=parmap.getB("MSU_BOLTZMANN_BJORKEN",true);
-	BFCALC=parmap.getB("MSU_BOLTZMANN_BFCALC",true);
-	SIGMADEFAULT=parmap.getD("MSU_BOLTZMANN_SIGMADEFAULT",1.0);
-	SIGMAINELASTIC=parmap.getD( "MSU_BOLTZMANN_SIGMAINELASTIC",1.0);
-	INELASTIC=parmap.getB( "MSU_BOLTZMANN_INELASTIC",false);
-	NBOSE=parmap.getI("MSU_BOLTZMANN_NBOSE",1);
-	Q0=parmap.getD( "MSU_BOLTZMANN_INELASTIC_Q0", 0);
-	HYDRO_OCTANT_SYMMETRY=parmap.getI("HYDRO_OCTANT",2);
-	HYDRO_PURE_BJORKEN=parmap.getB("HYDRO_PURE_BJORKEN",false);
-	BARYON_ANNIHILATION=parmap.getB("MSU_BOLTZMANN_BARYON_ANNIHILATION",false);
-	DELNPARTSTOT=parmap.getD("MSU_BOLTZMANN_DELNPARTSTOT",1000);
-	DELNACTIONSTOT=parmap.getD("MSU_BOLTZMANN_DELNACTIONSTOT",2000);
-	BINARY_RW=parmap.getB("MSU_BOLTZMANN_BINARY_RW",false);
-	MUTCALC=parmap.getB("MSU_BOLTZMANN_MUTCALC",false);
-	MUTCALC_DELTAU=parmap.getD("MSU_BOLTZMANN_MUTCALC_DELTAU",0.5);
-	ANNIHILATION_SREDUCTION=parmap.getD("MSU_BOLTZMANN_ANNIHILATION_SREDUCTION",1.0);
-	RESONANCE_DECAYS=parmap.getB("MSU_BOLTZMANN_RESONANCE_DECAYS",true);
+	NACTIONSMAX=parmap->getI("MSU_BOLTZMANN_NACTIONSMAX",100000);
+	NPARTSMAX=parmap->getI("MSU_BOLTZMANN_NPARTSMAX",200000);
+	TAUCOLLMAX=parmap->getD("MSU_BOLTZMANN_TAUCOLLMAX",50.0);
+	DENSWRITE=parmap->getB("MSU_BOLTZMANN_DENSWRITE",false);
+	DENSWRITE_NTAU=parmap->getI("MSU_BOLTZMANN_DENSWRITE_NTAU",20);
+	DENSWRITE_DELTAU=parmap->getD("MSU_BOLTZMANN_DENSWRITE_DELTAU",1.0);
+	input_dataroot=parmap->getS("MSU_BOLTZMANN_INPUT_DATAROOT","udsdata/boltzmann");
+	output_dataroot=parmap->getS("MSU_BOLTZMANN_OUTPUT_DATAROOT","udsdata/boltzmann");
+	NSAMPLE=parmap->getI("MSU_BOLTZMANN_NSAMPLE",1);
+	NSAMPLE_UDS2BAL=parmap->getI("NSAMPLE_UDS2BAL",1);
+	ERROR_PRINT=parmap->getB("MSU_BOLTZMANN_ERROR_PRINT",true);
+	XYMAX=parmap->getD("MSU_BOLTZMANN_XYMAX",15);
+	ETAMAX=parmap->getD("MSU_BOLTZMANN_ETAMAX",1.0);
+	NETA=parmap->getI("MSU_BOLTZMANN_NETA",10);
+	NXY=parmap->getI("MSU_BOLTZMANN_NXY",10);
+	SIGMAMAX=parmap->getD("MSU_BOLTZMANN_SIGMAMAX",30);
+	NRINGSMAX=parmap->getI("MSU_BOLTZMANN_NRINGSMAX",200);
+	NPRCELLSMAX=parmap->getI("MSU_BOLTZMANN_PR_NPRCELLSMAX",100000);
+	COLLISIONS=parmap->getB("MSU_BOLTZMANN_COLLISIONS",true);
+	BJORKEN=parmap->getB("MSU_BOLTZMANN_BJORKEN",true);
+	BFCALC=parmap->getB("MSU_BOLTZMANN_BFCALC",true);
+	SIGMADEFAULT=parmap->getD("MSU_BOLTZMANN_SIGMADEFAULT",1.0);
+	SIGMAINELASTIC=parmap->getD( "MSU_BOLTZMANN_SIGMAINELASTIC",1.0);
+	INELASTIC=parmap->getB( "MSU_BOLTZMANN_INELASTIC",false);
+	NBOSE=parmap->getI("MSU_BOLTZMANN_NBOSE",1);
+	Q0=parmap->getD( "MSU_BOLTZMANN_INELASTIC_Q0", 0);
+	HYDRO_OCTANT_SYMMETRY=parmap->getI("HYDRO_OCTANT",2);
+	HYDRO_PURE_BJORKEN=parmap->getB("HYDRO_PURE_BJORKEN",false);
+	BARYON_ANNIHILATION=parmap->getB("MSU_BOLTZMANN_BARYON_ANNIHILATION",false);
+	DELNPARTSTOT=parmap->getD("MSU_BOLTZMANN_DELNPARTSTOT",1000);
+	DELNACTIONSTOT=parmap->getD("MSU_BOLTZMANN_DELNACTIONSTOT",2000);
+	BINARY_RW=parmap->getB("MSU_BOLTZMANN_BINARY_RW",false);
+	MUTCALC=parmap->getB("MSU_BOLTZMANN_MUTCALC",false);
+	MUTCALC_DELTAU=parmap->getD("MSU_BOLTZMANN_MUTCALC_DELTAU",0.5);
+	ANNIHILATION_SREDUCTION=parmap->getD("MSU_BOLTZMANN_ANNIHILATION_SREDUCTION",1.0);
+	RESONANCE_DECAYS=parmap->getB("MSU_BOLTZMANN_RESONANCE_DECAYS",true);
 	SIGMAMAX=SIGMAMAX/double(NSAMPLE);
-	SIGMABF=parmap.getD("MSU_BOLTZMANN_SIGMABF",2.3);
+	SIGMABF=parmap->getD("MSU_BOLTZMANN_SIGMABF",2.3);
 	NPARTSMAX*=NSAMPLE;
 	NACTIONSMAX*=NSAMPLE;
 	DXY=XYMAX/double(NXY);
 	DETA=ETAMAX/double(NETA);
-	BALANCE_CALC=parmap.getB("MSU_BOLTZMANN_BALANCE_CALC",false);
+	BALANCE_CALC=parmap->getB("MSU_BOLTZMANN_BALANCE_CALC",false);
 }
 
 void CMSU_Boltzmann::InitCascade(){

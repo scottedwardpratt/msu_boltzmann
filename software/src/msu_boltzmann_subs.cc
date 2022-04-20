@@ -218,8 +218,6 @@ CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
 			new CMSUPart(npartstot);
 		}
-		sprintf(message,"made new parts, npartstot=%d, tau=%g\n",npartstot,tau);
-		CLog::Info(message);
 	}
 	return DeadPartMap.begin()->second;
 }
@@ -229,8 +227,6 @@ void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 	while(DeadPartMap.size()<2){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
-		sprintf(message,"made new parts, npartstot=%d, tau=%g\n",npartstot,tau);
-		CLog::Info(message);
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	part1=ppos->second;
@@ -243,8 +239,6 @@ void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 	while(DeadPartMap.size()<5){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
-		sprintf(message,"made new parts, npartstot=%d, tau=%g\n",npartstot,tau);
-		CLog::Info(message);
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	for(ipart=0;ipart<5;ipart++){
@@ -291,9 +285,9 @@ int CMSU_Boltzmann::CountBaryons(){
 void CMSU_Boltzmann::InitMuTCalc(){
 	int ix,iy,ntau;
 	CMuTInfo::boltzmann=this;
-	CMuTInfo::NXY=parmap.getI("MSU_BOLTZMANN_MUTCALC_NXY",24);
-	CMuTInfo::DXY=parmap.getD("MSU_BOLTZMANN_MUTCalc_DXY",1.0);
-	CMuTInfo::NMINCALC=parmap.getD("MSU_BOLTZMANN_MUTCALC_NMINCALC",5);
+	CMuTInfo::NXY=parmap->getI("MSU_BOLTZMANN_MUTCALC_NXY",24);
+	CMuTInfo::DXY=parmap->getD("MSU_BOLTZMANN_MUTCalc_DXY",1.0);
+	CMuTInfo::NMINCALC=parmap->getD("MSU_BOLTZMANN_MUTCALC_NMINCALC",5);
 	CMuTInfo::taumin.resize(NXY);
 	//CMuTInfo::massB.resize(8);
 	//CMuTInfo::degenB.resize(8);

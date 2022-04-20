@@ -562,8 +562,8 @@ void CMSUPart::FindActions(){
 		CLog::Info(message);
 		KillActions();
 	}
-	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass){
-		sprintf(message,"msquared too small, =%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
+	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass-1.0E-6){
+		sprintf(message,"msquared too small, M=%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
 		CLog::Info(message);
 		Print();
 		exit(1);

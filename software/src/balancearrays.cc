@@ -14,7 +14,7 @@ CBalanceArrays::CBalanceArrays(CMSU_Boltzmann *boltzmannset){
 	CBFNumer::message=message;
 	CBFDenom::message=message;
 	reslist=boltzmann->reslist;
-	parmap=&(boltzmann->parmap);
+	parmap=boltzmann->parmap;
 	InitArrays();
 }
 
