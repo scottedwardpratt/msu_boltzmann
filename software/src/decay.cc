@@ -16,6 +16,13 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 	mass[0]=mother->GetMass();
 	
 	/* Make masses for daughters */
+	
+	double minmass_daughters=0.0;
+	for(ibody=0;ibody<nbodies;ibody++){
+		minmass_daughters+=daughter[ibody]->resinfo->minmass;
+	}
+	printf("check in, minmass_daughters=%g\n",minmass_daughters);
+
 	do{
 		mtot=0.0;
 		for(ibody=0;ibody<nbodies;ibody++){
@@ -25,7 +32,10 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 				mass[ibody+1]=daughter[ibody]->resinfo->mass;
 			mtot+=mass[ibody+1];
 		}
+		printf("mtot=%g, mothermass=%g, minmass=%g, minmass_daugthers=%g\n",
+			mtot,mass[0],mother->resinfo->minmass,minmass_daughters);
 	}while(mtot>mass[0]);
+	printf("check out\n");
 	
 	if(nbodies==2){
 		decay_nbody->SetMasses2(mass[0],mass[1],mass[2]);

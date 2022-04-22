@@ -7,8 +7,9 @@ void CAction::PerformDecay(){
 	CMSUPart *mother,*dptr;
 	CMSUPartMap::iterator ppos;
 	int ibody,nbodies;
-	double mtot,mt,etamax=boltzmann->ETAMAX,mothermass;
+	double mt,etamax=boltzmann->ETAMAX,mothermass;
 	double deleta;
+	printf("howdy\n");
 	ppos=partmap.begin();
 	mother=ppos->second;
 	boltzmann->GetDeadParts(product);
@@ -35,30 +36,15 @@ void CAction::PerformDecay(){
 			mother->r[3]=tau*sinh(mother->eta);
 		}
 	}
-	int ntry=0;
-	do{
-		mtot=0.0;
-		if(ntry<25)
-			mother->resinfo->DecayGetResInfoPtr(nbodies,daughterresinfo);
-		else{
-			mother->resinfo->DecayGetResInfoPtr_minmass(nbodies,daughterresinfo);
-		}
-		for(ibody=0;ibody<nbodies;ibody++){
-			mtot+=daughterresinfo[ibody]->mass;
-		}
-		if(ntry>25){
-			mother->Print();
-			sprintf(message,"action_perform_decay, ntry too big, mothermass=%g\n",mother->GetMass());
-			mother->resinfo->Print();
-			CLog::Fatal(message);
-		}
-		ntry++;
-	}while(mtot>mothermass);
+	printf("howdy c\n");
+	mother->resinfo->DecayGetResInfoPtr(mothermass,nbodies,daughterresinfo);
+	printf("howdy d\n");
 	for(ibody=0;ibody<nbodies;ibody++){
 		product[ibody]->resinfo=daughterresinfo[ibody];
 	}
-	
+	printf("howdy e\n");
 	boltzmann->Decay(mother,nbodies,product);
+	printf("howdy f\n");
 	
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -77,4 +63,5 @@ void CAction::PerformDecay(){
 	}
 	mother->Kill();
 	boltzmann->ndecay+=1;
+	printf("bye bye\n");
 }
