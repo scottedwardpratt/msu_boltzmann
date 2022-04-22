@@ -35,7 +35,6 @@ int main(){
 			nparts+=ms.MakeEvent();
 			msuboltz->InputPartList(pl);
 			pl->Clear();
-			printf("howdy\n");
 			msuboltz->PerformAllActions();
 			printf("ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 		}

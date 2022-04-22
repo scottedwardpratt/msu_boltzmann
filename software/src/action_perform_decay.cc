@@ -48,7 +48,8 @@ void CAction::PerformDecay(){
 		}
 		if(ntry>25){
 			mother->Print();
-			sprintf(message,"FATAL: action_perform_decay, ntry too big, mothermass=%g\n",mother->GetMass());
+			sprintf(message,"action_perform_decay, ntry too big, mothermass=%g\n",mother->GetMass());
+			mother->resinfo->Print();
 			CLog::Fatal(message);
 		}
 		ntry++;

@@ -29,7 +29,7 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 		++epos;
 	}
 	if(epos->second!=this){
-		sprintf(message,"CAction::GetPos cannot find this action\n");
+		sprintf(message,"CAction::GetPos cannot find this action, key=%g\n",key);
 		CLog::Fatal(message);
 		return emap->end();
 	}

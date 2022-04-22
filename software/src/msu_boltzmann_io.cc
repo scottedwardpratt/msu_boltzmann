@@ -12,18 +12,24 @@ using namespace std;
 
 void CMSU_Boltzmann::InputPartList(CpartList *partlist){
 	int ipart,balanceID;
+	double oldeta,oldrapidity,Et;
 	double tau0,eta,mass,rapidity,weight=1.0;
 	CMSUPart *newpart;
 	Cpart *part;
 	for(ipart=0;ipart<partlist->nparts;ipart++){
 		part=&(partlist->partvec[ipart]);
-		tau0=sqrt(part->r[0]*part->r[0]-part->r[1]*part->r[1]-part->r[2]*part->r[2]-part->r[3]*part->r[3]);
-		eta=asinh(part->r[3]/tau0);
+		tau0=sqrt(part->r[0]*part->r[0]-part->r[3]*part->r[3]);
+		oldeta=asinh(part->r[3]/tau0);
 		mass=sqrt(part->msquared);
-		rapidity=atanh(part->p[3]/part->p[0]);
+		oldrapidity=atanh(part->p[3]/part->p[0]);
 		weight=1.0;
 		balanceID=-1;
 		newpart=GetDeadPart();
+		eta=ETAMAX*(1.0-2.0*randy->ran());
+		rapidity=oldrapidity+(eta-oldeta);
+		Et=(part->msquared+part->p[1]*part->p[1]+part->p[2]*part->p[2]);
+		part->p[3]=Et*sinh(eta);
+		part->p[0]=Et*cosh(eta);
 		newpart->InitBalance(part->pid,part->r[1],part->r[2],tau0,eta,part->p[1],part->p[2],mass,rapidity,weight,balanceID);
 	}
 }
