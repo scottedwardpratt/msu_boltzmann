@@ -25,8 +25,10 @@ void CAction::PerformDecay(){
 	}
 	if(tau>boltzmann->TAUCOLLMAX || mother->cell==NULL){
 		while(boltzmann->BJORKEN && (mother->eta<-etamax || mother->eta>etamax)){
-			if(mother->eta<-etamax) deleta=2.0*etamax*ceil((-etamax-mother->eta)/(2.0*etamax));
-			if(mother->eta>etamax) deleta=-2.0*etamax*ceil((mother->eta-etamax)/(2.0*etamax));
+			if(mother->eta<-etamax)
+				deleta=2.0*etamax*ceil((-etamax-mother->eta)/(2.0*etamax));
+			if(mother->eta>etamax)
+				deleta=-2.0*etamax*ceil((mother->eta-etamax)/(2.0*etamax));
 			mother->eta+=deleta;
 			mother->y+=deleta;
 			mt=mother->GetMT();
