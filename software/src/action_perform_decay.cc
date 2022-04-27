@@ -9,7 +9,6 @@ void CAction::PerformDecay(){
 	int ibody,nbodies;
 	double mt,etamax=boltzmann->ETAMAX,mothermass;
 	double deleta;
-	printf("howdy\n");
 	ppos=partmap.begin();
 	mother=ppos->second;
 	boltzmann->GetDeadParts(product);
@@ -38,15 +37,11 @@ void CAction::PerformDecay(){
 			mother->r[3]=tau*sinh(mother->eta);
 		}
 	}
-	printf("howdy c\n");
 	mother->resinfo->DecayGetResInfoPtr(mothermass,nbodies,daughterresinfo);
-	printf("howdy d\n");
 	for(ibody=0;ibody<nbodies;ibody++){
 		product[ibody]->resinfo=daughterresinfo[ibody];
 	}
-	printf("howdy e\n");
 	boltzmann->Decay(mother,nbodies,product);
-	printf("howdy f\n");
 	
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -65,5 +60,4 @@ void CAction::PerformDecay(){
 	}
 	mother->Kill();
 	boltzmann->ndecay+=1;
-	printf("bye bye\n");
 }

@@ -103,9 +103,12 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 			dsigma=b*sf*Gamma*2.0*PI*PI*(degenR/(degen1*degen2))*HBARC_GEV*HBARC_GEV/q2;
 			if(dsigma>40.0)
 				dsigma=40.0;
-			dsigma_merge.push_back(dsigma);
-			sigma_merge+=dsigma;
+			
 		}
+		else
+			dsigma=0.0;
+		dsigma_merge.push_back(dsigma);
+		sigma_merge+=dsigma;
 		merge=merge->next;
 	}
 	sigmatot=sigma_scatter+sigma_inel+sigma_annihilation+sigma_merge;
