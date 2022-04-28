@@ -207,25 +207,32 @@ void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_
 	double E,dEdT,ETarget=epsilon_target/rho_target,epsilon0,dedT,P,rho0,dT;
 	int ntry=0;
 	char message[100];
-	if(ETarget<mass+10.0){
-		T=5.0;
+	if(ETarget<mass+0.01){
+		T=0.005;
 		mu=ETarget/T;
 	}
 	else{
-		T=90.0;
-		do{
-			ntry+=1;
-			MSU_EOS::freegascalc_onespecies(T,mass,epsilon0,P,rho0,dedT);
-			E=epsilon0/rho0;
-			dEdT=dedT/rho0-epsilon0*epsilon0/(rho0*rho0*T*T);
-			dT=(ETarget-E)/dEdT;
-			if(fabs(dT)>0.6*T)
-				dT=0.6*T*dT/fabs(dT);
-			T+=dT;
-		}while(fabs(dT)>1.0E-5 && ntry<30);
-		if(ntry==30){
-			sprintf(message,"CMuTInfo::GetMuT did not converge!!!, T=%g, dT=%g\n",T,dT);
-			CLog::Info(message);
+		if(ETarget/mass<1.1){
+			T=(2.0/3.0)*ETarget/mass;
+			rho0=pow((mass*T)/(2.0*PI),1.5);
+		}
+		else{
+			T=0.09;
+			do{
+				ntry+=1;
+				MSU_EOS::freegascalc_onespecies(T,mass,epsilon0,P,rho0,dedT);
+				E=epsilon0/rho0;
+				dEdT=dedT/rho0-epsilon0*epsilon0/(rho0*rho0*T*T);
+				dT=(ETarget-E)/dEdT;
+				if(fabs(dT)>0.4*T)
+					dT=0.4*T*dT/fabs(dT);
+				T+=dT;
+			}while(fabs(dT)>1.0E-5 && ntry<30);
+			if(ntry==30 || T!=T){
+				sprintf(message,"CMuTInfo::GetMuT did not converge!!!, T=%g, dT=%g\n",
+					T,dT);
+				CLog::Fatal(message);
+			}
 		}
 		MSU_EOS::freegascalc_onespecies(T,mass,epsilon0,P,rho0,dedT);
 		mu=log(rho_target/(rho0*degen));

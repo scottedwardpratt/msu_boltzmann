@@ -32,6 +32,7 @@ int main(){
 	qualifiers.Read("qualifiers.txt");
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
 		nmerge=nscatter=0;
+		msuboltz->ReadMuTInfo();
 		for(ievent=0;ievent<nevents;ievent++){
 			msuboltz->Reset();
 			nparts+=ms.MakeEvent();
@@ -44,6 +45,7 @@ int main(){
 		}
 		printf("nmerge/event=%g, nscatter/event=%g\n",
 			double(nmerge)/double(nevents),double(nscatter)/double(nevents));
+		msuboltz->WriteMuTInfo();
 	}
 
 	printf("YIPPEE!!!!! We made it all the way through!\n");

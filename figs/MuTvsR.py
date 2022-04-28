@@ -53,9 +53,9 @@ rhoB=tau*Bdata[5]
 
 ax = fig.add_axes([0.19,0.06,0.8,0.23])
 
-plt.plot(rpi,Tpi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
-plt.plot(rK,TK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
-plt.plot(rB,TB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
+plt.plot(rpi,1000*Tpi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
+plt.plot(rK,1000*TK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
+plt.plot(rB,1000*TB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
 
 ax.tick_params(axis='both', which='major', labelsize=14)
 
@@ -162,7 +162,7 @@ for i in range(0,s):
 	if Npi[i]>4 :
 		x=np.append(x,rpi[i])
 		y=np.append(y,mupi[i]*Tpi[i])
-plt.plot(x,y,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
+plt.plot(x,1000*y,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
 #plt.plot(rpi,mupi*Tpi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
 
 x=np.array([],dtype=float)
@@ -172,7 +172,7 @@ for i in range(0,s):
 	if NK[i]>4:
 		x=np.append(x,rK[i])
 		y=np.append(y,muK[i]*TK[i])
-plt.plot(x,y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
+plt.plot(x,1000*y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
 
 x=np.array([],dtype=float)
 y=np.array([],dtype=float)
@@ -181,7 +181,7 @@ for i in range(0,s):
 	if NB[i]>4 :
 		x=np.append(x,rB[i])
 		y=np.append(y,muB[i]*TB[i])
-plt.plot(x,y,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
+plt.plot(x,1000*y,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
 
 
 ax.tick_params(axis='both', which='major', labelsize=14)

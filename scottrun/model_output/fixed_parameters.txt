@@ -1,12 +1,12 @@
 MSU_BOLTZMANN_COLLISIONS true
-MSU_BOLTZMANN_NEVENTSMAX 10
-MSU_BOLTZMANN_NSAMPLE 4 # oversampling ratio, 1=cascade, infty=Boltzmann
+MSU_BOLTZMANN_NEVENTSMAX 100
+MSU_BOLTZMANN_NSAMPLE 1 # oversampling ratio, 1=cascade, infty=Boltzmann
 MSU_BOLTZMANN_TAUCOLLMAX 40.0 #no collisions beyond this tau
 MSU_BOLTZMANN_BJORKEN true  # cyclic BC for |eta|>MSU_BOLTZMANN_ETAMAX
 MSU_BOLTZMANN_ETAMAX 1.0
 MSU_BOLTZMANN_NETA 8 # number of cells in eta direction = 2*NETA
 MSU_BOLTZMANN_XYMAX 30.0 # extent of collision mesh in xy plane (fm)
-MSU_BOLTZMANN_NXY 20 # number of cells in XY direction = 2*NXY, cell size = XYMAX/NXY
+MSU_BOLTZMANN_NXY 24 # number of cells in XY direction = 2*NXY, cell size = XYMAX/NXY
 MSU_BOLTZMANN_COOPERFRYE_CREATENEGPARTS false # neg. weighted particle from CF surface
 MSU_BOLTZMANN_NSCATT_MAX 0 # neg. weight tracing cut off after this no. of scatt.s
 MSU_BOLTZMANN_DELNPARTSTOT 2000
@@ -19,7 +19,7 @@ MSU_BOLTZMANN_ANNIHILATION_SREDUCTION 1.0
 MSU_BOLTZMANN_BARYON_ANNIHILATION true
 #parameters for inelastic 2<->2 scatterings
 MSU_BOLTZMANN_INELASTIC false
-MSU_BOLTZMANN_MUTCALC false
+MSU_BOLTZMANN_MUTCALC true
 MSU_BOLTZMANN_MUTCALC_DELTAU 1.0
 MSU_BOLTZMANN_MUTCALC_DXY 1.0
 MSU_BOLTZMANN_MUTCALC_NXY 24
@@ -36,7 +36,7 @@ RESONANCES_DECAYS_FILE ../progdata/resinfo/pdg-SMASH.dat
 RESONANCE_ALPHA 1.0
 RESONANCE_DECAYS true
 ######################
-SAMPLER_NSAMPLE 4
+SAMPLER_NSAMPLE 1
 SAMPLER_SIGMAFMIN 0.093
 SAMPLER_SIGMAFMAX 0.093
 SAMPLER_NSIGMAF 0
