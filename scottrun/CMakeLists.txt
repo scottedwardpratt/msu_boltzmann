@@ -27,7 +27,6 @@ set(SOURCE_FILES ./msuboltz.cc)
 
 add_executable(msuboltz ${SOURCE_FILES})
 add_dependencies(msuboltz extern_commonutils extern_msu_sampler extern_msu_boltzmann)
-# extern_msu_boltzmann)
 
 target_link_libraries(msuboltz ${GSL_LIBRARY} ${GSL_CBLAS_LIBRARY} ${EIGEN3_LIBRARY} ${GITHOME_MSU}/commonutils/software/lib/libmsu_commonutils.a ${GITHOME_MSU}/msu_sampler/software/lib/libmsu_sampler.a ${GITHOME_MSU}/msu_boltzmann/software/lib/libmsu_boltzmann.a)
 
