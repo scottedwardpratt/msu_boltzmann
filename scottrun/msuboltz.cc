@@ -1,6 +1,7 @@
 #include "msu_sampler/master.h"
 #include "msu_commonutils/qualifier.h"
 #include "msu_boltzmann/msu_boltzmann.h"
+#include "msu_commonutils/log.h"
 #include <cstring>
 using namespace std;
 
@@ -8,6 +9,11 @@ int main(){
 	CparameterMap parmap;
 	string run_name="default_0";
 	int nmerge,nscatter,nevents,nparts,ievent,iqual;
+	char message[200];
+	char logfilename[100];
+	sprintf(logfilename,"msuboltz_log.h");
+	CLog::Init(logfilename);
+	CLog::INTERACTIVE=false;
 
 	string filename="model_output/fixed_parameters.txt";
 	parmap.ReadParsFromFile(filename);
@@ -41,10 +47,12 @@ int main(){
 			msuboltz->PerformAllActions();
 			nmerge+=msuboltz->nmerge;
 			nscatter+=msuboltz->nscatter;
-			printf("ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
+			sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
+			CLog::Info(message);
 		}
-		printf("nmerge/event=%g, nscatter/event=%g\n",
+		sprintf(message,"nmerge/event=%g, nscatter/event=%g\n",
 			double(nmerge)/double(nevents),double(nscatter)/double(nevents));
+		CLog::Info(message);
 		msuboltz->WriteMuTInfo();
 	}
 

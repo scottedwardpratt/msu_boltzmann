@@ -1,5 +1,5 @@
 MSU_BOLTZMANN_COLLISIONS true
-MSU_BOLTZMANN_NEVENTSMAX 100
+MSU_BOLTZMANN_NEVENTSMAX 5000
 MSU_BOLTZMANN_NSAMPLE 1 # oversampling ratio, 1=cascade, infty=Boltzmann
 MSU_BOLTZMANN_TAUCOLLMAX 40.0 #no collisions beyond this tau
 MSU_BOLTZMANN_BJORKEN true  # cyclic BC for |eta|>MSU_BOLTZMANN_ETAMAX
@@ -48,10 +48,9 @@ SAMPLER_CALCMU false #true if hydro hyper info doesn't already have mu.
 SAMPLER_FINDT false
 SAMPLER_BOSE_CORR true
 SAMPLER_N_BOSE_CORR 1
-SAMPLER_SFDIRNAME ../software/resinfo/spectralfunctions
+SAMPLER_SFDIRNAME ../progdata/resinfo/spectralfunctions
 SAMPLER_USE_POLE_MASS true
 SAMPLER_USEPOLEMASS false
-SAMPLER_SFDIRNAME ../progdata/resinfo/spectralfunctions
 ######################
 HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
 HYPERDATA_FILENAME hyper.txt
