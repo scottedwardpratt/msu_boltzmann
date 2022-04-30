@@ -5,7 +5,7 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_sampler/resonances.h"
 
-using namespace Misc;
+//using namespace Misc;
 
 /*
 InelasticScatter: Method to implement inelastic scattering. Right now, it magically

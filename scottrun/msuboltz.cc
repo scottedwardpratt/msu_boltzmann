@@ -7,9 +7,10 @@ using namespace std;
 
 int main(){
 	CparameterMap parmap;
+	char message[200];
 	string run_name="default_0";
 	int nmerge,nscatter,nevents,nparts,ievent,iqual;
-	char message[200];
+	//char message[200];
 	char logfilename[100];
 	sprintf(logfilename,"msuboltz_log.h");
 	CLog::Init(logfilename);
