@@ -55,6 +55,6 @@ int main(){
 		msuboltz->WriteMuTInfo();
 	}
 
-	CLog::Info("YIPPEE!!!!! We made it all the way through!\n");
+	CLog::Info(string("YIPPEE!!!!! We made it all the way through!\n"));
 	return 0;
 }
