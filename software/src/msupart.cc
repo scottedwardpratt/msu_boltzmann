@@ -571,7 +571,7 @@ void CMSUPart::FindActions(){
 		Setp0();
 	}
 
-	if(cell!=NULL){
+	if(cell!=NULL && resinfo->pid!=22){
 		if(boltzmann->COLLISIONS && tau0<boltzmann->TAUCOLLMAX){
 			FindCellExit();
 			FindCollisions();

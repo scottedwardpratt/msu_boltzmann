@@ -6,8 +6,7 @@ void CAction::Perform(){
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
 
-	//sprintf(message,"Performing Action of type %d\n",type);
-	//CLog::Info(message);
+	//CLog::Info("Performing Action of type"+to_string(type)+"\n");
 
 	boltzmann->nactions+=1;
 	Kill();
@@ -54,6 +53,5 @@ void CAction::Perform(){
 		sprintf(message,"FATAL: action type = %d is unknown, exiting\n",type);
 		CLog::Fatal(message);
 	}
-
 	
 }
