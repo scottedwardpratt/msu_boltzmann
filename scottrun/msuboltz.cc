@@ -10,9 +10,8 @@ int main(){
 	char message[200];
 	string run_name="default_0";
 	int nmerge,nscatter,nevents,nparts,ievent,iqual;
-	//char message[200];
 	char logfilename[100];
-	sprintf(logfilename,"msuboltz_log.h");
+	sprintf(logfilename,"msuboltz_log.txt");
 	CLog::Init(logfilename);
 	CLog::INTERACTIVE=false;
 
@@ -20,7 +19,6 @@ int main(){
 	parmap.ReadParsFromFile(filename);
 	filename="model_output/"+run_name+"/parameters.txt";
 	parmap.ReadParsFromFile(filename);
-
 	CmasterSampler ms(&parmap);
 	CpartList *pl=new CpartList(&parmap,ms.reslist);
 
@@ -57,6 +55,6 @@ int main(){
 		msuboltz->WriteMuTInfo();
 	}
 
-	printf("YIPPEE!!!!! We made it all the way through!\n");
+	CLog::Info("YIPPEE!!!!! We made it all the way through!\n");
 	return 0;
 }
