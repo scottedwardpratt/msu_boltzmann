@@ -16,7 +16,6 @@ int main(){
 	CLog::INTERACTIVE=true;
 	double T=0.155,m=0.939,epsilon,P,dens,dedt;
 	MSU_EOS::freegascalc_onespecies(T,m,epsilon,P,dens,dedt);
-	printf("rhoB=%g\n",8*dens);
 
 	string filename="model_output/fixed_parameters.txt";
 	parmap.ReadParsFromFile(filename);
