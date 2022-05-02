@@ -204,9 +204,10 @@ double &Ux,double &Uy,double &epsilon){
 }
 
 void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_target,double &T,double &mu){
-	double E,dEdT,ETarget=epsilon_target/rho_target,epsilon0,dedT,P,rho0,dT;
+	double E,dEdT,ETarget,epsilon0,dedT,P,rho0,dT;
 	int ntry=0;
 	char message[100];
+	ETarget=epsilon_target/rho_target
 	if(ETarget<mass+0.01){
 		T=0.005;
 		mu=ETarget/T;
