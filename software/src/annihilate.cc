@@ -411,7 +411,7 @@ double CMSU_Boltzmann::GetAnnihilationSigma(CMSUPart *part1,CMSUPart *part2){
 	triangle=p1dotp2*p1dotp2-m1squared*m2squared;
 	Plab=0.5*(m1squared+m2squared)*triangle/(m1squared*m2squared);
 	Plab=sqrt(Plab);
-	sigma_annihilation=6.7*pow(Plab,-0.7)/double(NSAMPLE);
+	sigma_annihilation=6.7*pow(1000.0*Plab,-0.7)/double(NSAMPLE);
 	rstrange=0.5*sqrt(sigma_annihilation);
 	rstrange*=pow(ANNIHILATION_SREDUCTION,abs(part1->resinfo->strange))+pow(ANNIHILATION_SREDUCTION,abs(part2->resinfo->strange));
 	sigma_annihilation=rstrange*rstrange;
