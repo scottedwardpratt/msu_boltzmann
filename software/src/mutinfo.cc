@@ -213,8 +213,8 @@ void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_
 	}
 	else{
 		if(ETarget/mass<1.1){
-			T=(2.0/3.0)*ETarget/mass;
-			rho0=pow((mass*T)/(2.0*PI),1.5);
+			T=(2.0/3.0)*(ETarget-mass);
+			rho0=pow((mass*T)/(2.0*PI*HBARC_GEV*HBARC_GEV),1.5);
 		}
 		else{
 			T=0.09;
