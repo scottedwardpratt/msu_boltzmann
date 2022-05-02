@@ -39,7 +39,6 @@ int main(){
 		nmerge=nscatter=0;
 		msuboltz->ReadMuTInfo();
 		for(ievent=0;ievent<nevents;ievent++){
-			printf("ievent=%d\n",ievent);
 			msuboltz->Reset();
 			nparts+=ms.MakeEvent();
 			msuboltz->InputPartList(pl);
