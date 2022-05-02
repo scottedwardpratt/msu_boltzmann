@@ -14,6 +14,9 @@ int main(){
 	//sprintf(logfilename,"msuboltz_log.txt");
 	//CLog::Init(logfilename);
 	CLog::INTERACTIVE=true;
+	double T=0.155,m=0.939,epsilon,P,dens,dedt;
+	MSU_EOS::freegascalc_onespecies(T,m,epsilon,P,dens,dedt);
+	printf("rhoB=%g\n",8*dens);
 
 	string filename="model_output/fixed_parameters.txt";
 	parmap.ReadParsFromFile(filename);
@@ -27,6 +30,7 @@ int main(){
 	ms.ReadHyper_OSU_2D();
 
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
+
 	msuboltz->InitCascade();
 	
 	nparts=0;
@@ -41,6 +45,10 @@ int main(){
 		for(ievent=0;ievent<nevents;ievent++){
 			msuboltz->Reset();
 			nparts+=ms.MakeEvent();
+			//int Nnucleons=pl->CountResonances(2112)+pl->CountResonances(-2112)+pl->CountResonances(2212)+pl->CountResonances(-2212);
+			int Nnucleons=pl->CountResonances(-2112)+pl->CountResonances(-2212);
+			printf("Nnucleons=%d\n",Nnucleons);
+
 			msuboltz->InputPartList(pl);
 			pl->Clear();
 			msuboltz->PerformAllActions();
