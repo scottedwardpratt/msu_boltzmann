@@ -45,6 +45,7 @@ int main(){
 			msuboltz->InputPartList(pl);
 			pl->Clear();
 			msuboltz->PerformAllActions();
+			
 			nmerge+=msuboltz->nmerge;
 			nscatter+=msuboltz->nscatter;
 			sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));

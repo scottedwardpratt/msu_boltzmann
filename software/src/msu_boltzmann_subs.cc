@@ -315,7 +315,6 @@ void CMSU_Boltzmann::InitMuTCalc(){
 			CMuTInfo::Bresinfo.push_back(resinfo);
 		}
 	}
-	CMuTInfo::massB[0]=939.0;
 }
 
 void CMSU_Boltzmann::CalcMuTU(){

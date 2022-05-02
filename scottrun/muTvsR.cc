@@ -62,11 +62,11 @@ int main(){
 				Upi[ir]=Upi[ir]/double(npts[ir]);
 				Tpi[ir]=Tpi[ir]/double(npts[ir]);
 				r=(ir+0.5)*delR;
-				fprintf(output,"%6.2f %7d %7.2f %7.4f %7.4f %7.4f %7.4f\n",r,Nparts[ir],Tpi[ir],Upi[ir],mupi[ir],rhopi[ir],epi[ir]);
+				fprintf(output,"%6.2f %7d %7.5f %7.4f %7.5f %7.5f %7.5f\n",r,Nparts[ir],Tpi[ir],Upi[ir],mupi[ir],rhopi[ir],epi[ir]);
 			}
 			else{
 				r=(ir+0.5)*delR;
-				fprintf(output,"%6.2f %7d %7.2f %7.4f %7.4f %7.4f %7.4f\n",r,0,0.0,0.0,0.0,0.0,0.0);
+				fprintf(output,"%6.2f %7d %7.5f %7.4f %7.5f %7.4f %7.5f\n",r,0,0.0,0.0,0.0,0.0,0.0);
 			}
 			npts[ir]=0;
 		}
@@ -112,11 +112,11 @@ int main(){
 				UK[ir]=UK[ir]/double(npts[ir]);
 				TK[ir]=TK[ir]/double(npts[ir]);
 				r=(ir+0.5)*delR;
-				fprintf(output,"%6.2f %7d %7.2f %7.4f %7.4f %7.4f %7.4f\n",r,Nparts[ir],TK[ir],UK[ir],muK[ir],rhoK[ir],eK[ir]);
+				fprintf(output,"%6.2f %7d %7.5f %7.4f %7.5f %7.5f %7.5f\n",r,Nparts[ir],TK[ir],UK[ir],muK[ir],rhoK[ir],eK[ir]);
 			}
 			else{
 				r=(ir+0.5)*delR;
-				fprintf(output,"%6.2f %7d %7.2f %7.4f %7.4f %7.4f %7.4f\n",r,0,0.0,0.0,0.0,0.0,0.0);
+				fprintf(output,"%6.2f %7d %7.5f %7.4f %7.5f %7.5f %7.5f\n",r,0,0.0,0.0,0.0,0.0,0.0);
 			}
 			npts[ir]=0;
 		}
@@ -162,11 +162,11 @@ int main(){
 					TB[ir]=TB[ir]/double(npts[ir]);
 					UB[ir]=UB[ir]/double(npts[ir]);
 					r=(ir+0.5)*delR;
-					fprintf(output,"%6.2f %7d %7.2f %7.4f %7.4f %7.4f %7.4f\n",r,Nparts[ir],TB[ir],UB[ir],muB[ir],rhoB[ir],eB[ir]);
+					fprintf(output,"%6.2f %7d %7.5f %7.4f %7.5f %7.5f %7.5f\n",r,Nparts[ir],TB[ir],UB[ir],muB[ir],rhoB[ir],eB[ir]);
 				}
 				else{
 					r=(ir+0.5)*delR;
-					fprintf(output,"%6.2f %7d %7.2f %7.4f %7.4f %7.4f %7.4f\n",r,0,0.0,0.0,0.0,0.0,0.0);
+					fprintf(output,"%6.2f %7d %7.5f %7.4f %7.5f %7.5f %7.5f\n",r,0,0.0,0.0,0.0,0.0,0.0);
 				}
 				npts[ir]=0;
 			}
