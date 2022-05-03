@@ -9,7 +9,7 @@ int main(){
 	CparameterMap parmap;
 	char message[200];
 	string run_name="default_0";
-	int nmerge,nscatter,nevents,nparts,ievent,iqual;
+	int nmerge,nscatter,nannihilate,nevents,nparts,ievent,iqual;
 	//char logfilename[100];
 	//sprintf(logfilename,"msuboltz_log.txt");
 	//CLog::Init(logfilename);
@@ -37,7 +37,7 @@ int main(){
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.txt");
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
-		nmerge=nscatter=0;
+		nmerge=nscatter=nannihilate=0;
 		msuboltz->ReadMuTInfo();
 		for(ievent=0;ievent<nevents;ievent++){
 			msuboltz->Reset();
@@ -48,11 +48,12 @@ int main(){
 			
 			nmerge+=msuboltz->nmerge;
 			nscatter+=msuboltz->nscatter;
+			nannihilate+=msuboltz->nannihilate;
 			sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 			CLog::Info(message);
 		}
-		sprintf(message,"nmerge/event=%g, nscatter/event=%g\n",
-			double(nmerge)/double(nevents),double(nscatter)/double(nevents));
+		sprintf(message,"nmerge/event=%g, nscatter/event=%g, nannihilate=%g\n",
+			double(nmerge)/double(nevents),double(nscatter)/double(nevents),double(nannihilate)/double(nevents));
 		CLog::Info(message);
 		msuboltz->WriteMuTInfo();
 	}
