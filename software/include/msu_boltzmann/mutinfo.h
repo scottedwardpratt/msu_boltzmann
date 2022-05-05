@@ -33,6 +33,8 @@ public:
 		//double &T,double &muB,double &muBS);
 	static void GetEpsilonU(double T00,double T0x,double T0y,double Txx,double Tyy,double Txy,
 		double &Ux,double &Uy,double &epsilon);
+	static void TestEpsilonU(double T00,double T0x,double T0y,double Txx,double Tyy,double Txy,
+double Ux,double Uy,double epsilon);
 	void Print();
 	static void GetIxIy(double x,double y,int &ix,int &iy);
 	//void MuTCalc_PionsWithBose();

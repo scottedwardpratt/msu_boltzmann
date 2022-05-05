@@ -72,15 +72,21 @@ ax = fig.add_axes([0.18,0.12,0.8,0.86])
 x=np.array([],dtype=float)
 y=np.array([],dtype=float)
 s=np.prod(Npi.shape)
+z=np.array([],dtype=float)
 for i in range(0,s):
 	if Npi[i]>4 and NK[i]>4 and NB1[i]>4 and NB2[i]>4 :
 		DelMu0=-muB1[i]-muB2[i]+(5.0-NS)*mupi[i]+muK[i]*NS
 		X=1.0-exp(DelMu0)
-		print(i,': X=',X,' DelMu0=',DelMu0)
+		DelBeta=(2.0/Tpi[i])-(1.0/TB1[i])-(1.0/TB2[i])
+		Ebar=1.0+0.75*TB1[i]+0.75*TB2[i]  # typical energy of a baryon of mass 1.0 GeV
+		XX=(1.0-exp(DelBeta*Ebar))
+		print(i,': X=',X,' DelMu0=',DelMu0,' XX=',XX,' DelBeta=',DelBeta)
 		x=np.append(x,rpi[i])
 		y=np.append(y,X)
+		z=np.append(z,XX)
 
-plt.plot(x,y,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
+plt.plot(x,y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
+plt.plot(x,z,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
 #plt.plot(rpi,X1,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
 #plt.plot(rpi,X2,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
 #plt.plot(rpi,X3,linestyle='-',color='c',markersize=6,marker='o',markerfacecolor='c')
@@ -96,12 +102,12 @@ plt.xlim(0,24)
 ax.set_yticks(np.arange(-2,2,0.5), minor=False)
 ax.set_yticklabels(np.arange(-2,2,0.5), minor=False, family='serif')
 ax.set_yticks(np.arange(-2,2.0,0.1), minor=True)
-plt.ylim(-0.5,1.1)
+plt.ylim(-2,1.0)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
 plt.xlabel('$r$ [fm]', fontsize=18, weight='normal')
-plt.ylabel('$X0$',fontsize=18)
+plt.ylabel('$R/R_0$',fontsize=18)
 
 
 

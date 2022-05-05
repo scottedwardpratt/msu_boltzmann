@@ -24,7 +24,7 @@ CMuTInfo::CMuTInfo(double tau_set){
 	Pxpi=Pypi=PxK=PyK=0.0;
 	Txxpi=Tyypi=Txypi=0.0;
 	TxxK=TyyK=TxyK=0.0;
-	Npi=NK;
+	Npi=NK=0;
 	Tpi=TK=145.0;
 	sufficientNpi=sufficientNK=false;
 
@@ -91,6 +91,7 @@ void CMuTInfo::CalcAllMuTU(){
 		T0x=Pxpi/volume;
 		T0y=Pypi/volume;
 		GetEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,Uxpi,Uypi,epsilonpi);
+		//TestEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,Uxpi,Uypi,epsilonpi);
 		gamma=sqrt(1.0+Uxpi*Uxpi+Uypi*Uypi);
 		rhopi=double(Npi)/(gamma*volume);
 		degen=3.0;
@@ -201,6 +202,77 @@ double &Ux,double &Uy,double &epsilon){
 	gamma=sqrt(1.0+Ux*Ux+Uy*Uy);
 	epsilon=gamma*T00*gamma-2.0*gamma*T0x*Ux-2.0*gamma*T0y*Uy
 	+Ux*Txx*Ux+Uy*Tyy*Uy+2.0*Ux*Txy*Uy;
+}
+
+void CMuTInfo::TestEpsilonU(double T00,double T0x,double T0y,double Txx,double Tyy,double Txy,
+	double Ux,double Uy,double epsilon){
+	FourVector u,n;
+	double udotn,epsilontest=0.0;
+	int alpha,beta,gamma,delta;
+	udotn=sqrt(1.0+Ux*Ux+Uy*Uy);
+	u[0]=udotn;
+	u[1]=Ux;
+	u[2]=Uy;
+	u[3]=0.0;
+	n[0]=1.0;
+	n[1]=n[2]=n[3]=0.0;
+	double g[4],L[4][4],Linv[4][4],T[4][4],Ttilde[4][4],Gtest[4][4];
+	g[0]=1.0; g[1]=g[2]=g[3]=-1.0;
+	for(alpha=0;alpha<4;alpha++){
+		for(beta=0;beta<4;beta++){
+			L[alpha][beta]=Linv[alpha][beta]=T[alpha][beta]=Ttilde[alpha][beta]=Gtest[alpha][beta]=0.0;
+		}
+	}
+
+	T[0][0]=T00;
+	T[0][1]=T[1][0]=T0x;
+	T[0][2]=T[2][0]=T0y;
+	T[1][1]=Txx;
+	T[2][2]=Tyy;
+	T[1][2]=T[2][1]=Txy;
+	for(alpha=0;alpha<4;alpha++){
+		for(beta=0;beta<4;beta++){
+			epsilontest+=u[alpha]*g[alpha]*T[alpha][beta]*g[beta]*u[beta];
+			if(alpha==beta){
+				L[alpha][beta]+=g[alpha];
+				Linv[alpha][beta]+=g[alpha];
+			}
+			L[alpha][beta]+=2.0*u[alpha]*n[beta];
+			Linv[alpha][beta]+=2.0*n[alpha]*u[beta];
+			L[alpha][beta]-=(u[alpha]+n[alpha])*(u[beta]+n[beta])/(1.0+udotn);
+			Linv[alpha][beta]-=(u[alpha]+n[alpha])*(u[beta]+n[beta])/(1.0+udotn);
+		}
+	}
+	for(alpha=0;alpha<4;alpha++){
+		for(beta=0;beta<4;beta++){
+			for(gamma=0;gamma<4;gamma++){
+				Gtest[alpha][beta]+=Linv[alpha][gamma]*g[gamma]*L[gamma][beta];
+				for(delta=0;delta<4;delta++){
+					if(alpha==beta)
+					Ttilde[alpha][beta]+=Linv[alpha][gamma]*g[gamma]*T[gamma][delta]*g[delta]*L[delta][beta];
+				}
+			}
+		}
+	}
+	char message[400];
+	sprintf(message,"epsilon=%g =? %g =? %g\n",epsilon,Ttilde[0][0],epsilontest);
+	CLog::Info(message);
+	sprintf(message,"------ Ttilde --------\n");
+	for(alpha=0;alpha<4;alpha++){
+		for(beta=0;beta<4;beta++){
+			sprintf(message,"%s%10.5f ",message,1000*Ttilde[alpha][beta]);
+		}
+		sprintf(message,"%s\n",message);
+	}
+	CLog::Info(message);
+	printf(message,"------ Gtest --------\n");
+	for(alpha=0;alpha<4;alpha++){
+		for(beta=0;beta<4;beta++){
+			sprintf(message,"%s%10.5f ",message,Gtest[alpha][beta]);
+		}
+		sprintf(message,"%s\n",message);
+	}
+	CLog::Info(message);
 }
 
 void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_target,double &T,double &mu){

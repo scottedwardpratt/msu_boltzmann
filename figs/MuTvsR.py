@@ -156,33 +156,40 @@ plt.ylabel('$u_r$ ',fontsize=18)
 ax = fig.add_axes([0.19,0.75,0.80,0.23])
 
 x=np.array([],dtype=float)
-y=np.array([],dtype=float)
+ypi=np.array([],dtype=float)
 s=np.prod(Npi.shape)
 for i in range(0,s):
 	if Npi[i]>4 :
 		x=np.append(x,rpi[i])
-		y=np.append(y,mupi[i]*Tpi[i])
-plt.plot(x,1000*y,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
+		ypi=np.append(ypi,mupi[i])
+plt.plot(x,ypi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
 #plt.plot(rpi,mupi*Tpi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
 
 x=np.array([],dtype=float)
-y=np.array([],dtype=float)
+yK=np.array([],dtype=float)
 s=np.prod(NK.shape)
 for i in range(0,s):
 	if NK[i]>4:
 		x=np.append(x,rK[i])
-		y=np.append(y,muK[i]*TK[i])
-plt.plot(x,1000*y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
+		yK=np.append(yK,muK[i])
+plt.plot(x,yK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
 
 x=np.array([],dtype=float)
-y=np.array([],dtype=float)
+yB=np.array([],dtype=float)
 s=np.prod(NB.shape)
 for i in range(0,s):
 	if NB[i]>4 :
 		x=np.append(x,rB[i])
-		y=np.append(y,muB[i]*TB[i])
-plt.plot(x,1000*y,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
+		yB=np.append(yB,muB[i])
+plt.plot(x,yB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
 
+x=np.array([],dtype=float)
+DelY=np.array([],dtype=float)
+for i in range(0,s):
+	if NB[i]>4 :
+		x=np.append(x,rB[i])
+		DelY=np.append(DelY,2.0*yB[i]-5.0*ypi[i])
+plt.plot(x,DelY,linestyle='-',color='k',markersize=6,marker='o',markerfacecolor='k')
 
 ax.tick_params(axis='both', which='major', labelsize=14)
 
@@ -193,16 +200,17 @@ ax.set_xticks(np.arange(0,31,5), minor=True)
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0f'))
 plt.xlim(0,25)
 
-ax.set_yticks(np.arange(-250,1500,250), minor=False)
-ax.set_yticklabels(np.arange(-250,1500,250), minor=False, family='serif')
-ax.set_yticks(np.arange(-250,1500,50), minor=True)
+ax.set_yticks(np.arange(-5.0,20.0,5.0), minor=False)
+ax.set_yticklabels(np.arange(-5.0,20.0,5.0), minor=False, family='serif')
+ax.set_yticks(np.arange(-5.0,20.0,1.0), minor=True)
 #plt.ylim(-25,1250)
-plt.ylim(-25,500)
+#plt.ylim(-2,10.0)
+plt.ylim(-1.5,10)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
 plt.xlabel(None)
-plt.ylabel('$\mu$ [MeV]',fontsize=18)
+plt.ylabel('$\mu/T$',fontsize=18)
 
 #######################################
 

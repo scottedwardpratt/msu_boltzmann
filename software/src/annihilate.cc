@@ -393,7 +393,6 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 }
 */
 
-
 double CMSU_Boltzmann::GetAnnihilationSigma(CMSUPart *part1,CMSUPart *part2){
 	const double g[4]={1,-1,-1,-1};
 	double Plab,p1dotp2,triangle,sigma_annihilation,rstrange,m1squared,m2squared;
