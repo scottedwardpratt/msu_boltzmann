@@ -28,7 +28,6 @@ int main(){
 	ms.ReadHyper_OSU_2D();
 
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
-
 	msuboltz->InitCascade();
 	
 	nparts=0;
