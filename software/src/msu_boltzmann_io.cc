@@ -322,7 +322,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 		sprintf(filename,"mucalc_results/mutinfo_pi_tau%g.txt",tau_print);
 		fptr=fopen(filename,"w");
 		fgets(dummy,500,fptr);
-		fprintf(fptr,"#  ix    iy     Npi     E/N       Tpi    Uxpi    Uypi     mupi     rho    epsilon\n");
+		fprintf(fptr,"#  ix    iy     Npi       Tpi    Uxpi    Uypi     mupi     rho    epsilon   Uxpi_alt    Uyp_alt\n");
 		for(ix=0;ix<CMuTInfo::NXY;ix++){
 			for(iy=0;iy<CMuTInfo::NXY;iy++){
 				mti=muTinfo[iitau][ix][iy];
@@ -330,11 +330,12 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 				if(mti->Npi<CMuTInfo::NMINCALC)
 					sufficientN=false;
 				if(sufficientN){
-					fprintf(fptr,"%d %d %d %g %g %g %g %g %g\n",
-						ix,iy,mti->Npi,mti->Tpi,mti->Uxpi,mti->Uypi,mti->mupi,mti->rhopi,mti->epsilonpi);
+					fprintf(fptr,"%2d %2d %8d %g %g %g %g %g %g %g %g\n",
+						ix,iy,mti->Npi,mti->Tpi,mti->Uxpi,mti->Uypi,
+						mti->mupi,mti->rhopi,mti->epsilonpi,mti->Uxpi_alt,mti->Uypi_alt);
 				}
 				else{
-					fprintf(fptr,"%d %d %d %g %g %g %g %g %g\n",ix,iy,0,0.0,0.0,0.0,0.0,0.0,0.0);
+					fprintf(fptr,"%d %d %d %g %g %g %g %g %g %g %g\n",ix,iy,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0);
 				}
 			}
 		}
@@ -343,7 +344,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 		sprintf(filename,"mucalc_results/mutinfo_K_tau%g.txt",tau_print);
 		fptr=fopen(filename,"w");
 		fgets(dummy,500,fptr);
-		fprintf(fptr,"#  ix    iy     NK     E/N         TK    Uxpi    UyK      muK      rho      epsilon\n");
+		fprintf(fptr,"#  ix    iy     NK      TK    UxK    UyK      muK      rho      epsilon  UxK_alt   UyK_alt\n");
 		for(ix=0;ix<CMuTInfo::NXY;ix++){
 			for(iy=0;iy<CMuTInfo::NXY;iy++){
 				mti=muTinfo[iitau][ix][iy];
@@ -351,11 +352,11 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 				if(mti->NK<CMuTInfo::NMINCALC)
 					sufficientN=false;
 				if(sufficientN){
-					fprintf(fptr,"%d %d %d %g %g %g %g %g %g\n",
-						ix,iy,mti->NK,mti->TK,mti->UxK,mti->UyK,mti->muK,mti->rhoK,mti->epsilonK);
+					fprintf(fptr,"%2d %2d %d %g %g %g %g %g %g %g %g\n",
+						ix,iy,mti->NK,mti->TK,mti->UxK,mti->UyK,mti->muK,mti->rhoK,mti->epsilonK,mti->UxK_alt,mti->UyK_alt);
 				}
 				else{
-					fprintf(fptr,"%d %d %d %g %g %g %g %g %g\n",ix,iy,0,0.0,0.0,0.0,0.0,0.0,0.0);
+					fprintf(fptr,"%d %d %8d %g %g %g %g %g %g %g %g\n",ix,iy,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0);
 				}
 			}
 		}
@@ -365,7 +366,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 			sprintf(filename,"mucalc_results/mutinfo_B%d_tau%g.txt",btype,tau_print);
 			fptr=fopen(filename,"w");
 			fgets(dummy,500,fptr);
-			fprintf(fptr,"#  ix    iy     NB       E/N    TB    UxB       UyB       muB       rhoB     epsilonB\n");
+			fprintf(fptr,"#  ix    iy     NB      TB    UxB       UyB       muB       rhoB     epsilonB\n");
 			for(ix=0;ix<CMuTInfo::NXY;ix++){
 				for(iy=0;iy<CMuTInfo::NXY;iy++){
 					mti=muTinfo[iitau][ix][iy];
@@ -373,12 +374,12 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 					if(mti->NB[btype]<CMuTInfo::NMINCALC)
 						sufficientN=false;
 					if(sufficientN){
-						fprintf(fptr,"%d %d %d %g %g %g %g %g %g\n",
+						fprintf(fptr,"%d %d %8d %g %g %g %g %g %g %g %g\n",
 							ix,iy,mti->NB[btype],mti->TB[btype],mti->UxB[btype],mti->UyB[btype],mti->muB[btype],
-							mti->rhoB[btype],mti->epsilonB[btype]);
+							mti->rhoB[btype],mti->epsilonB[btype],mti->UxB_alt[btype],mti->UyB_alt[btype]);
 					}
 					else{
-						fprintf(fptr,"%d %d %d %g %g %g %g %g %g\n",ix,iy,0,0.0,0.0,0.0,0.0,0.0,0.0);
+						fprintf(fptr,"%2d %2d %d %g %g %g %g %g %g %g %g\n",ix,iy,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0);
 					}
 				}
 			}
@@ -391,20 +392,20 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 void CMSU_Boltzmann::ReadMuTInfo(){
 	char dummy[500];
 	int ix,iy,iitau,N,NB,ntau,btype;
-	double T,Ux,Uy,mu,rho,epsilon;
-	double tau_print;
+	double T,Ux,Uy,Ux_alt,Uy_alt,mu,rho,epsilon;
+	double tau_read;
 	char filename[60];
 	bool READN=false;
 	FILE *fptr;
 	CMuTInfo *mti;
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 	for(iitau=0;iitau<ntau;iitau++){
-		tau_print=(iitau+1)*MUTCALC_DELTAU;
-		sprintf(filename,"mucalc_results/mutinfo_pi_tau%g.txt",tau_print);
+		tau_read=(iitau+1)*MUTCALC_DELTAU;
+		sprintf(filename,"mucalc_results/mutinfo_pi_tau%g.txt",tau_read);
 		fptr=fopen(filename,"r");
 		if(fptr){
 			fgets(dummy,500,fptr);
-			fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon);
+			fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 			while(!feof(fptr)){
 				mti=muTinfo[iitau][ix][iy];
 				if(N>CMuTInfo::NMINCALC)
@@ -417,16 +418,16 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 					mti->Uypi=Uy;
 					mti->epsilonpi=epsilon;
 				}
-				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon);
+				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 			}
 			fclose(fptr);
 		}
 
-		sprintf(filename,"mucalc_results/mutinfo_K_tau%g.txt",tau_print);
+		sprintf(filename,"mucalc_results/mutinfo_K_tau%g.txt",tau_read);
 		fptr=fopen(filename,"r");
 		if(fptr){
 			fgets(dummy,500,fptr);
-			fscanf(fptr,"%d %d %d  %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon);
+			fscanf(fptr,"%d %d %d  %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 			while(!feof(fptr)){
 				mti=muTinfo[iitau][ix][iy];
 				if(N>CMuTInfo::NMINCALC)
@@ -439,17 +440,17 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 					mti->UyK=Uy;
 					mti->epsilonK=epsilon;
 				}
-				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon);
+				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 			}
 			fclose(fptr);
 		}
 
 		for(btype=0;btype<8;btype++){
-			sprintf(filename,"mucalc_results/mutinfo_B%d_tau%g.txt",btype,tau_print);
+			sprintf(filename,"mucalc_results/mutinfo_B%d_tau%g.txt",btype,tau_read);
 			fptr=fopen(filename,"r");
 			if(fptr){
 				fgets(dummy,500,fptr);
-				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&NB,&T,&Ux,&Uy,&mu,&rho,&epsilon);
+				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&NB,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 				while(!feof(fptr)){
 					mti=muTinfo[iitau][ix][iy];
 					if(NB>CMuTInfo::NMINCALC)
@@ -462,7 +463,7 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 						mti->UyB[btype]=Uy;
 						mti->epsilonB[btype]=epsilon;
 					}
-					fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&NB,&T,&Ux,&Uy,&mu,&rho,&epsilon);
+					fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&NB,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 				}
 				fclose(fptr);
 			}

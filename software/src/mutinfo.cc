@@ -41,6 +41,8 @@ CMuTInfo::CMuTInfo(double tau_set){
 	rhoB.resize(8);
 	UxB.resize(8);
 	UyB.resize(8);
+	UxB_alt.resize(8);
+	UyB_alt.resize(8);
 	sufficientNB.resize(8);
 
 	for(int btype=0;btype<8;btype++){
@@ -91,6 +93,8 @@ void CMuTInfo::CalcAllMuTU(){
 		T0x=Pxpi/volume;
 		T0y=Pypi/volume;
 		GetEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,Uxpi,Uypi,epsilonpi);
+		Uxpi_alt=Pxpi/(PionMassGeV*Npi);
+		Uypi_alt=Pypi/(PionMassGeV*Npi);
 		//TestEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,Uxpi,Uypi,epsilonpi);
 		gamma=sqrt(1.0+Uxpi*Uxpi+Uypi*Uypi);
 		rhopi=double(Npi)/(gamma*volume);
@@ -110,6 +114,8 @@ void CMuTInfo::CalcAllMuTU(){
 		T0x=PxK/volume;
 		T0y=PyK/volume;
 		GetEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,UxK,UyK,epsilonK);
+		UxK_alt=PxK/(KaonMassGeV*NK);
+		UyK_alt=PyK/(KaonMassGeV*NK);
 		gamma=sqrt(1.0+UxK*UxK+UyK*UyK);
 		rhoK=double(NK)/(gamma*volume);
 		degen=4.0;
@@ -128,6 +134,8 @@ void CMuTInfo::CalcAllMuTU(){
 			T0x=PxB[btype]/volume;
 			T0y=PyB[btype]/volume;
 			GetEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,UxB[btype],UyB[btype],epsilonB[btype]);
+			UxB_alt[btype]=PxB[btype]/(massB[btype]*NB[btype]);
+			UyB_alt[btype]=PyB[btype]/(massB[btype]*NB[btype]);
 			gamma=sqrt(1.0+UxB[btype]*UxB[btype]+UyB[btype]*UyB[btype]);
 			rhoB[btype]=double(NB[btype])/(gamma*volume);
 			GetMuT(massB[btype],degenB[btype],rhoB[btype],epsilonB[btype],TB[btype],muB[btype]);

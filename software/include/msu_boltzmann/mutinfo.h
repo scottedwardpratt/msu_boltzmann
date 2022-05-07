@@ -16,9 +16,10 @@ public:
 	double Txxpi,Tyypi,Txypi;
 	double TxxK,TyyK,TxyK;
 	double Uxpi,Uypi,UxK,UyK;
+	double Uxpi_alt,Uypi_alt,UxK_alt,UyK_alt;
 	int Npi,NK;
 
-	vector<double> epsilonB,rhoB,UxB,UyB;
+	vector<double> epsilonB,rhoB,UxB,UyB,UxB_alt,UyB_alt;
 	vector<double> EB,PxB,PyB,TxxB,TyyB,TxyB;
 	vector<double> TB,muB;
 	vector<int> NB;

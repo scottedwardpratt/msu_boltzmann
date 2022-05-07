@@ -34,6 +34,7 @@ Tpi=pidata[2]
 Upi=pidata[3]
 mupi=pidata[4]
 rhopi=tau*pidata[5]
+Upi_alt=pidata[7]
 
 rK=Kdata[0]
 NK=Kdata[1]
@@ -41,6 +42,7 @@ TK=Kdata[2]
 UK=Kdata[3]
 muK=Kdata[4]
 rhoK=tau*Kdata[5]
+UK_alt=Kdata[7]
 
 rB=Bdata[0]
 NB=Bdata[1]
@@ -48,6 +50,7 @@ TB=Bdata[2]
 UB=Bdata[3]
 muB=Bdata[4]
 rhoB=tau*Bdata[5]
+UB_alt=Bdata[7]
 
 #######################################
 
@@ -68,7 +71,7 @@ plt.xlim(0,25)
 ax.set_yticks(np.arange(0,200,40), minor=False)
 ax.set_yticklabels(np.arange(0,200,40), minor=False, family='serif')
 ax.set_yticks(np.arange(0,200,20), minor=True)
-plt.ylim(20,159.9)
+plt.ylim(20,170)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
@@ -94,7 +97,7 @@ plt.xlim(0,25)
 ax.set_yticks(np.arange(0,4,0.5), minor=False)
 ax.set_yticklabels(np.arange(0,4,0.5), minor=False, family='serif')
 ax.set_yticks(np.arange(0,4,0.1), minor=True)
-plt.ylim(0,2.25)
+plt.ylim(0,2.9999)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
@@ -107,30 +110,39 @@ ax = fig.add_axes([0.19,0.52,0.8,0.23])
 
 x=np.array([],dtype=float)
 y=np.array([],dtype=float)
+z=np.array([],dtype=float)
 s=np.prod(Npi.shape)
 for i in range(0,s):
 	if Npi[i]>4 :
 		x=np.append(x,rpi[i])
 		y=np.append(y,Upi[i])
+		z=np.append(z,Upi_alt[i])
 plt.plot(x,y,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
+#plt.plot(x,z,linestyle='-',color='r',markersize=6,marker='s',markerfacecolor='r')
 
 x=np.array([],dtype=float)
 y=np.array([],dtype=float)
+z=np.array([],dtype=float)
 s=np.prod(Npi.shape)
 for i in range(0,s):
 	if NK[i]>4 :
 		x=np.append(x,rK[i])
 		y=np.append(y,UK[i])
+		z=np.append(z,UK_alt[i])
 plt.plot(x,y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
+#plt.plot(x,z,linestyle='-',color='g',markersize=6,marker='s',markerfacecolor='g')
 
 x=np.array([],dtype=float)
 y=np.array([],dtype=float)
+z=np.array([],dtype=float)
 s=np.prod(NB.shape)
 for i in range(0,s):
 	if NB[i]>4 :
 		x=np.append(x,rB[i])
 		y=np.append(y,UB[i])
+		z=np.append(z,UB_alt[i])
 plt.plot(x,y,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
+#plt.plot(x,z,linestyle='-',color='b',markersize=6,marker='s',markerfacecolor='b')
 
 ax.tick_params(axis='both', which='major', labelsize=14)
 
@@ -144,7 +156,7 @@ plt.xlim(0,25)
 ax.set_yticks(np.arange(0,6,1.0), minor=False)
 ax.set_yticklabels(np.arange(0,6,1.0), minor=False, family='serif')
 ax.set_yticks(np.arange(0,6,0.2), minor=True)
-plt.ylim(0,5.999)
+plt.ylim(0,2.999)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 

@@ -6,7 +6,7 @@
 
 void CAction::PerformMuTCalcUpdateNPE(){
 	int ix,iy,itau,btype,pid;
-	itau=lrint(floor(tau/boltzmann->MUTCALC_DELTAU));
+	itau=lrint(tau/boltzmann->MUTCALC_DELTAU)-1;
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	CresInfo *resinfo;
@@ -78,4 +78,5 @@ void CAction::PerformMuTCalcUpdateNPE(){
 			}
 		}
 	}
+
 }

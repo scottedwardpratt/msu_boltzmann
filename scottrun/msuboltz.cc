@@ -7,6 +7,7 @@ using namespace std;
 
 int main(){
 	CparameterMap parmap;
+	int NN=0,Npi=0,NK=0;
 	char message[200];
 	string run_name="default_0";
 	int nmerge,nscatter,nannihilate,nevents,nparts,ievent,iqual;
@@ -39,10 +40,15 @@ int main(){
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
 		nmerge=nscatter=nannihilate=0;
 		msuboltz->ReadMuTInfo();
+		Npi=NK=NN=0;
 		for(ievent=0;ievent<nevents;ievent++){
 			msuboltz->Reset();
 			nparts+=ms.MakeEvent();
 			msuboltz->InputPartList(pl);
+			Npi+=pl->CountResonances(211)+pl->CountResonances(-221)+pl->CountResonances(111);
+			NK+=pl->CountResonances(321)+pl->CountResonances(-321)+pl->CountResonances(311)+pl->CountResonances(-311);
+			NN+=pl->CountResonances(2212)+pl->CountResonances(-2212)+pl->CountResonances(2112)+pl->CountResonances(-2112);
+
 			pl->Clear();
 			msuboltz->PerformAllActions();
 			
@@ -52,6 +58,7 @@ int main(){
 			sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 			CLog::Info(message);
 		}
+		printf("Npi=%d, NK=%d, NN=%d, NN/Npi=%g\n",Npi,NK,NN,double(NN)/double(Npi));
 		sprintf(message,"nmerge/event=%g, nscatter/event=%g, nannihilate=%g\n",
 			double(nmerge)/double(nevents),double(nscatter)/double(nevents),double(nannihilate)/double(nevents));
 		CLog::Info(message);

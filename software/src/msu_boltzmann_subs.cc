@@ -304,7 +304,7 @@ void CMSU_Boltzmann::InitMuTCalc(){
 		for(ix=0;ix<NXY;ix++){
 			muTinfo[itau][ix].resize(NXY);
 			for(iy=0;iy<NXY;iy++)
-				muTinfo[itau][ix][iy]=new CMuTInfo((itau+0.5)*MUTCALC_DELTAU);
+				muTinfo[itau][ix][iy]=new CMuTInfo((itau+1)*MUTCALC_DELTAU);
 		}
 	}
 	CresInfoMap::iterator rpos;
