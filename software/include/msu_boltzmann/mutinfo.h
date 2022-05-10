@@ -28,7 +28,7 @@ public:
 	
 	void UpdateNPE(CMSU_BoltzmannCell *cell);
 	void CalcAllMuTU();
-	static void GetMuT(double mass,double degen,double rho_target,double epsilon_target,
+	static void GetMuT(double mass,int degen,double rho_target,double epsilon_target,
 		double &T,double &mu);
 	//static bool GetMuT_Baryon(double rhoB_target,double rhoBS_target,double epsilon_target,
 		//double &T,double &muB,double &muBS);
@@ -44,11 +44,11 @@ double Ux,double Uy,double epsilon);
 	static vector<CresInfo*> Bresinfo;
 	static vector<vector<double>> taumin;
 	static vector<double> massB;
-	static vector<double> degenB;
+	static vector<int> degenB;
 	static int NXY;
 	static double DXY;
 	static CMSU_Boltzmann *boltzmann;
-	static int GetBtype(int pid);
+	static int GetBtypeOctetDecuplet(int pid);
 };
 
 #endif

@@ -18,7 +18,8 @@ void CAction::PerformMuTCalcUpdateNPE(){
 		if(part->active){
 			resinfo=part->resinfo;
 			pid=abs(resinfo->pid);
-			btype=CMuTInfo::GetBtype(pid);
+			// Only use low-lying baryons to calculate mu and T 
+			btype=CMuTInfo::GetBtypeOctetDecuplet(pid);
 			if(pid==111 || pid==211 || pid==311 || pid==321 || btype>=0){
 				eta=part->GetEta(tau);
 				t=tau*cosh(eta);

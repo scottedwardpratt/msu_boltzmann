@@ -213,8 +213,8 @@ void CMSU_Boltzmann::Reset(){
 	//npartstot=0;
 	if(MUTCALC){
 		ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
-		for(iitau=1;iitau<ntau;iitau++){
-			taucalc=iitau*MUTCALC_DELTAU;
+		for(iitau=0;iitau<ntau;iitau++){
+			taucalc=(iitau+1)*MUTCALC_DELTAU;
 			AddAction_MuTCalc_UpdateNPE(taucalc);
 		}
 		CMuTInfo::NETEVENTS+=NSAMPLE;

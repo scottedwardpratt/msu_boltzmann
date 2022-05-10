@@ -16,7 +16,7 @@ double CMuTInfo::DXY=0.0;
 vector<vector<double>> CMuTInfo::taumin{};
 vector<CresInfo *> CMuTInfo::Bresinfo{};
 vector<double> CMuTInfo::massB{0.938,1.18937,1.31483,1.11568,1.232,1.385,1.530,1.67243};
-vector<double> CMuTInfo::degenB{8,12,8,4,16,24,16,8};
+vector<int> CMuTInfo::degenB{8,12,8,4,16,24,16,8};
 
 CMuTInfo::CMuTInfo(double tau_set){
 	tau=tau_set;
@@ -85,6 +85,10 @@ void CMuTInfo::CalcAllMuTU(){
 	char message[200];
 
 	double volume=4.0*tau*2.0*boltzmann->ETAMAX*DXY*DXY*double(NETEVENTS);   // factor or 4 due to combining quadrants
+	sufficientNpi=sufficientNK=false;
+	for(btype=0;btype<8;btype++)
+		sufficientNB[btype]=false;
+
 	if(Npi>=NMINCALC){
 		Txx=Txxpi/volume;
 		Tyy=Tyypi/volume;
@@ -98,8 +102,9 @@ void CMuTInfo::CalcAllMuTU(){
 		//TestEpsilonU(T00,T0x,T0y,Txx,Tyy,Txy,Uxpi,Uypi,epsilonpi);
 		gamma=sqrt(1.0+Uxpi*Uxpi+Uypi*Uypi);
 		rhopi=double(Npi)/(gamma*volume);
-		degen=3.0;
+		degen=3;
 		GetMuT(PionMassGeV,degen,rhopi,epsilonpi,Tpi,mupi);
+		sufficientNpi=true;
 	}
 	else{
 		Tpi=-1.0;
@@ -118,8 +123,8 @@ void CMuTInfo::CalcAllMuTU(){
 		UyK_alt=PyK/(KaonMassGeV*NK);
 		gamma=sqrt(1.0+UxK*UxK+UyK*UyK);
 		rhoK=double(NK)/(gamma*volume);
-		degen=4.0;
-		GetMuT(KaonMassGeV,degen,rhoK,epsilonK,TK,muK);
+		degen=4;
+		sufficientNK=true;
 	}
 	else{
 		TK=-1.0;
@@ -140,12 +145,13 @@ void CMuTInfo::CalcAllMuTU(){
 			rhoB[btype]=double(NB[btype])/(gamma*volume);
 			GetMuT(massB[btype],degenB[btype],rhoB[btype],epsilonB[btype],TB[btype],muB[btype]);
 			if(TB[btype]!=TB[btype] || muB[btype]!=muB[btype]){
-				sprintf(message,"btype=%d: Disaster, m=%g, rho=%g, degen=%g, epsilon=%g\n",
+				sprintf(message,"btype=%d: Disaster, m=%g, rho=%g, degen=%d, epsilon=%g\n",
 					btype,massB[btype],rhoB[btype],degenB[btype],epsilonB[btype]);
 				CLog::Info(message);
 				sprintf(message,"NB=%d, T00/rho=%g, epsilon/rho=%g, EB/NB=%g, TB=%g, muB=%g\n",NB[btype],T00/rhoB[btype],epsilonB[btype]/rhoB[btype],EB[btype]/NB[btype],TB[btype],muB[btype]);
 				CLog::Fatal(message);
 			}
+			sufficientNB[btype]=true;
 		}
 		else{
 			TB[btype]=-1.0;
@@ -273,7 +279,7 @@ void CMuTInfo::TestEpsilonU(double T00,double T0x,double T0y,double Txx,double T
 		sprintf(message,"%s\n",message);
 	}
 	CLog::Info(message);
-	printf(message,"------ Gtest --------\n");
+	sprintf(message,"------ Gtest --------\n");
 	for(alpha=0;alpha<4;alpha++){
 		for(beta=0;beta<4;beta++){
 			sprintf(message,"%s%10.5f ",message,Gtest[alpha][beta]);
@@ -283,7 +289,7 @@ void CMuTInfo::TestEpsilonU(double T00,double T0x,double T0y,double Txx,double T
 	CLog::Info(message);
 }
 
-void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_target,double &T,double &mu){
+void CMuTInfo::GetMuT(double mass,int degen,double rho_target,double epsilon_target,double &T,double &mu){
 	double E,dEdT,ETarget,epsilon0,dedT,P,rho0,dT;
 	int ntry=0;
 	char message[100];
@@ -318,6 +324,10 @@ void CMuTInfo::GetMuT(double mass,double degen,double rho_target,double epsilon_
 		MSU_EOS::freegascalc_onespecies(T,mass,epsilon0,P,rho0,dedT);
 		mu=log(rho_target/(rho0*degen));
 	}
+	if(T!=T || mu!=mu){
+		printf("disaster, T=%g, mu=%g, rho_target=%g, epsilon_target=%g, e/rho=%g\n",T,mu,rho_target,epsilon_target,epsilon_target/rho_target);
+		exit(1);
+	}
 }
 
 void CMuTInfo::GetIxIy(double x,double y,int &ix,int &iy){
@@ -325,7 +335,8 @@ void CMuTInfo::GetIxIy(double x,double y,int &ix,int &iy){
 	iy=lrint(floor(fabs(y)/DXY));
 }
 
-int CMuTInfo::GetBtype(int pid){
+
+int CMuTInfo::GetBtypeOctetDecuplet(int pid){
 	int btype=-1;
 	pid=abs(pid);
 	if(pid==2112 || pid==2212)
@@ -346,3 +357,4 @@ int CMuTInfo::GetBtype(int pid){
 		btype=7;
 	return btype;
 }
+

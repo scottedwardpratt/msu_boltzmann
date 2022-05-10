@@ -14,6 +14,7 @@ void CMSU_Boltzmann::InputPartList(CpartList *partlist){
 	int ipart,balanceID;
 	double oldeta,oldrapidity,Et;
 	double tau0,eta,mass,rapidity,weight=1.0;
+	//int nbaryons=0,nhyperons=0;
 	CMSUPart *newpart;
 	Cpart *part;
 	for(ipart=0;ipart<partlist->nparts;ipart++){
@@ -31,7 +32,13 @@ void CMSU_Boltzmann::InputPartList(CpartList *partlist){
 		part->p[3]=Et*sinh(eta);
 		part->p[0]=Et*cosh(eta);
 		newpart->InitBalance(part->pid,part->r[1],part->r[2],tau0,eta,part->p[1],part->p[2],mass,rapidity,weight,balanceID);
+		/*if(newpart->resinfo->baryon!=0)
+			nbaryons+=1;
+		if(newpart->resinfo->baryon!=0 && newpart->resinfo->strange!=0)
+			nhyperons+=1;
+			*/
 	}
+	//printf("nbaryons=%d, nhyperons=%d\n",nbaryons,nhyperons);
 }
 
 double CMSU_Boltzmann::WriteOSCAR(int ievent){
@@ -410,12 +417,14 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 				mti=muTinfo[iitau][ix][iy];
 				if(N>CMuTInfo::NMINCALC)
 					mti->sufficientNpi=true;
+				else
+					mti->sufficientNpi=false;
 				mti->Tpi=T;
 				mti->mupi=mu;
+				mti->Uxpi=Ux;
+				mti->Uypi=Uy;
 				if(READN){
 					mti->Npi=N;
-					mti->Uxpi=Ux;
-					mti->Uypi=Uy;
 					mti->epsilonpi=epsilon;
 				}
 				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
@@ -432,12 +441,14 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 				mti=muTinfo[iitau][ix][iy];
 				if(N>CMuTInfo::NMINCALC)
 					mti->sufficientNK=true;
+				else
+					mti->sufficientNK=false;
 				mti->TK=T;
 				mti->muK=mu;
+				mti->UxK=Ux;
+					mti->UyK=Uy;
 				if(READN){
 					mti->NK=N;
-					mti->UxK=Ux;
-					mti->UyK=Uy;
 					mti->epsilonK=epsilon;
 				}
 				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
@@ -455,12 +466,14 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 					mti=muTinfo[iitau][ix][iy];
 					if(NB>CMuTInfo::NMINCALC)
 						mti->sufficientNB[btype]=true;
+					else
+						mti->sufficientNB[btype]=false;
 					mti->TB[btype]=T;
 					mti->muB[btype]=mu;
+					mti->UxB[btype]=Ux;
+					mti->UyB[btype]=Uy;
 					if(READN){
 						mti->NB[btype]=NB;
-						mti->UxB[btype]=Ux;
-						mti->UyB[btype]=Uy;
 						mti->epsilonB[btype]=epsilon;
 					}
 					fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&NB,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);

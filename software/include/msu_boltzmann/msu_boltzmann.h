@@ -173,7 +173,7 @@ public:
 	bool ERROR_PRINT;
 
 	long long int nscatter,nbscatter,n,nmerge,nswallow,npass,nexit;
-	long long int nactivate,nannihilate,nregenerate,nactionkills;
+	long long int nactivate,nannihilate,ncancel_annihilate,nregenerate,nactionkills;
 	long long int nactions,ninelastic, ncollisions,oldncollisions,ndecay,ncheck,ncheck1,ncheck2;
 
 	void freegascalc_onespecies(double m,double t,double &p,double &e,double &dens,double &sigma2,double &dedt);
