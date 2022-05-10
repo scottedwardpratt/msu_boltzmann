@@ -431,6 +431,11 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	//btype1=part1->resinfo->Btype;
 	//btype2=part2->resinfo->Btype;
 
+	iitau=lrint(floor(tau/MUTCALC_DELTAU));
+	if(iitau>=muTinfo.size()){
+		cancel=false;
+		return cancel;
+	}
 	CMuTInfo::GetIxIy(part1->r[1],part1->r[2],ix1,iy1);
 	CMuTInfo::GetIxIy(part1->r[1],part1->r[2],ix2,iy2);
 	if(iitau>=muTinfo.size() || ix1>=CMuTInfo::NXY || ix2>=CMuTInfo::NXY || iy1>=CMuTInfo::NXY || iy2>=CMuTInfo::NXY || ix1<0 || ix2<0 || iy1<0 || iy2<0){
@@ -443,8 +448,6 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 		cancel=true;
 		return cancel;
 	}
-
-	iitau=lrint(floor(tau/MUTCALC_DELTAU));
 	
 	mti1=muTinfo[iitau][ix1][iy1];
 	mti2=muTinfo[iitau][ix2][iy2];
