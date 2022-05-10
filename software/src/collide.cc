@@ -105,11 +105,6 @@ int CMSU_Boltzmann::Collide_Annihilate(CMSUPart *part1,CMSUPart *part2,int &npro
 		part1->BjorkenTranslate();
 	}
 
-	if(tau<0.0){
-		printf("tau=%g?????\n",tau);
-		exit(1);
-	}
-
 	if(CancelAnnihilation(part1,part2)){
 		if(bjtranslate)
 			part1->BjorkenUnTranslate();

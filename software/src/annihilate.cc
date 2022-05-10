@@ -70,7 +70,6 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 		quark[nbodies-1]=-1;
 		antiq[0]=-1;
 	}
-
 	nKplus=nKminus=nK0bar=nK0=npiplus=npiminus=npi0=0;
 	for(i=0;i<nbodies;i++){
 		if(quark[i]==1 && antiq[i]==1){
@@ -434,6 +433,11 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 
 	CMuTInfo::GetIxIy(part1->r[1],part1->r[2],ix1,iy1);
 	CMuTInfo::GetIxIy(part1->r[1],part1->r[2],ix2,iy2);
+	if(iitau>=muTinfo.size() || ix1>=CMuTInfo::NXY || ix2>=CMuTInfo::NXY || iy1>=CMuTInfo::NXY || iy2>=CMuTInfo::NXY || ix1<0 || ix2<0 || iy1<0 || iy2<0){
+		cancel=false;
+		return cancel;
+	}
+	
 	if(tau<CMuTInfo::taumin[ix1][iy1] || tau<CMuTInfo::taumin[ix2][iy2]){
 		//printf("annihilation canceled for being in hydro area\n");
 		cancel=true;
@@ -441,10 +445,7 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	}
 
 	iitau=lrint(floor(tau/MUTCALC_DELTAU));
-	if(iitau>=muTinfo.size() || ix1>=NXY || ix2>=NXY || iy1>=NXY || iy2>=NXY){
-		cancel=false;
-		return cancel;
-	}
+	
 	mti1=muTinfo[iitau][ix1][iy1];
 	mti2=muTinfo[iitau][ix2][iy2];
 	btype1=part1->resinfo->Btype;

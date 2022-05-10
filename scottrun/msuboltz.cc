@@ -47,7 +47,6 @@ int main(){
 			Npi+=pl->CountResonances(211)+pl->CountResonances(-221)+pl->CountResonances(111);
 			NK+=pl->CountResonances(321)+pl->CountResonances(-321)+pl->CountResonances(311)+pl->CountResonances(-311);
 			NN+=pl->CountResonances(2212)+pl->CountResonances(-2212)+pl->CountResonances(2112)+pl->CountResonances(-2112);
-
 			pl->Clear();
 			msuboltz->PerformAllActions();
 			
