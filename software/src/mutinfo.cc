@@ -124,6 +124,7 @@ void CMuTInfo::CalcAllMuTU(){
 		gamma=sqrt(1.0+UxK*UxK+UyK*UyK);
 		rhoK=double(NK)/(gamma*volume);
 		degen=4;
+		GetMuT(KaonMassGeV,degen,rhopi,epsilonpi,TK,muK);
 		sufficientNK=true;
 	}
 	else{
