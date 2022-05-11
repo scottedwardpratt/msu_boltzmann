@@ -120,7 +120,7 @@ void CMuTInfo::CalcAllMuTU(){
 		gamma=sqrt(1.0+UxK*UxK+UyK*UyK);
 		rhoK=double(NK)/(gamma*volume);
 		degen=4;
-		GetMuT(KaonMassGeV,degen,rhopi,epsilonpi,TK,muK);
+		GetMuT(KaonMassGeV,degen,rhoK,epsilonK,TK,muK);
 	}
 	else{
 		TK=-1.0;
@@ -331,7 +331,6 @@ void CMuTInfo::GetIxIy(double x,double y,int &ix,int &iy){
 	ix=lrint(floor(fabs(x)/DXY));
 	iy=lrint(floor(fabs(y)/DXY));
 }
-
 
 int CMuTInfo::GetBtypeOctetDecuplet(int pid){
 	int btype=-1;
