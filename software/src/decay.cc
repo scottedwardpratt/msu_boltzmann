@@ -10,14 +10,18 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 	vector<double> probmax;
 	double mtot,E0,netprob,Estarmax;
 	int imass,ibody;
-	int ntry;
+	//int ntry;
 	for(ibody=0;ibody<nbodies;ibody++){
 		minmass_daughters+=daughter[ibody]->resinfo->minmass;
 		mass_daughters+=daughter[ibody]->resinfo->mass;
 		width_daughters+=daughter[ibody]->resinfo->width;
 	}
-	if(mass[0]>minmass_daughters+0.02 && mass[0]>mass_daughters-1.5*width_daughters){
-		ntry=0;
+	if(mass_daughters<minmass_daughters || mass[0]<minmass_daughters){
+		printf("masses out of whack in decay\n");
+		exit(1);
+	}
+	if(mass[0]>minmass_daughters+0.02+0.2*width_daughters && fabs(mass[0]-mass_daughters)<1.5*width_daughters){
+		//ntry=0;
 		do{
 			mtot=0.0;
 			for(ibody=0;ibody<nbodies;ibody++){
@@ -25,12 +29,14 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 				mass[ibody+1]=daughter[ibody]->resinfo->GenerateMassFromSF(netprob);
 				mtot+=mass[ibody+1];
 			}
-			ntry+=1;
+			//ntry+=1;
 		}while(mtot>mass[0]);
+		/*
 		if(ntry>10000){
 			printf("A: ntry=%d\n",ntry);
-			printf("mass[0]=%g, minmass_daughters=%g, mass_daughters=%g\n",mass[0],minmass_daughters, mass_daughters);
+			printf("mass[0]=%g, minmass_daughters=%g, mass_daughters=%g, width_daughters=%g\n",mass[0],minmass_daughters, mass_daughters,width_daughters);
 		}
+		*/
 	}
 	else{
 		probmax.resize(nbodies);
@@ -46,6 +52,7 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 				}
 			}
 		}
+		//ntry=0;
 		do{
 			mtot=0.0;
 			for(ibody=0;ibody<nbodies;ibody++){
@@ -57,7 +64,14 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 					mass[ibody+1]=daughter[ibody]->resinfo->mass;
 				mtot+=mass[ibody+1];
 			}
-		}while(mtot>mass[0]);
+			//ntry+=1;
+		}while(mtot>mass[0]); 
+		/*
+		if(ntry>10000){
+			printf("B: ntry=%d\n",ntry);
+			printf("mass[0]=%g, minmass_daughters=%g, mass_daughters=%g, width_daughters=%g\n",mass[0],minmass_daughters, mass_daughters,width_daughters);
+		}
+		*/
 	}
 	double mcheck=0.0;
 	for(ibody=0;ibody<nbodies;ibody++){

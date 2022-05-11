@@ -85,9 +85,6 @@ void CMuTInfo::CalcAllMuTU(){
 	char message[200];
 
 	double volume=4.0*tau*2.0*boltzmann->ETAMAX*DXY*DXY*double(NETEVENTS);   // factor or 4 due to combining quadrants
-	sufficientNpi=sufficientNK=false;
-	for(btype=0;btype<8;btype++)
-		sufficientNB[btype]=false;
 
 	if(Npi>=NMINCALC){
 		Txx=Txxpi/volume;
@@ -104,7 +101,6 @@ void CMuTInfo::CalcAllMuTU(){
 		rhopi=double(Npi)/(gamma*volume);
 		degen=3;
 		GetMuT(PionMassGeV,degen,rhopi,epsilonpi,Tpi,mupi);
-		sufficientNpi=true;
 	}
 	else{
 		Tpi=-1.0;
@@ -125,7 +121,6 @@ void CMuTInfo::CalcAllMuTU(){
 		rhoK=double(NK)/(gamma*volume);
 		degen=4;
 		GetMuT(KaonMassGeV,degen,rhopi,epsilonpi,TK,muK);
-		sufficientNK=true;
 	}
 	else{
 		TK=-1.0;
@@ -152,7 +147,6 @@ void CMuTInfo::CalcAllMuTU(){
 				sprintf(message,"NB=%d, T00/rho=%g, epsilon/rho=%g, EB/NB=%g, TB=%g, muB=%g\n",NB[btype],T00/rhoB[btype],epsilonB[btype]/rhoB[btype],EB[btype]/NB[btype],TB[btype],muB[btype]);
 				CLog::Fatal(message);
 			}
-			sufficientNB[btype]=true;
 		}
 		else{
 			TB[btype]=-1.0;

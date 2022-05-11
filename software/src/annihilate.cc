@@ -501,7 +501,7 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	betaEtot=EB*(betameson-betaB);
 	reduction_factor=1.0-exp(muQtot-betaEtot);
 	
-		
+	/*	
 	if(reduction_factor<0.0){
 		printf("________________________________________________________\n");
 		printf("-- tau=%g, reduction factor=%g, (%d,%d), netK=%g\n",
@@ -514,6 +514,7 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 		printf("-- muQtot=%g, betaEtot=%g\n",muQtot,betaEtot);
 		printf("________________________________________________________\n");
 	}
+	*/
 	
 	if(mti1->TB[btype1]!=mti1->TB[btype1] || mti2->TB[btype2]!=mti1->TB[btype2]){
 		CLog::Fatal("temperature screwed up\n");
