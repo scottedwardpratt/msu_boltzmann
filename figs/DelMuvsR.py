@@ -77,8 +77,9 @@ for i in range(0,s):
 	if Npi[i]>4 and NK[i]>4 and NB1[i]>4 and NB2[i]>4 :
 		DelMu0=-muB1[i]-muB2[i]+(5.0-NS)*mupi[i]+muK[i]*NS
 		X=exp(DelMu0)
-		DelBeta=(2.0/Tpi[i])-(1.0/TB1[i])-(1.0/TB2[i])
-		Ebar=1.0+0.75*TB1[i]+0.75*TB2[i]  # typical energy of a baryon of mass 1.0 GeV
+		DelBeta=-(1.0/Tpi[i])+(0.5/TB1[i])+(0.5/TB2[i])
+		#Ebar=2.0+1.5*TB1[i]+1.5*TB2[i]  # typical energy of a baryon of mass 1.0 GeV
+		Ebar=2.0
 		XX=exp(DelBeta*Ebar)
 		print(i,': X=',X,' DelMu0=',DelMu0,' XX=',XX,' DelBeta=',DelBeta)
 		x=np.append(x,rpi[i])
@@ -91,7 +92,7 @@ z=1.0-z
 
 
 plt.plot(x,y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
-plt.plot(x,z,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
+#plt.plot(x,z,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
 plt.plot(x,yz,linestyle='-',color='k',markersize=6,marker='o',markerfacecolor='k')
 #plt.plot(rpi,X1,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
 #plt.plot(rpi,X2,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')

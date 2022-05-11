@@ -10,12 +10,14 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 	vector<double> probmax;
 	double mtot,E0,netprob,Estarmax;
 	int imass,ibody;
+	int ntry;
 	for(ibody=0;ibody<nbodies;ibody++){
 		minmass_daughters+=daughter[ibody]->resinfo->minmass;
 		mass_daughters+=daughter[ibody]->resinfo->mass;
 		width_daughters+=daughter[ibody]->resinfo->width;
 	}
-	if(mass[0]>minmass_daughters && mass[0]>mass_daughters-2.0*width_daughters){
+	if(mass[0]>minmass_daughters+0.02 && mass[0]>mass_daughters-1.5*width_daughters){
+		ntry=0;
 		do{
 			mtot=0.0;
 			for(ibody=0;ibody<nbodies;ibody++){
@@ -23,7 +25,12 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 				mass[ibody+1]=daughter[ibody]->resinfo->GenerateMassFromSF(netprob);
 				mtot+=mass[ibody+1];
 			}
+			ntry+=1;
 		}while(mtot>mass[0]);
+		if(ntry>10000){
+			printf("A: ntry=%d\n",ntry);
+			printf("mass[0]=%g, minmass_daughters=%g, mass_daughters=%g\n",mass[0],minmass_daughters, mass_daughters);
+		}
 	}
 	else{
 		probmax.resize(nbodies);
