@@ -17,10 +17,9 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		width_daughters+=daughter[ibody]->resinfo->width;
 	}
 	if(mass_daughters<minmass_daughters || mass[0]<minmass_daughters){
-		printf("masses out of whack in decay\n");
-		exit(1);
+		CLog::Fatal("masses out of whack in decay\n");
 	}
-	if(mass[0]>minmass_daughters+0.02+0.2*width_daughters && fabs(mass[0]-mass_daughters)<1.5*width_daughters){
+	if(mass[0]>minmass_daughters+0.5*(mass_daughters-minmass_daughters) && mass[0]>mass_daughters-width_daughters){
 		//ntry=0;
 		do{
 			mtot=0.0;

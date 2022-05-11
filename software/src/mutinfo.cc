@@ -310,9 +310,11 @@ void CMuTInfo::GetMuT(double mass,int degen,double rho_target,double epsilon_tar
 					dT=0.4*T*dT/fabs(dT);
 				T+=dT;
 			}while(fabs(dT)>1.0E-5 && ntry<30);
-			if(ntry==30 || T!=T){
+			if(ntry==50 || T!=T){
 				sprintf(message,"CMuTInfo::GetMuT did not converge!!!, T=%g, dT=%g\n",
 					T,dT);
+				CLog::Info("T="+to_string(T)+", ETarget="+to_string(ETarget)+", mass="+to_string(mass)+"\n");
+				CLog::Info("rho_target="+to_string(rho_target)+", epsilon_target="+to_string(epsilon_target)+"\n");
 				CLog::Fatal(message);
 			}
 		}

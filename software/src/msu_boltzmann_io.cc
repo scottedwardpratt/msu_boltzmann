@@ -423,6 +423,7 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 				mti->mupi=mu;
 				mti->Uxpi=Ux;
 				mti->Uypi=Uy;
+				mti->Npi=0;
 				if(READN){
 					mti->Npi=N;
 					mti->epsilonpi=epsilon;
@@ -446,7 +447,8 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 				mti->TK=T;
 				mti->muK=mu;
 				mti->UxK=Ux;
-					mti->UyK=Uy;
+				mti->UyK=Uy;
+				mti->NK=0;
 				if(READN){
 					mti->NK=N;
 					mti->epsilonK=epsilon;
@@ -472,6 +474,7 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 					mti->muB[btype]=mu;
 					mti->UxB[btype]=Ux;
 					mti->UyB[btype]=Uy;
+					mti->NB[btype]=0;
 					if(READN){
 						mti->NB[btype]=NB;
 						mti->epsilonB[btype]=epsilon;
