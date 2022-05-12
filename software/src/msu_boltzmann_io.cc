@@ -311,6 +311,7 @@ void CMSU_Boltzmann::WriteDens(){
 
 void CMSU_Boltzmann::WriteMuTInfo(){
 	char dummy[500];
+	string dirname;
 	int ix,iy,iitau,ntau,btype;
 	double tau_print;
 	char filename[50];
@@ -318,6 +319,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 	FILE *fptr;
 	CMuTInfo *mti;
 	CalcMuTU();
+	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_OUTPUT_DIR","mucalc_results");
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 	for(iitau=0;iitau<ntau;iitau++){
 		tau_print=(iitau+1)*MUTCALC_DELTAU;
@@ -326,7 +328,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 				mti=muTinfo[iitau][ix][iy];
 			}
 		}
-		sprintf(filename,"mucalc_results/mutinfo_pi_tau%g.txt",tau_print);
+		sprintf(filename,"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_print);
 		fptr=fopen(filename,"w");
 		fgets(dummy,500,fptr);
 		fprintf(fptr,"#  ix    iy     Npi       Tpi    Uxpi    Uypi     mupi     rho    epsilon   Uxpi_alt    Uyp_alt\n");
@@ -348,7 +350,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 		}
 		fclose(fptr);
 
-		sprintf(filename,"mucalc_results/mutinfo_K_tau%g.txt",tau_print);
+		sprintf(filename,"%s/mutinfo_K_tau%g.txt",dirname.c_str(),tau_print);
 		fptr=fopen(filename,"w");
 		fgets(dummy,500,fptr);
 		fprintf(fptr,"#  ix    iy     NK      TK    UxK    UyK      muK      rho      epsilon  UxK_alt   UyK_alt\n");
@@ -370,7 +372,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 		fclose(fptr);
 
 		for(btype=0;btype<8;btype++){
-			sprintf(filename,"mucalc_results/mutinfo_B%d_tau%g.txt",btype,tau_print);
+			sprintf(filename,"%s/mutinfo_B%d_tau%g.txt",dirname.c_str(),btype,tau_print);
 			fptr=fopen(filename,"w");
 			fgets(dummy,500,fptr);
 			fprintf(fptr,"#  ix    iy     NB      TB    UxB       UyB       muB       rhoB     epsilonB\n");
@@ -398,6 +400,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 
 void CMSU_Boltzmann::ReadMuTInfo(){
 	char dummy[500];
+	string dirname;
 	int ix,iy,iitau,N,NB,ntau,btype;
 	double T,Ux,Uy,Ux_alt,Uy_alt,mu,rho,epsilon;
 	double tau_read;
@@ -406,9 +409,10 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 	FILE *fptr;
 	CMuTInfo *mti;
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
+	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_INPUT_DIR","mutcalc_input");
 	for(iitau=0;iitau<ntau;iitau++){
 		tau_read=(iitau+1)*MUTCALC_DELTAU;
-		sprintf(filename,"mucalc_results/mutinfo_pi_tau%g.txt",tau_read);
+		sprintf(filename,"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_read);
 		fptr=fopen(filename,"r");
 		if(fptr){
 			fgets(dummy,500,fptr);
@@ -433,7 +437,7 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 			fclose(fptr);
 		}
 
-		sprintf(filename,"mucalc_results/mutinfo_K_tau%g.txt",tau_read);
+		sprintf(filename,"%s/mutinfo_K_tau%g.txt",dirname.c_str(),tau_read);
 		fptr=fopen(filename,"r");
 		if(fptr){
 			fgets(dummy,500,fptr);
@@ -459,7 +463,7 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 		}
 
 		for(btype=0;btype<8;btype++){
-			sprintf(filename,"mucalc_results/mutinfo_B%d_tau%g.txt",btype,tau_read);
+			sprintf(filename,"%s/mutinfo_B%d_tau%g.txt",dirname.c_str(),btype,tau_read);
 			fptr=fopen(filename,"r");
 			if(fptr){
 				fgets(dummy,500,fptr);
