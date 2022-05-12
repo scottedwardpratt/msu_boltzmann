@@ -34,8 +34,6 @@ public:
 	
 	int NXY;	//!< Determines size of mesh. The mesh size is \f$(2NXY,2NXY, 2NETA)\f$.
 	int NETA;
-	int NRINGSMAX;
-	int NPRCELLSMAX;
 	bool RESONANCE_DECAYS,BFCALC;
 	int HYDRO_OCTANT_SYMMETRY;
 	double XYMAX,ETAMAX,DXY,DETA;

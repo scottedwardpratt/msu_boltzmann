@@ -65,14 +65,14 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 		double &sigma_scatter,double &sigma_merge,double &sigma_annihilation,double &sigma_inel,
 		vector<double> &dsigma_merge){
 	double sigmatot=0,M,Gamma,b,degenR,degen1,degen2,q2,dsigma,sf;
-	int ir1,ir2;
+	int ir1,ir2,irflip;
 	Cmerge *merge;
 	
 	if((part1->balanceID>=0 && part2->balanceID<0) || (part2->balanceID>=0 && part1->balanceID<0)){
-		sigma_scatter=SIGMABF;
+		sigma_scatter=SIGMABF/double(NSAMPLE);
 	}
 	else{
-		sigma_scatter=SIGMADEFAULT;
+		sigma_scatter=SIGMADEFAULT/double(NSAMPLE);
 	}
 
 	if(BARYON_ANNIHILATION && (part1->resinfo->baryon*part2->resinfo->baryon)<0){
@@ -82,12 +82,17 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 		sigma_annihilation=0.0;
 
 	if(SIGMAINELASTIC)
-		sigma_inel=SIGMAINELASTIC;
+		sigma_inel=SIGMAINELASTIC/double(NSAMPLE);
 	else
 		sigma_inel=0.0;
 
 	ir1=part1->resinfo->ires;
 	ir2=part2->resinfo->ires;
+	if(ir1>ir2){
+		irflip=ir1;
+		ir1=ir2;
+		ir2=irflip;
+	}
 	merge=reslist->MergeArray[ir1][ir2];
 	dsigma_merge.clear();
 	while(merge!=NULL){
@@ -103,7 +108,7 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 			dsigma=b*sf*Gamma*2.0*PI*PI*(degenR/(degen1*degen2))*HBARC_GEV*HBARC_GEV/q2;
 			if(dsigma>40.0)
 				dsigma=40.0;
-			
+			dsigma=dsigma/double(NSAMPLE);
 		}
 		else
 			dsigma=0.0;
@@ -112,6 +117,11 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 		merge=merge->next;
 	}
 	sigmatot=sigma_scatter+sigma_inel+sigma_annihilation+sigma_merge;
+	/*
+	if(part1->resinfo->pid==-211 && part2->resinfo->pid==211)
+		printf("m1=%g, m2=%g, Minv=%g, q=%g, sigmatot=%g\n",
+			part1->resinfo->mass,part2->resinfo->mass,sqrt(Minv2),sqrt(q2),10.0*sigmatot);
+		*/	
 	return sigmatot;
 }
 
@@ -130,7 +140,7 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 	if(checkpossible){
 		sigmatot=GetSigma(part1,part2,Minv2,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel,
 			dsigma_merge);
-		if(pibsquared<sigmatot/double(NSAMPLE)){
+		if(pibsquared<sigmatot){
 			AddAction_Collision(part1,part2,taucoll,pibsquared,
 						sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel,
 						dsigma_merge);

@@ -5,12 +5,16 @@
 #include <cstring>
 using namespace std;
 
-int main(){
+int main(int argc, char *argv[]){
+	if (argc != 2) {
+		printf("Usage: msuboltz run_name\n");
+		exit(-1);
+  }
 	CparameterMap parmap;
+	string run_name=argv[1];
 	int NN=0,Npi=0,NK=0;
 	char message[200];
-	string run_name="default_0";
-	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,iqual;
+	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,iqual,ndecay;
 	//char logfilename[100];
 	//sprintf(logfilename,"msuboltz_log.txt");
 	//CLog::Init(logfilename);
@@ -37,7 +41,7 @@ int main(){
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.txt");
 	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
-		nmerge=nscatter=nannihilate=ncancel_annihilate=0;
+		nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
 		msuboltz->ReadMuTInfo();
 		Npi=NK=NN=0;
 		for(ievent=0;ievent<nevents;ievent++){
@@ -54,12 +58,14 @@ int main(){
 			nscatter+=msuboltz->nscatter;
 			nannihilate+=msuboltz->nannihilate;
 			ncancel_annihilate+=msuboltz->ncancel_annihilate;
+			ndecay+=msuboltz->ndecay;
 			sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 			CLog::Info(message);
 		}
 		sprintf(message,"Npi=%d, NK=%d, NN=%d, NN/Npi=%g\n",Npi,NK,NN,double(NN)/double(Npi));
 		CLog::Info(message);
-		sprintf(message,"nmerge/event=%g, nscatter/event=%g\n",double(nmerge)/double(nevents),double(nscatter)/double(nevents));
+		sprintf(message,"ndecay/event=%g, nmerge/event=%g, nscatter/event=%g\n",
+			double(ndecay)/double(nevents),double(nmerge)/double(nevents),double(nscatter)/double(nevents));
 		CLog::Info(message);
 		sprintf(message,"nannihilate=%g, ncancel_annihilate=%g\n",
 			double(nannihilate)/double(nevents),double(ncancel_annihilate)/double(nevents));

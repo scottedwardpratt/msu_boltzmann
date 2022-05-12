@@ -15,15 +15,17 @@ void CAction::PerformCollide(){
 
 	sigmatot=sigma_scatter+sigma_merge+sigma_annihilation+sigma_inel;
 	double r=boltzmann->randy->ran();
-	if(r<sigma_scatter/sigmatot){
-		colltype=boltzmann->Collide_Scatter(part1,part2,nproducts,product);
+
+	if(r<sigma_merge/sigmatot){
+		colltype=boltzmann->Collide_Merge(part1,part2,sigma_merge,dsigma_merge,nproducts,product);
 	}
 	else if(r<(sigma_scatter+sigma_merge)/sigmatot){
-		colltype=boltzmann->Collide_Merge(part1,part2,sigma_merge,dsigma_merge,nproducts,product);
+		colltype=boltzmann->Collide_Scatter(part1,part2,nproducts,product);
 	}
 	else if(r<(sigma_scatter+sigma_merge+sigma_annihilation)/sigmatot){
 		colltype=boltzmann->Collide_Annihilate(part1,part2,nproducts,product);
 	}
+	/*
 	else{
 		if(!boltzmann->INELASTIC){
 			sprintf(message,"In PeformCollide: Trying to Perform Inelastic Collision???");
@@ -31,6 +33,7 @@ void CAction::PerformCollide(){
 		}
 		colltype=boltzmann->Collide_Inelastic(part1,part2,nproducts,product);
 	}
+	*/
 
 	//colltype=boltzmann->Collide(part1,part2,nproducts,product,pibsquared);
 

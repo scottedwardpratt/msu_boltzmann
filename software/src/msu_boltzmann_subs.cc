@@ -285,25 +285,25 @@ int CMSU_Boltzmann::CountBaryons(){
 void CMSU_Boltzmann::InitMuTCalc(){
 	int ix,iy,ntau;
 	CMuTInfo::boltzmann=this;
-	CMuTInfo::NXY=parmap->getI("MSU_BOLTZMANN_MUTCALC_NXY",24);
-	CMuTInfo::DXY=parmap->getD("MSU_BOLTZMANN_MUTCalc_DXY",1.0);
-	CMuTInfo::NMINCALC=parmap->getD("MSU_BOLTZMANN_MUTCALC_NMINCALC",5);
-	CMuTInfo::taumin.resize(NXY);
+	CMuTInfo::NXY=parmap->getI("MSU_BOLTZMANN_MUTCALC_NXY",30);
+	CMuTInfo::DXY=parmap->getD("MSU_BOLTZMANN_MUTCALC_DXY",1.0);
+	CMuTInfo::NMINCALC=parmap->getD("MSU_BOLTZMANN_MUTCALC_NMINCALC",10);
+	CMuTInfo::taumin.resize(CMuTInfo::NXY);
 	//CMuTInfo::massB.resize(8);
 	//CMuTInfo::degenB.resize(8);
-	for(ix=0;ix<NXY;ix++){
-		CMuTInfo::taumin[ix].resize(NXY);
-		for(iy=0;iy<NXY;iy++)
+	for(ix=0;ix<CMuTInfo::NXY;ix++){
+		CMuTInfo::taumin[ix].resize(CMuTInfo::NXY);
+		for(iy=0;iy<CMuTInfo::NXY;iy++)
 			CMuTInfo::taumin[ix][iy]=0.0;
 	}
 	CMuTInfo::NETEVENTS=0;
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 	muTinfo.resize(ntau);
 	for(itau=0;itau<ntau;itau++){
-		muTinfo[itau].resize(NXY);
-		for(ix=0;ix<NXY;ix++){
-			muTinfo[itau][ix].resize(NXY);
-			for(iy=0;iy<NXY;iy++)
+		muTinfo[itau].resize(CMuTInfo::NXY);
+		for(ix=0;ix<CMuTInfo::NXY;ix++){
+			muTinfo[itau][ix].resize(CMuTInfo::NXY);
+			for(iy=0;iy<CMuTInfo::NXY;iy++)
 				muTinfo[itau][ix][iy]=new CMuTInfo((itau+1)*MUTCALC_DELTAU);
 		}
 	}

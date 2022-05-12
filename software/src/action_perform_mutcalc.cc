@@ -13,9 +13,13 @@ void CAction::PerformMuTCalcUpdateNPE(){
 	CMuTInfo *mti;
 	double gamma,gammav,E,px,py,eta,t,x,y;
 
+	//int nactive=0,npi=0,nB=0;
+
 	for(ppos=boltzmann->PartMap.begin();ppos!=boltzmann->PartMap.end();++ppos){
 		part=ppos->second;
 		if(part->active){
+			//nB+=abs(part->resinfo->baryon);
+			//nactive+=1;
 			resinfo=part->resinfo;
 			pid=abs(resinfo->pid);
 			// Only use low-lying baryons to calculate mu and T 
@@ -26,7 +30,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 				x=part->r[1]+(t-part->r[0])*part->p[1]/part->p[0];
 				y=part->r[2]+(t-part->r[0])*part->p[2]/part->p[0];
 				CMuTInfo::GetIxIy(x,y,ix,iy);
-				if(ix<CMuTInfo::NXY && iy<CMuTInfo::NXY){
+				if(ix>=0 && iy>=0 && ix<CMuTInfo::NXY && iy<CMuTInfo::NXY){
 					if(boltzmann->tau>CMuTInfo::taumin[ix][iy]){
 						px=part->p[1];
 						py=part->p[2];
@@ -38,6 +42,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 							mti=boltzmann->muTinfo[itau][ix][iy];
 
 							if(resinfo->pid==111 || abs(resinfo->pid)==211){
+								//npi+=1;
 								gamma=cosh(eta);
 								gammav=sinh(eta);
 								mti->Npi+=1;
@@ -79,5 +84,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 			}
 		}
 	}
+	//printf("CAction::PerformMuTCalcUpdateNPE(): tau=%g, nactive=%d, npi=%d, nB=%d, ndecay=%d\n",
+		//tau,nactive,npi,nB,boltzmann->ndecay);
 
 }
