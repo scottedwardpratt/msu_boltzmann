@@ -319,7 +319,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 	FILE *fptr;
 	CMuTInfo *mti;
 	CalcMuTU();
-	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_OUTPUT_DIR","mucalc_results");
+	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_OUTPUT_DIR","mutcalc_results");
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 	for(iitau=0;iitau<ntau;iitau++){
 		tau_print=(iitau+1)*MUTCALC_DELTAU;
