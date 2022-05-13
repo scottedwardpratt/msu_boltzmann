@@ -198,9 +198,10 @@ plt.plot(x,yB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b
 x=np.array([],dtype=float)
 DelY=np.array([],dtype=float)
 for i in range(0,s):
-	if NB[i]>4 :
+	print('i=',i)
+	if NB[i]>4 and Npi[i]>4 and NK[i]>4:
 		x=np.append(x,rB[i])
-		DelY=np.append(DelY,2.0*yB[i]-5.0*ypi[i])
+		DelY=np.append(DelY,2.0*muB[i]-5.0*mupi[i])
 plt.plot(x,DelY,linestyle='-',color='k',markersize=6,marker='o',markerfacecolor='k')
 
 ax.tick_params(axis='both', which='major', labelsize=14)
@@ -217,7 +218,7 @@ ax.set_yticklabels(np.arange(-5.0,20.0,5.0), minor=False, family='serif')
 ax.set_yticks(np.arange(-5.0,20.0,1.0), minor=True)
 #plt.ylim(-25,1250)
 #plt.ylim(-2,10.0)
-plt.ylim(-1.5,10)
+plt.ylim(-1.5,12)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 

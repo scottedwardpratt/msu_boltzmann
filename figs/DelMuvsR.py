@@ -104,7 +104,7 @@ ax.set_xticks(np.arange(0,31,10), minor=False)
 ax.set_xticklabels(np.arange(0,31,10), minor=False, family='serif')
 ax.set_xticks(np.arange(0,31,5), minor=True)
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0f'))
-plt.xlim(0,24)
+plt.xlim(0,25)
 
 ax.set_yticks(np.arange(-2,2,0.5), minor=False)
 ax.set_yticklabels(np.arange(-2,2,0.5), minor=False, family='serif')

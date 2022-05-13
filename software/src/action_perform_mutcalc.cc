@@ -57,7 +57,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 							else if(abs(part->resinfo->pid)==321 || abs(part->resinfo->pid)==311){
 								gamma=cosh(eta);
 								gammav=sinh(eta);
-								mti->NK+=1;
+								//mti->NK+=1;
 								mti->PxK+=px;
 								mti->PyK+=py;
 								E=gamma*part->p[0]-gammav*part->p[3];
@@ -85,6 +85,6 @@ void CAction::PerformMuTCalcUpdateNPE(){
 		}
 	}
 	//printf("CAction::PerformMuTCalcUpdateNPE(): tau=%g, nactive=%d, npi=%d, nB=%d, ndecay=%d\n",
-		//tau,nactive,npi,nB,boltzmann->ndecay);
+		//tau,nactive,npi,nB,int(boltzmann->ndecay)+2*int(boltzmann->nannihilate));
 
 }

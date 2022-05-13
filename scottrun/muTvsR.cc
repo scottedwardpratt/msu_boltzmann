@@ -27,7 +27,7 @@ int main(){
 	Nparts.resize(NR,0);
 	char filename[200],dummy[200];
 
-	for(tau=1;tau<40.001;tau+=1){
+	for(tau=1;tau<30.001;tau+=1){
 		
 
 		//Pions
@@ -37,7 +37,7 @@ int main(){
 			mupi[ir]=Tpi[ir]=Upi[ir]=rhopi[ir]=epi[ir]=0.0;
 		}
 
-		sprintf(filename,"mucalc_results/mutinfo_pi_tau%g.txt",tau);
+		sprintf(filename,"mutcalc_results/mutinfo_pi_tau%g.txt",tau);
 		fptr=fopen(filename,"r");
 		fgets(dummy,200,fptr);
 		do{
@@ -61,7 +61,7 @@ int main(){
 		}while(!feof(fptr));
 		fclose(fptr);
 
-		sprintf(filename,"mucalc_results/muTvsR_pi_tau%g.txt",tau);
+		sprintf(filename,"mutcalc_results/muTvsR_pi_tau%g.txt",tau);
 		output=fopen(filename,"w");
 		for(ir=0;ir<NR;ir++){
 			if(npts[ir]>0){
@@ -89,7 +89,7 @@ int main(){
 			muK[ir]=TK[ir]=UK[ir]=rhoK[ir]=eK[ir]=0.0;
 		}
 		
-		sprintf(filename,"mucalc_results/mutinfo_K_tau%g.txt",tau);
+		sprintf(filename,"mutcalc_results/mutinfo_K_tau%g.txt",tau);
 		fptr=fopen(filename,"r");
 		fgets(dummy,200,fptr);
 		do{
@@ -115,7 +115,7 @@ int main(){
 		}while(!feof(fptr));
 		fclose(fptr);
 
-		sprintf(filename,"mucalc_results/muTvsR_K_tau%g.txt",tau);
+		sprintf(filename,"mutcalc_results/muTvsR_K_tau%g.txt",tau);
 		output=fopen(filename,"w");
 		for(ir=0;ir<NR;ir++){
 			if(npts[ir]>0){
@@ -144,7 +144,7 @@ int main(){
 				Nparts[ir]=0;
 				muB[ir]=TB[ir]=UB[ir]=rhoB[ir]=eB[ir]=0.0;
 			}
-			sprintf(filename,"mucalc_results/mutinfo_B%d_tau%g.txt",btype,tau);
+			sprintf(filename,"mutcalc_results/mutinfo_B%d_tau%g.txt",btype,tau);
 			fptr=fopen(filename,"r");
 			fgets(dummy,200,fptr);
 			do{
@@ -169,7 +169,7 @@ int main(){
 			fclose(fptr);
 
 
-			sprintf(filename,"mucalc_results/muTvsR_B%d_tau%g.txt",btype,tau);
+			sprintf(filename,"mutcalc_results/muTvsR_B%d_tau%g.txt",btype,tau);
 			output=fopen(filename,"w");
 			for(ir=0;ir<NR;ir++){
 				if(npts[ir]>0){
