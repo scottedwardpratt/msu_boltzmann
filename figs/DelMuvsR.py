@@ -9,7 +9,6 @@ from matplotlib import ticker
 #sformatter.set_scientific(True)
 #sformatter.set_powerlimits((-2,3))
 
-tau=15
 tau=int(input('Enter tau: '))
 print('tau=',tau)
 
@@ -116,6 +115,7 @@ plt.ylim(-0.2,1.1)
 plt.xlabel('$r$ [fm]', fontsize=18, weight='normal')
 plt.ylabel('$R/R_0$',fontsize=18)
 
+text(0.5,0.96,'$\\tau=$'+str(tau),fontsize=18)
 
 
 plt.savefig('DelMuvsR.pdf')

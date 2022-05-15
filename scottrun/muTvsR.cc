@@ -27,7 +27,7 @@ int main(){
 	Nparts.resize(NR,0);
 	char filename[200],dummy[200];
 
-	for(tau=1;tau<30.001;tau+=1){
+	for(tau=1;tau<40.001;tau+=1){
 		
 
 		//Pions

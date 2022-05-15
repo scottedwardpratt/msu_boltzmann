@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 	if (argc != 2) {
-		printf("Usage: msuboltz run_name\n");
+		CLog::Info("Usage: msuboltz run_name\n");
 		exit(-1);
   }
 	CparameterMap parmap;

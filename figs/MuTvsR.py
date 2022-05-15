@@ -1,11 +1,12 @@
+import sys
+import os
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-import numpy as np
-import os
+
 from pylab import *
 from matplotlib import ticker
 #from matplotlib.ticker import ScalarFormatter
-#sformatter=ScalarFormatter(useOffset=True,useMathText=True)
+#sformatter=ScalarFormatter(us0eOffset=True,useMathText=True)
 #sformatter.set_scientific(True)
 #sformatter.set_powerlimits((-2,3))
 
@@ -13,7 +14,7 @@ from matplotlib import ticker
 tau=15
 tau=int(input('Enter tau: '))
 btype=0
-btype=int(input('Enter btype: '))
+#btype=int(input('Enter btype: '))
 
 filename='data/muTvsR_pi_tau'+str(tau)+'.txt'
 print('filename=',filename)
@@ -82,9 +83,11 @@ plt.ylabel('$T$ [MeV]',fontsize=18)
 
 ax = fig.add_axes([0.19,0.29,0.8,0.23])
 
-plt.plot(rpi,rhopi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
-plt.plot(rK,rhoK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
-plt.plot(rB,rhoB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
+plt.plot(rpi,rhopi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r',label='$\pi$')
+plt.plot(rK,rhoK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g',label='$K$')
+plt.plot(rB,rhoB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b',label='$p,n$')
+
+legend(loc=(0.6,0.5),fontsize=18)
 
 ax.tick_params(axis='both', which='major', labelsize=14)
 
@@ -101,7 +104,7 @@ plt.ylim(0,1.7)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
-plt.xlabel('$r$ [fm]', fontsize=18, weight='normal')
+plt.xlabel(None)
 plt.ylabel('$\\rho$ [fm$^{-2}$]',fontsize=18)
 
 #######################################
@@ -198,7 +201,6 @@ plt.plot(x,yB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b
 x=np.array([],dtype=float)
 DelY=np.array([],dtype=float)
 for i in range(0,s):
-	print('i=',i)
 	if NB[i]>4 and Npi[i]>4 and NK[i]>4:
 		x=np.append(x,rB[i])
 		DelY=np.append(DelY,2.0*muB[i]-5.0*mupi[i])
@@ -225,10 +227,14 @@ plt.ylim(-1.5,12)
 plt.xlabel(None)
 plt.ylabel('$\mu/T$',fontsize=18)
 
+text(0.5,10,"$\\tau=$"+str(tau)+" fm/$c$",fontsize=18)
+text(1.5,4.0,"$2\\mu_N-5\\mu_\\pi$",fontsize=18)
+
 #######################################
 
+filename='MuTvsR_tau'+str(tau)+".pdf"
 
-plt.savefig('MuTvsR.pdf')
-os.system('open -a Preview MuTvsR.pdf')
+plt.savefig(filename)
+os.system('open -a Preview '+filename)
 #plt.show()
 quit()
