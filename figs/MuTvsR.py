@@ -11,8 +11,8 @@ from matplotlib import ticker
 #sformatter.set_powerlimits((-2,3))
 
 
-tau=15
-tau=int(input('Enter tau: '))
+tau=12
+#tau=int(input('Enter tau: '))
 btype=0
 #btype=int(input('Enter btype: '))
 
@@ -87,7 +87,7 @@ plt.plot(rpi,rhopi,linestyle='-',color='r',markersize=6,marker='o',markerfacecol
 plt.plot(rK,rhoK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g',label='$K$')
 plt.plot(rB,rhoB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b',label='$p,n$')
 
-legend(loc=(0.6,0.5),fontsize=18)
+legend(loc=(0.65,0.5),fontsize=18)
 
 ax.tick_params(axis='both', which='major', labelsize=14)
 

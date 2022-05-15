@@ -9,8 +9,13 @@ from matplotlib import ticker
 #sformatter.set_scientific(True)
 #sformatter.set_powerlimits((-2,3))
 
+species=["$p,n$","$\\Sigma$","$\\Xi$","$\\Lambda$","$\\Delta$","$\\Sigma^*$","$\\Xi^*$","$\\Omega$"]
+
+print(species)
+
 tau=int(input('Enter tau: '))
 print('tau=',tau)
+
 
 btype1=0
 btype1=int(input('Enter btype1: '))
@@ -116,7 +121,8 @@ plt.xlabel('$r$ [fm]', fontsize=18, weight='normal')
 plt.ylabel('$R/R_0$',fontsize=18)
 
 text(0.5,0.96,'$\\tau=$'+str(tau),fontsize=18)
-
+species=species[btype1]+','+species[btype2]
+text(0.7,0.1,species,fontsize=18)
 
 plt.savefig('DelMuvsR.pdf')
 os.system('open -a Preview DelMuvsR.pdf')

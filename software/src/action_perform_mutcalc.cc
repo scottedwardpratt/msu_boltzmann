@@ -57,7 +57,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 							else if(abs(part->resinfo->pid)==321 || abs(part->resinfo->pid)==311){
 								gamma=cosh(eta);
 								gammav=sinh(eta);
-								//mti->NK+=1;
+								mti->NK+=1;
 								mti->PxK+=px;
 								mti->PyK+=py;
 								E=gamma*part->p[0]-gammav*part->p[3];
