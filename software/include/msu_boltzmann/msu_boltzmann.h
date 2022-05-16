@@ -17,8 +17,17 @@ using namespace std;
 
 class CpartList;
 
+class ChadronCount{
+public:
+	long long int Npi,NK,NB,NN,NLambda,NSigma,NXi,NOmega;
+	ChadronCount(){
+		Npi=NK=NB=NN=NLambda=NSigma=NXi=NOmega=0;
+	}
+};
+
 class CMSU_Boltzmann{
 public:
+	int nevents;
 	CparameterMap *parmap;
 	CChargeMap chargemap;
 	CMSUPartMap DeadPartMap;
@@ -62,7 +71,6 @@ public:
 	CAction *GetDeadAction();
 	//vector<CLocalInfo *> localinfo;
 	//
-	vector<long long int> phicount; // for testing purposes
 	void AnalyzeCharges(); // for testing purposes
 	
 	//!Constructor.
@@ -135,7 +143,9 @@ public:
 	void ReadMuTInfo();
 	void WriteWeights();
 	void IncrementWeightArrays();
-	int CountBaryons();
+	ChadronCount hadroncount;
+	void IncrementHadronCount();
+	void WriteHadronCount();
 	void InitMuTCalc();
 
 	bool FindCollision(CMSUPart *part1,CMSUPart *part2,double &taucoll);

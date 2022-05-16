@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
 	string run_name=argv[1];
 	int NN=0,Npi=0,NK=0;
 	char message[200];
-	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,iqual,ndecay;
+	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,ndecay;
 	//char logfilename[100];
 	//sprintf(logfilename,"msuboltz_log.txt");
 	//CLog::Init(logfilename);
@@ -40,38 +40,39 @@ int main(int argc, char *argv[]){
 
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.txt");
-	for(iqual=0;iqual<qualifiers.nqualifiers;iqual++){
-		nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
-		msuboltz->ReadMuTInfo();
-		Npi=NK=NN=0;
-		for(ievent=0;ievent<nevents;ievent++){
-			msuboltz->Reset();
-			nparts+=ms.MakeEvent();
-			msuboltz->InputPartList(pl);
-			Npi+=pl->CountResonances(211)+pl->CountResonances(-221)+pl->CountResonances(111);
-			NK+=pl->CountResonances(321)+pl->CountResonances(-321)+pl->CountResonances(311)+pl->CountResonances(-311);
-			NN+=pl->CountResonances(2212)+pl->CountResonances(-2212)+pl->CountResonances(2112)+pl->CountResonances(-2112);
-			pl->Clear();
-			msuboltz->PerformAllActions();
-			
-			nmerge+=msuboltz->nmerge;
-			nscatter+=msuboltz->nscatter;
-			nannihilate+=msuboltz->nannihilate;
-			ncancel_annihilate+=msuboltz->ncancel_annihilate;
-			ndecay+=msuboltz->ndecay;
-			sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
-			CLog::Info(message);
-		}
-		sprintf(message,"Npi=%d, NK=%d, NN=%d, NN/Npi=%g\n",Npi,NK,NN,double(NN)/double(Npi));
+	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
+	msuboltz->ReadMuTInfo();
+	msuboltz->nevents=0;
+	Npi=NK=NN=0;
+	for(ievent=0;ievent<nevents;ievent++){
+		msuboltz->Reset();
+		nparts+=ms.MakeEvent();
+		msuboltz->InputPartList(pl);
+		Npi+=pl->CountResonances(211)+pl->CountResonances(-221)+pl->CountResonances(111);
+		NK+=pl->CountResonances(321)+pl->CountResonances(-321)+pl->CountResonances(311)+pl->CountResonances(-311);
+		NN+=pl->CountResonances(2212)+pl->CountResonances(-2212)+pl->CountResonances(2112)+pl->CountResonances(-2112);
+		pl->Clear();
+		msuboltz->PerformAllActions();
+		msuboltz->IncrementHadronCount();
+		
+		nmerge+=msuboltz->nmerge;
+		nscatter+=msuboltz->nscatter;
+		nannihilate+=msuboltz->nannihilate;
+		ncancel_annihilate+=msuboltz->ncancel_annihilate;
+		ndecay+=msuboltz->ndecay;
+		sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 		CLog::Info(message);
-		sprintf(message,"ndecay/event=%g, nmerge/event=%g, nscatter/event=%g\n",
-			double(ndecay)/double(nevents),double(nmerge)/double(nevents),double(nscatter)/double(nevents));
-		CLog::Info(message);
-		sprintf(message,"nannihilate=%g, ncancel_annihilate=%g\n",
-			double(nannihilate)/double(nevents),double(ncancel_annihilate)/double(nevents));
-		CLog::Info(message);
-		msuboltz->WriteMuTInfo();
 	}
+	sprintf(message,"Npi=%d, NK=%d, NN=%d, NN/Npi=%g\n",Npi,NK,NN,double(NN)/double(Npi));
+	CLog::Info(message);
+	sprintf(message,"ndecay/event=%g, nmerge/event=%g, nscatter/event=%g\n",
+		double(ndecay)/double(nevents),double(nmerge)/double(nevents),double(nscatter)/double(nevents));
+	CLog::Info(message);
+	sprintf(message,"nannihilate=%g, ncancel_annihilate=%g\n",
+		double(nannihilate)/double(nevents),double(ncancel_annihilate)/double(nevents));
+	CLog::Info(message);
+	//msuboltz->WriteMuTInfo();
+	msuboltz->WriteHadronCount();
 
 	CLog::Info("YIPPEE!!!!! We made it all the way through!\n");
 	return 0;

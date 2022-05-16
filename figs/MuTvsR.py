@@ -64,13 +64,13 @@ plt.plot(rB,1000*TB,linestyle='-',color='b',markersize=6,marker='o',markerfaceco
 ax.tick_params(axis='both', which='major', labelsize=14)
 
 ax.set_xticks(np.arange(0,31,10), minor=False)
-ax.set_xticklabels(np.arange(0,31,10), minor=False, family='serif')
+ax.set_xticklabels(np.arange(0,31,10), minor=False, family='sans')
 ax.set_xticks(np.arange(0,31,5), minor=True)
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0f'))
 plt.xlim(0,25)
 
 ax.set_yticks(np.arange(0,200,40), minor=False)
-ax.set_yticklabels(np.arange(0,200,40), minor=False, family='serif')
+ax.set_yticklabels(np.arange(0,200,40), minor=False, family='sans')
 ax.set_yticks(np.arange(0,200,20), minor=True)
 plt.ylim(20,170)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
@@ -85,9 +85,9 @@ ax = fig.add_axes([0.19,0.29,0.8,0.23])
 
 plt.plot(rpi,rhopi,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r',label='$\pi$')
 plt.plot(rK,rhoK,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g',label='$K$')
-plt.plot(rB,rhoB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b',label='$p,n$')
+plt.plot(rB,rhoB,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b',label='$N$')
 
-legend(loc=(0.65,0.5),fontsize=18)
+legend(loc=(0.72,0.5),fontsize=18)
 
 ax.tick_params(axis='both', which='major', labelsize=14)
 
@@ -98,14 +98,14 @@ ax.set_xticks(np.arange(0,31,5), minor=True)
 plt.xlim(0,25)
 
 ax.set_yticks(np.arange(0,4,0.5), minor=False)
-ax.set_yticklabels(np.arange(0,4,0.5), minor=False, family='serif')
+ax.set_yticklabels(np.arange(0,4,0.5), minor=False, family='sans')
 ax.set_yticks(np.arange(0,4,0.1), minor=True)
 plt.ylim(0,1.7)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
 plt.xlabel(None)
-plt.ylabel('$\\rho$ [fm$^{-2}$]',fontsize=18)
+plt.ylabel('$\\rho\\tau~$ [fm$^{-2}$]',fontsize=18)
 
 #######################################
 
@@ -150,14 +150,14 @@ plt.plot(x,y,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b'
 ax.tick_params(axis='both', which='major', labelsize=14)
 
 ax.set_xticks(np.arange(0,31,10), minor=False)
-#ax.set_xticklabels(np.arange(0,31,10), minor=False, family='serif')
+#ax.set_xticklabels(np.arange(0,31,10), minor=False, family='sans')
 ax.set_xticklabels([])
 ax.set_xticks(np.arange(0,31,5), minor=True)
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0f'))
 plt.xlim(0,25)
 
 ax.set_yticks(np.arange(0,6,1.0), minor=False)
-ax.set_yticklabels(np.arange(0,6,1.0), minor=False, family='serif')
+ax.set_yticklabels(np.arange(0,6,1.0), minor=False, family='sans')
 ax.set_yticks(np.arange(0,6,0.2), minor=True)
 plt.ylim(0,3.5)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
@@ -209,14 +209,14 @@ plt.plot(x,DelY,linestyle='-',color='k',markersize=6,marker='o',markerfacecolor=
 ax.tick_params(axis='both', which='major', labelsize=14)
 
 ax.set_xticks(np.arange(0,31,10), minor=False)
-#ax.set_xticklabels(np.arange(0,31,10), minor=False, family='serif')
+#ax.set_xticklabels(np.arange(0,31,10), minor=False, family='sans')
 ax.set_xticklabels([])
 ax.set_xticks(np.arange(0,31,5), minor=True)
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0f'))
 plt.xlim(0,25)
 
 ax.set_yticks(np.arange(-5.0,20.0,5.0), minor=False)
-ax.set_yticklabels(np.arange(-5.0,20.0,5.0), minor=False, family='serif')
+ax.set_yticklabels(np.arange(-5.0,20.0,5.0), minor=False, family='sans')
 ax.set_yticks(np.arange(-5.0,20.0,1.0), minor=True)
 #plt.ylim(-25,1250)
 #plt.ylim(-2,10.0)

@@ -270,18 +270,6 @@ void CMSU_Boltzmann::CheckPartMap(){
 	}
 }
 
-int CMSU_Boltzmann::CountBaryons(){
-	CMSUPartMap::iterator iter;
-	CMSUPart *part;
-	nbaryons=0;
-	for(iter=PartMap.begin();iter!=PartMap.end();iter++){
-		part=iter->second;
-		if(part->resinfo->baryon!=0)
-			nbaryons+=1;
-	}
-	return nbaryons;
-}
-
 void CMSU_Boltzmann::InitMuTCalc(){
 	int ix,iy,ntau;
 	CMuTInfo::boltzmann=this;
@@ -327,4 +315,48 @@ void CMSU_Boltzmann::CalcMuTU(){
 			}
 		}
 	}
+}
+
+void CMSU_Boltzmann::IncrementHadronCount(){
+	int apid;
+	CMSUPartMap::iterator iter;
+	CMSUPart *part;
+	CresInfo *resinfo;
+	nbaryons=0;
+	for(iter=PartMap.begin();iter!=PartMap.end();iter++){
+		part=iter->second;
+		resinfo=part->resinfo;
+		apid=abs(resinfo->pid);
+		if(resinfo->baryon!=0){
+			if(resinfo->strange==0)
+				hadroncount.NN+=1;
+			else if(abs(resinfo->strange)==1){
+				if(resinfo->total_isospin==0)
+					hadroncount.NLambda+=1;
+				else
+					hadroncount.NSigma+=1;
+			}
+			else if(abs(resinfo->strange)==2)
+				hadroncount.NXi+=1;
+			else
+				hadroncount.NOmega+=1;
+		}
+		else{
+			if(apid==111 || apid==211)
+				hadroncount.Npi+=1;
+			if(apid==321 || apid==311)
+				hadroncount.NK+=1;
+		}
+	}
+}
+
+void CMSU_Boltzmann::WriteHadronCount(){
+	char message[200];
+	double norm=1.0/double(nevents*NSAMPLE);
+	long long int NB=hadroncount.NN+hadroncount.NLambda+hadroncount.NSigma+hadroncount.NXi+hadroncount.NOmega;
+	long long int Nhyper=NB-hadroncount.NN;
+	sprintf(message,"Npi     %g\nNK      %g\nNN      %g\nNLambda %g\nNsigma  %g\nNXi     %g\nNOmega  %g\nNB      %g\nNhyper  %g\n",norm*hadroncount.Npi,norm*hadroncount.NK,norm*hadroncount.NN,
+		norm*hadroncount.NLambda,norm*hadroncount.NSigma,norm*hadroncount.NXi,
+		norm*hadroncount.NOmega,norm*NB,norm*Nhyper);
+	CLog::Info(message);
 }

@@ -200,6 +200,7 @@ void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 }
 
 void CMSU_Boltzmann::Reset(){
+	nevents+=1;
 	int iitau,ntau;
 	double taucalc;
 	KillAllParts();

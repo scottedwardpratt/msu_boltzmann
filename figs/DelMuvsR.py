@@ -9,7 +9,10 @@ from matplotlib import ticker
 #sformatter.set_scientific(True)
 #sformatter.set_powerlimits((-2,3))
 
-species=["$p,n$","$\\Sigma$","$\\Xi$","$\\Lambda$","$\\Delta$","$\\Sigma^*$","$\\Xi^*$","$\\Omega$"]
+species=["$N$","$\\Sigma$","$\\Xi$","$\\Lambda$","$\\Delta$","$\\Sigma^*$","$\\Xi^*$","$\\Omega$"]
+antispecies=["$\\bar{N}$","$\\bar{\\Sigma}$","$\\bar{\\Xi}$","$\\bar{\\Lambda}$","$\\bar{\\Delta}$","$\\bar{\\Sigma}^*$","$\\bar{\\Xi}^*$","$\\bar{\\Omega}$"]
+
+Nstrange=[0,1,2,1,0,1,2,3]
 
 print(species)
 
@@ -23,7 +26,10 @@ btype2=0
 btype2=int(input('Enter btype2: '))
 
 
-NS=int(input('Enter # of kaons: '))
+NS=Nstrange[btype1]+Nstrange[btype2]
+if NS==6:
+	NS=1
+NPI=5-NS
 
 filename='data/muTvsR_pi_tau'+str(tau)+'.txt'
 print('filename=',filename)
@@ -71,7 +77,7 @@ rhoB2=float(tau)*B2data[5]
 
 #######################################
 
-ax = fig.add_axes([0.18,0.12,0.8,0.86])
+ax = fig.add_axes([0.18,0.125,0.8,0.855])
 
 x=np.array([],dtype=float)
 y=np.array([],dtype=float)
@@ -79,7 +85,7 @@ s=np.prod(Npi.shape)
 z=np.array([],dtype=float)
 for i in range(0,s):
 	if Npi[i]>4 and NK[i]>4 and NB1[i]>4 and NB2[i]>4 :
-		DelMu0=-muB1[i]-muB2[i]+(5.0-NS)*mupi[i]+muK[i]*NS
+		DelMu0=-muB1[i]-muB2[i]+NPI*mupi[i]+NS*muK[i]
 		X=exp(DelMu0)
 		DelBeta=-(1.0/Tpi[i])+(0.5/TB1[i])+(0.5/TB2[i])
 		#Ebar=2.0+1.5*TB1[i]+1.5*TB2[i]  # typical energy of a baryon of mass 1.0 GeV
@@ -95,34 +101,40 @@ y=1.0-y
 z=1.0-z
 
 
-plt.plot(x,y,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
+plt.plot(x,y,linestyle='--',color='g',markersize=6,marker='o',markerfacecolor='g',label='ignoring $\\Delta T$')
 #plt.plot(x,z,linestyle='-',color='r',markersize=6,marker='o',markerfacecolor='r')
-plt.plot(x,yz,linestyle='-',color='k',markersize=6,marker='o',markerfacecolor='k')
+plt.plot(x,yz,linestyle='-',color='k',markersize=6,marker='o',markerfacecolor='k',label='total correction')
 #plt.plot(rpi,X1,linestyle='-',color='g',markersize=6,marker='o',markerfacecolor='g')
 #plt.plot(rpi,X2,linestyle='-',color='b',markersize=6,marker='o',markerfacecolor='b')
 #plt.plot(rpi,X3,linestyle='-',color='c',markersize=6,marker='o',markerfacecolor='c')
 
+legend(loc=(0.275,0.02),fontsize=18)
+
 ax.tick_params(axis='both', which='major', labelsize=14)
 
 ax.set_xticks(np.arange(0,31,10), minor=False)
-ax.set_xticklabels(np.arange(0,31,10), minor=False, family='serif')
+ax.set_xticklabels(np.arange(0,31,10), minor=False, family='sans')
 ax.set_xticks(np.arange(0,31,5), minor=True)
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0f'))
 plt.xlim(0,25)
 
 ax.set_yticks(np.arange(-2,2,0.5), minor=False)
-ax.set_yticklabels(np.arange(-2,2,0.5), minor=False, family='serif')
+ax.set_yticklabels(np.arange(-2,2,0.5), minor=False, family='sans')
 ax.set_yticks(np.arange(-2,2.0,0.1), minor=True)
 plt.ylim(-0.2,1.1)
 #ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1e'))
 #ax.yaxis.set_major_formatter(sformatter)
 
-plt.xlabel('$r$ [fm]', fontsize=18, weight='normal')
-plt.ylabel('$R/R_0$',fontsize=18)
+plt.xlabel('$r$ [fm]', fontsize=22, weight='normal')
+plt.ylabel('$R/R_0$',fontsize=22)
 
-text(0.5,0.96,'$\\tau=$'+str(tau),fontsize=18)
-species=species[btype1]+','+species[btype2]
-text(0.7,0.1,species,fontsize=18)
+text(24,0.225,'$\\tau=$'+str(tau)+' fm/$c$',fontsize=22,ha='right')
+#species=species[btype1]+','+species[btype2]
+if NS==0:
+	species_descrip=species[btype1]+'+'+antispecies[btype2]+'$\\rightarrow$'+str(NPI)+'$\\pi$'
+else:
+	species_descrip=species[btype1]+'+'+antispecies[btype2]+'$\\rightarrow$'+str(NPI)+'$\\pi$'+'+'+str(NS)+'$K$'
+text(24,0.1,species_descrip,fontsize=22,ha='right')
 
 plt.savefig('DelMuvsR.pdf')
 os.system('open -a Preview DelMuvsR.pdf')
