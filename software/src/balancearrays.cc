@@ -28,6 +28,7 @@ void CBalanceArrays::InitArrays(){
 	BF_PHICUT=parmap->getD("BF_PHICUT",15);
 	NPHI=parmap->getI("BF_NPHIBINS",180);
 	DELY=parmap->getD("BF_DELY",0.05);
+	PPBAR_ONLY=parmap->getB("BF_PPBAR_ONLY",false);
 	gammap=gammapnorm=v2=normtest=v2norm,v2prime=v2primenorm=v2perfect=v2perfectnorm=0.0;
 	Nchi=parmap->getI("NCHI",200);
 	CreateBFArrays();
@@ -378,21 +379,24 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 		for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 			parta=it->second;
 			if(abs(parta->resinfo->charge)==1 && parta->balanceID<0){
-				IncrementDenom(parta);
+				if(!PPBAR_ONLY || abs(parta->resinfo->pid)==2212){
+					IncrementDenom(parta);
+				}
 			}
 		}
 	}
 	else{
 		for(it=boltzmann->PartMap.begin();it!=boltzmann->PartMap.end();++it){
 			parta=it->second;
-			
 			if(parta->balanceID<0){
-				ya=atanh(parta->p[3]/parta->p[0]);
-				while(ya<-MSU_BOLTZMANN_ETAMAX)
-					ya+=2.0*MSU_BOLTZMANN_ETAMAX;
-				while(ya>MSU_BOLTZMANN_ETAMAX)
-					ya-=2.0*MSU_BOLTZMANN_ETAMAX;
-				ppartmap.insert(pair<double,CMSUPart* >(ya,parta));
+				if(!PPBAR_ONLY || abs(parta->resinfo->pid)==2212){
+					ya=atanh(parta->p[3]/parta->p[0]);
+					while(ya<-MSU_BOLTZMANN_ETAMAX)
+						ya+=2.0*MSU_BOLTZMANN_ETAMAX;
+					while(ya>MSU_BOLTZMANN_ETAMAX)
+						ya-=2.0*MSU_BOLTZMANN_ETAMAX;
+					ppartmap.insert(pair<double,CMSUPart* >(ya,parta));
+				}
 			}
 		}
 		ita=ppartmap.begin();
@@ -530,6 +534,9 @@ void CBalanceArrays::IncrementNumer(CMSUPart *parta,CMSUPart *partb){
 		return;
 	}
 	if(abs(pidb)!=211 && abs(pidb)!=321 && abs(pidb)!=2212){
+		return;
+	}
+	if(PPBAR_ONLY && (abs(pida)!=2212 || abs(pidb)!=2212)){
 		return;
 	}
 	

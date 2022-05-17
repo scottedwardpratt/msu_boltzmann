@@ -67,6 +67,7 @@ public:
 	CBFNumer *bf_allcharges_phi0,*bf_allcharges_phi45,*bf_allcharges_phi90;
 	CBFDenom *denom_allcharges_phi0,*denom_allcharges_phi45,*denom_allcharges_phi90;
 	double rapdist[10];
+	bool PPBAR_ONLY;
 	
 	void ProcessPartMap();
 	void ProcessBFPartMap();

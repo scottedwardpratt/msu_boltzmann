@@ -60,6 +60,7 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	ERROR_PRINT=parmap->getB("MSU_BOLTZMANN_ERROR_PRINT",true);
 	XYMAX=parmap->getD("MSU_BOLTZMANN_XYMAX",15);
 	ETAMAX=parmap->getD("MSU_BOLTZMANN_ETAMAX",1.0);
+	ETAMAX=parmap->getD("MSU_SAMPLER_BJORKEN_ETAMAX",ETAMAX);
 	NETA=parmap->getI("MSU_BOLTZMANN_NETA",10);
 	NXY=parmap->getI("MSU_BOLTZMANN_NXY",10);
 	COLLISIONS=parmap->getB("MSU_BOLTZMANN_COLLISIONS",true);

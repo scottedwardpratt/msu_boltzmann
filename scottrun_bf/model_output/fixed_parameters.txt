@@ -1,10 +1,10 @@
 MSU_BOLTZMANN_NEVENTSMAX 3
 MSU_BOLTZMANN_COLLISIONS true
 MSU_BOLTZMANN_NSAMPLE 1 # oversampling ratio, 1=cascade, infty=Boltzmann
-MSU_BOLTZMANN_TAUCOLLMAX 40.0 #no collisions beyond this tau
+MSU_BOLTZMANN_TAUCOLLMAX 50.0 #no collisions beyond this tau
 MSU_BOLTZMANN_BJORKEN true  # cyclic BC for |eta|>MSU_BOLTZMANN_ETAMAX
-MSU_BOLTZMANN_ETAMAX 1.0
-MSU_BOLTZMANN_NETA 8 # number of cells in eta direction = 2*NETA
+#MSU_BOLTZMANN_ETAMAX 5.0 #USES MSU_SAMPLER_BJORKEN_ETAMAX
+MSU_BOLTZMANN_NETA 20 # number of cells in eta direction = 2*NETA
 MSU_BOLTZMANN_XYMAX 30.0 # extent of collision mesh in xy plane (fm)
 MSU_BOLTZMANN_NXY 15 # number of cells in XY direction = 2*NXY, cell size = XYMAX/NXY
 MSU_BOLTZMANN_COOPERFRYE_CREATENEGPARTS false # neg. weighted particle from CF surface
@@ -48,16 +48,15 @@ MSU_SAMPLER_SIGMAFMIN 0.093
 MSU_SAMPLER_SIGMAFMAX 0.093
 MSU_SAMPLER_NSIGMAF 0
 MSU_SAMPLER_SETMU0 true
-MSU_SAMPLER_NEVENTS_TOT 100
 MSU_SAMPLER_NPARTS_BLOCKSIZE 2000
 MSU_SAMPLER_MEANFIELD simple
 MSU_SAMPLER_CALCMU false #true if hydro hyper info doesn't already have mu.
 MSU_SAMPLER_FINDT false
-MSU_SAMPLER_BOSE_CORR true
+MSU_SAMPLER_BOSE_CORR false
 MSU_SAMPLER_N_BOSE_CORR 1
 MSU_SAMPLER_SFDIRNAME ../progdata/resinfo/spectralfunctions
-MSU_SAMPLER_USE_POLE_MASS true
 MSU_SAMPLER_USEPOLEMASS false
+MSU_SAMPLER_BJORKEN_ETAMAX 5.0
 ######################
 HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
 #HYPER_INFO_FILE ../hyperdata/hypertest/hyper.txt
@@ -81,6 +80,7 @@ BF_NQINVBINS 100
 BF_DQINV 10     # MeV
 BF_NPHIBINS 28
 BF_FROM_UDS false
+BF_PPBAR_ONLY true
 BF_NoKsNoPhi    false
 #BF_ACCEPTANCE PERFECTq
 BF_ACCEPTANCE ALICE
