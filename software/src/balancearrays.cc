@@ -166,17 +166,21 @@ void CBalanceArrays::CreateBFArrays(){
 
 void CBalanceArrays::ConstructBFs(){
 	bool NoQ=false;
-	ConstructBF(numer_pipi,denom_pi,bf_pipi,1.0,NoQ);
-	ConstructBF(numer_piK,denom_pi,bf_piK,0.5,NoQ);
-	ConstructBF(numer_pip,denom_pi,bf_pip,0.5,NoQ);
-	ConstructBF(numer_KK,denom_K,bf_KK,1.0,NoQ);
-	ConstructBF(numer_Kp,denom_K,bf_Kp,0.5,NoQ);
+	if(!PPBAR_ONLY){
+		ConstructBF(numer_pipi,denom_pi,bf_pipi,1.0,NoQ);
+		ConstructBF(numer_piK,denom_pi,bf_piK,0.5,NoQ);
+		ConstructBF(numer_pip,denom_pi,bf_pip,0.5,NoQ);
+		ConstructBF(numer_KK,denom_K,bf_KK,1.0,NoQ);
+		ConstructBF(numer_Kp,denom_K,bf_Kp,0.5,NoQ);
+	}
 	ConstructBF(numer_pp,denom_p,bf_pp,1.0,NoQ);
 	NoQ=true;
-	ConstructBF(numer_allcharges,denom_allcharges,bf_allcharges,1.0,NoQ);
-	ConstructBF(numer_allcharges_phi0,denom_allcharges_phi0,bf_allcharges_phi0,1.0,NoQ);
-	ConstructBF(numer_allcharges_phi45,denom_allcharges_phi45,bf_allcharges_phi45,1.0,NoQ);
-	ConstructBF(numer_allcharges_phi90,denom_allcharges_phi90,bf_allcharges_phi90,1.0,NoQ);
+	if(!PPBAR_ONLY){
+		ConstructBF(numer_allcharges,denom_allcharges,bf_allcharges,1.0,NoQ);
+		ConstructBF(numer_allcharges_phi0,denom_allcharges_phi0,bf_allcharges_phi0,1.0,NoQ);
+		ConstructBF(numer_allcharges_phi45,denom_allcharges_phi45,bf_allcharges_phi45,1.0,NoQ);
+		ConstructBF(numer_allcharges_phi90,denom_allcharges_phi90,bf_allcharges_phi90,1.0,NoQ);
+	}
 	sprintf(message,"v2=%g, v2prime=%g\n",v2/v2norm,v2prime/v2primenorm);
 	CLog::Info(message);
 }
@@ -246,33 +250,41 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 void CBalanceArrays::WriteNumers(){
 	string numertype="numer";
 	bool NoQ=false;
-	numer_pipi->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_piK->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_pip->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_KK->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_Kp->WriteNumer(bf_results_dirname,numertype,NoQ);
+	if(!PPBAR_ONLY){
+		numer_pipi->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_piK->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_pip->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_KK->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_Kp->WriteNumer(bf_results_dirname,numertype,NoQ);
+	}
 	numer_pp->WriteNumer(bf_results_dirname,numertype,NoQ);
 	NoQ=true;
-	numer_allcharges->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_allcharges_phi0->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_allcharges_phi45->WriteNumer(bf_results_dirname,numertype,NoQ);
-	numer_allcharges_phi90->WriteNumer(bf_results_dirname,numertype,NoQ);
+	if(!PPBAR_ONLY){
+		numer_allcharges->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_allcharges_phi0->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_allcharges_phi45->WriteNumer(bf_results_dirname,numertype,NoQ);
+		numer_allcharges_phi90->WriteNumer(bf_results_dirname,numertype,NoQ);
+	}
 }
 
 void CBalanceArrays::WriteBFs(){
 	string numertype="bf";
 	bool NoQ=false;
-	bf_pipi->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_piK->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_pip->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_KK->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_Kp->WriteNumer(bf_results_dirname,numertype,NoQ);
+	if(!PPBAR_ONLY){
+		bf_pipi->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_piK->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_pip->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_KK->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_Kp->WriteNumer(bf_results_dirname,numertype,NoQ);
+	}
 	bf_pp->WriteNumer(bf_results_dirname,numertype,NoQ);
 	NoQ=true;
-	bf_allcharges->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_allcharges_phi0->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_allcharges_phi45->WriteNumer(bf_results_dirname,numertype,NoQ);
-	bf_allcharges_phi90->WriteNumer(bf_results_dirname,numertype,NoQ);
+	if(!PPBAR_ONLY){
+		bf_allcharges->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_allcharges_phi0->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_allcharges_phi45->WriteNumer(bf_results_dirname,numertype,NoQ);
+		bf_allcharges_phi90->WriteNumer(bf_results_dirname,numertype,NoQ);
+	}
 }
 
 void CBalanceArrays::WriteGammaP(){
@@ -486,7 +498,6 @@ void CBalanceArrays::IncrementDenom(CMSUPart *part){
 		ya=BF_YMIN+randy->ran()*(BF_YMAX-BF_YMIN);
 		dely=ya-parta.y;
 		parta.BoostRap(dely);
-		
 		acceptance->CalcAcceptance(accepta,effa,&parta);
 		if(accepta){
 			if(abs(pid)==211){
@@ -494,8 +505,9 @@ void CBalanceArrays::IncrementDenom(CMSUPart *part){
 			}
 			if(abs(pid)==321)
 				denom_K->Increment(&parta,effa);
-			if(abs(pid)==2212)
+			if(abs(pid)==2212){
 				denom_p->Increment(&parta,effa);
+			}
 		}
 		
 		acceptance->CalcAcceptanceNoID(accepta,effa,&parta);		

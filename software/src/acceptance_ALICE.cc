@@ -38,17 +38,17 @@ void CAcceptance_ALICE::CalcAcceptance(bool &accept,double &efficiency,CMSUPart 
 		if(fabs(dca[3])<2.0){
 			dcaxy=sqrt(dca[1]*dca[1]+dca[2]*dca[2]);
 			if(abs(pid)==211){
-				if(pt>200.0 && pt<2000.0 && dcaxy<0.04){ 
+				if(pt>0.2 && pt<2.0 && dcaxy<0.04){ 
 					accept=true; efficiency=1.0;
 				}
 			}
 			else if(abs(pid)==321){
-				if(pt>200.0 && pt<2000.0 && dcaxy<2.0){
+				if(pt>0.2 && pt<2.0 && dcaxy<2.0){
 					accept=true; efficiency=1.0;
 				}
 			}
 			else if(abs(pid)==2212){
-				if(pt>500.0 && pt<2500 && dcaxy<0.04){
+				if(pt>0.5 && pt<2.5 && dcaxy<0.04){
 					accept=true; efficiency=1.0;
 				}
 			}
@@ -107,17 +107,17 @@ void CAcceptance_ALICE::CalcAcceptance_Realistic(bool &accept,double &efficiency
 		if(fabs(dca[3])<2.0){
 			dcaxy=sqrt(dca[1]*dca[1]+dca[2]*dca[2]);
 			if(abs(pid)==211){
-				if(pt<2000.0 && dcaxy<0.04 && fabs(y)<0.8){ // for cross-species fabs(y)<0.7
+				if(pt<2.0 && dcaxy<0.04 && fabs(y)<0.8){ // for cross-species fabs(y)<0.7
 					accept=true; efficiency=1.0;
 				}
 			}
 			else if(abs(pid)==321){
-				if(pt<2000.0 && dcaxy<2.0 && fabs(y)<0.7){
+				if(pt<2.0 && dcaxy<2.0 && fabs(y)<0.7){
 					accept=true; efficiency=1.0;
 				}
 			}
 			else if(abs(pid)==2212){
-				if(pt>500.0 && pt<2500 && dcaxy<0.04 && fabs(y)<0.7){  // for pp BF, it was required that fabs(y)<0.7
+				if(pt>0.5 && pt<2.5 && dcaxy<0.04 && fabs(y)<0.7){  // for pp BF, it was required that fabs(y)<0.7
 					accept=true; efficiency=1.0;
 				}
 			}
