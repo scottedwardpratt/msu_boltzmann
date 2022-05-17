@@ -30,9 +30,7 @@ int main(int argc, char *argv[]){
 	ms.randy->reset(time(NULL));
 	ms.ReadHyper_OSU_2D();
 
-	printf("howdy aaa\n");
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
-	printf("howdy aa\n");
 	msuboltz->InitCascade();
 
 	CBalanceArrays *barray=msuboltz->balancearrays;
@@ -40,13 +38,10 @@ int main(int argc, char *argv[]){
 	nparts=0;
 	nevents=parmap.getI("SAMPLER_NEVENTS",10);
 	nevents=parmap.getI("MSU_BOLTZMANN_NEVENTSMAX",10);
-	printf("howdy b\n");
 
 	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
 	msuboltz->ReadMuTInfo();
 	msuboltz->nevents=0;
-
-	printf("howdy c\n");
 
 	CQualifiers qualifiers;
 	int iqual=0;
@@ -55,11 +50,8 @@ int main(int argc, char *argv[]){
 	qualifiers.SetPars(msuboltz->parmap,iqual);
 
 	for(ievent=0;ievent<nevents;ievent++){
-		printf("check a\n");
 		msuboltz->Reset();
-		printf("check b\n");
 		nparts+=ms.MakeEvent();
-		printf("check c\n");
 		msuboltz->InputPartList(pl);
 		pl->Clear();
 		msuboltz->PerformAllActions();
