@@ -85,7 +85,6 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	NACTIONSMAX*=NSAMPLE;
 	DXY=XYMAX/double(NXY);
 	DETA=ETAMAX/double(NETA);
-	BALANCE_CALC=parmap->getB("MSU_BOLTZMANN_BALANCE_CALC",false);
 }
 
 void CMSU_Boltzmann::InitCascade(){

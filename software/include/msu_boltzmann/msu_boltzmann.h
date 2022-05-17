@@ -11,6 +11,7 @@
 #include "msu_sampler/resonances.h"
 #include "msu_commonutils/log.h"
 #include "msu_sampler/part.h"
+#include "msu_boltzmann/balancearrays.h"
 #include "msu_boltzmann/inelastic.h"
 
 using namespace std;
@@ -186,7 +187,7 @@ public:
 
 	void freegascalc_onespecies(double m,double t,double &p,double &e,double &dens,double &sigma2,double &dedt);
 	
-	bool BALANCE_DECAY,BALANCE_CALC;
+	bool BALANCE_DECAY;
 	int ibalmax;
 	
 	// These are used for Analysis

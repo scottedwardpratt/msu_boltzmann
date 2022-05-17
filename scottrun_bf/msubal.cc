@@ -12,7 +12,6 @@ int main(int argc, char *argv[]){
   }
 	CparameterMap parmap;
 	string run_name=argv[1];
-	int NN=0,Npi=0,NK=0;
 	char message[200];
 	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,ndecay;
 	//char logfilename[100];
@@ -31,26 +30,37 @@ int main(int argc, char *argv[]){
 	ms.randy->reset(time(NULL));
 	ms.ReadHyper_OSU_2D();
 
+	printf("howdy aaa\n");
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
+	printf("howdy aa\n");
 	msuboltz->InitCascade();
+
+	CBalanceArrays *barray=msuboltz->balancearrays;
 	
 	nparts=0;
 	nevents=parmap.getI("SAMPLER_NEVENTS",10);
 	nevents=parmap.getI("MSU_BOLTZMANN_NEVENTSMAX",10);
+	printf("howdy b\n");
 
-	CQualifiers qualifiers;
-	qualifiers.Read("qualifiers.txt");
 	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
 	msuboltz->ReadMuTInfo();
 	msuboltz->nevents=0;
-	Npi=NK=NN=0;
+
+	printf("howdy c\n");
+
+	CQualifiers qualifiers;
+	int iqual=0;
+	qualifiers.Read("qualifiers.txt");
+	msuboltz->SetQualifier(qualifiers.qualifier[iqual]->qualname);
+	qualifiers.SetPars(msuboltz->parmap,iqual);
+
 	for(ievent=0;ievent<nevents;ievent++){
+		printf("check a\n");
 		msuboltz->Reset();
+		printf("check b\n");
 		nparts+=ms.MakeEvent();
+		printf("check c\n");
 		msuboltz->InputPartList(pl);
-		Npi+=pl->CountResonances(211)+pl->CountResonances(-221)+pl->CountResonances(111);
-		NK+=pl->CountResonances(321)+pl->CountResonances(-321)+pl->CountResonances(311)+pl->CountResonances(-311);
-		NN+=pl->CountResonances(2212)+pl->CountResonances(-2212)+pl->CountResonances(2112)+pl->CountResonances(-2112);
 		pl->Clear();
 		msuboltz->PerformAllActions();
 		msuboltz->IncrementHadronCount();
@@ -62,9 +72,8 @@ int main(int argc, char *argv[]){
 		ndecay+=msuboltz->ndecay;
 		sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
 		CLog::Info(message);
+		barray->ProcessPartMap();
 	}
-	sprintf(message,"Npi=%d, NK=%d, NN=%d, NN/Npi=%g\n",Npi,NK,NN,double(NN)/double(Npi));
-	CLog::Info(message);
 	sprintf(message,"ndecay/event=%g, nmerge/event=%g, nscatter/event=%g\n",
 		double(ndecay)/double(nevents),double(nmerge)/double(nevents),double(nscatter)/double(nevents));
 	CLog::Info(message);
@@ -73,6 +82,10 @@ int main(int argc, char *argv[]){
 	CLog::Info(message);
 	//msuboltz->WriteMuTInfo();
 	msuboltz->WriteHadronCount();
+	barray->ConstructBFs();
+	barray->WriteBFs();
+	barray->WriteDenoms();
+	barray->WriteGammaP();
 
 	CLog::Info("YIPPEE!!!!! We made it all the way through!\n");
 	return 0;
