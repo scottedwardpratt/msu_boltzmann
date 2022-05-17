@@ -11,7 +11,7 @@ from matplotlib import ticker
 #sformatter.set_powerlimits((-2,3))
 
 
-tau=12
+tau=20
 #tau=int(input('Enter tau: '))
 btype=0
 #btype=int(input('Enter btype: '))
