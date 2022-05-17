@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
 	sprintf(message,"nannihilate=%g, ncancel_annihilate=%g\n",
 		double(nannihilate)/double(nevents),double(ncancel_annihilate)/double(nevents));
 	CLog::Info(message);
-	//msuboltz->WriteMuTInfo();
+	msuboltz->WriteMuTInfo();
 	msuboltz->WriteHadronCount();
 
 	CLog::Info("YIPPEE!!!!! We made it all the way through!\n");
