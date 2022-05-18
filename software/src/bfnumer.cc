@@ -22,7 +22,7 @@ CBFNumer::CBFNumer(CparameterMap *parmapset){
 	Nphibins=parmap->getD("BF_NPHIBINS",180);
 	Deta=parmap->getD("BF_DETA",0.1);
 	Dy=parmap->getD("BF_DELY",0.1);
-	Dqinv=parmap->getD("BF_DQINV",10);
+	Dqinv=parmap->getD("BF_DQINV",0.01);
 	Dphi=360.0/double(Nphibins);
 	
 	Bqinv.resize(Nqbins,0);
@@ -199,8 +199,8 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 		filename=dirname+"/"+name+"/"+numertype+"_qinv.txt";
 		fptr=fopen(filename.c_str(),"w");
 		for(ibin=0;ibin<Nqbins;ibin++){
-			fprintf(fptr,"%7.2f %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e\n",
-			(0.5+ibin)*Dqinv,Bqinv[ibin],Bqout[ibin],Bqside[ibin],Bqlong[ibin],
+			fprintf(fptr,"%6.1f %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e\n",
+			(0.5+ibin)*Dqinv*1000.0,Bqinv[ibin],Bqout[ibin],Bqside[ibin],Bqlong[ibin],
 			Cqinv[ibin],Cqout[ibin],Cqside[ibin],Cqlong[ibin]);
 		}
 		fclose(fptr);
