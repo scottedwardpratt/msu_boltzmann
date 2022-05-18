@@ -566,7 +566,6 @@ void CMSUPart::FindActions(){
 		sprintf(message,"msquared too small, M=%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
 		CLog::Info(message);
 		Print();
-		exit(1);
 		msquared=resinfo->minmass*resinfo->minmass;
 		Setp0();
 	}
