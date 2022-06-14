@@ -95,17 +95,26 @@ void CMSUPart::InitBalance(int IDset,double rxset,double ryset,double tauset,dou
 
 void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double etaset,double pxset,double pyset,double mset,double rapidityset,double bweightset){
 	double et;
-	CresInfo *resinfoptr;
 	int ID;
 	resinfo=boltzmann->reslist->GetResInfoPtr(IDset);
+	if(fabs(resinfo->mass-mset)>1.0E-8){
+		printf("masses wrong\n");
+		exit(1);
+	}
 	ID=resinfo->pid;
 	if(ID!=IDset){
 		sprintf(message,"ID mismatch, ID=%d, resinfo->pidID=%d\n",IDset,ID);
 		CLog::Info(message);
 	}
 	p[1]=pxset; p[2]=pyset; msquared=mset*mset; y=rapidityset;
+	if(resinfo->decay==false)
+		msquared=resinfo->mass*resinfo->mass;
+	et=sqrt(p[1]*p[1]+p[2]*p[2]+msquared);
+	p[3]=et*sinh(y);
+	Setp0();
 	r[1]=rxset; r[2]=ryset; tau0=tauset; eta=etaset;
-	//eta0=eta;
+	r[3]=tau0*sinh(etaset);
+	r[0]=sqrt(tau0*tau0+r[3]*r[3]);
 	phi0=atan2(r[2],r[1]);
 	tau_lastint=tau0-1.0E-6;
 	nscatt=0;
@@ -116,15 +125,7 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 		sprintf(message,"boltzmann->ETAMAX=%g\n",boltzmann->ETAMAX);
 		CLog::Fatal(message);
 	}
-	resinfoptr=boltzmann->reslist->GetResInfoPtr(ID);
-	if(resinfoptr->decay==false){
-		msquared=resinfoptr->mass*resinfoptr->mass;
-	}
-	r[3]=tau0*sinh(eta);
-	r[0]=tau0*cosh(eta);
-	et=sqrt(p[1]*p[1]+p[2]*p[2]+msquared);
-	p[3]=et*sinh(y);
-	Setp0();
+	
 	if(tau0<0.0){
 		Print();
 		sprintf(message,"FATAL: tau0<0, tau0^2=%g\n",tau0);
@@ -134,6 +135,11 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 		CyclicReset();
 		sprintf(message,"performed cyclic reset in CMSUPart::Init()\n");
 		CLog::Fatal(message);
+	}
+	if(msquared!=msquared){
+		printf("In CMSUPart::Init()\n");
+		Print();
+		exit(1);
 	}
 	active=false;
 	ChangeMap(&(boltzmann->PartMap));
@@ -275,7 +281,6 @@ void CMSUPart::Propagate(double tau){
 				eta+=2.0*boltzmann->ETAMAX;
 			r[0]=tau0*cosh(eta);
 			r[3]=tau0*sinh(eta);
-			//Misc::Pause();
 		}
 		tau0=tau;
 		t0=r[0];
@@ -411,7 +416,7 @@ void CMSUPart::BjorkenTranslate(){
 	p[0]=mt*cosh(y);
 	r[0]=tau0*cosh(eta);
 	r[3]=tau0*sinh(eta);
-	SetMass();
+	Setp0();
 }
 
 void CMSUPart::BjorkenUnTranslate(){
@@ -429,7 +434,7 @@ void CMSUPart::BjorkenUnTranslate(){
 	p[0]=mt*cosh(y);
 	r[0]=tau0*cosh(eta);
 	r[3]=tau0*sinh(eta);
-	SetMass();
+	Setp0();
 }
 
 void CMSUPart::FindCollisions(){
@@ -556,16 +561,17 @@ void CMSUPart::FindCellExit(){
 }
 
 void CMSUPart::FindActions(){
+	printf("Howdy a\n");
 	KillActions();
+	printf("Howdy b\n");
 	if(active!=true){
 		sprintf(message,"CMSUPart::FindActions(), trying to Reset Inactive particle\n");
 		CLog::Info(message);
 		KillActions();
 	}
-	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass-1.0E-6){
+	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass-1.0E-5){
 		sprintf(message,"msquared too small, M=%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
 		CLog::Info(message);
-		Print();
 		msquared=resinfo->minmass*resinfo->minmass;
 		Setp0();
 	}
@@ -586,6 +592,7 @@ void CMSUPart::FindActions(){
 		Print();
 		CLog::Fatal(message);
 	}
+	printf("Adios\n");
 }
 
 double CMSUPart::GetPseudoRapidity(){

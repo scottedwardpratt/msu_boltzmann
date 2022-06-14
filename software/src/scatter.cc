@@ -69,7 +69,7 @@ Scatter: Elastically scatters two CMSUPart objects with s-wave angular distribut
 
 void CMSU_Boltzmann::Scatter(CMSUPart *part1,CMSUPart *part2,CMSUPart *part3,CMSUPart *part4){
 	double roots=0.0;
-	double ctheta,stheta,phi,qmag,m1,m2;
+	double ctheta,stheta,phi,qmag;
 	FourVector ptot,u,q,qprime;
 	const FourVector g={1,-1,-1,-1};
 	FourVector *p1=&part1->p,*p2=&part2->p,*p3=&part3->p,*p4=&part4->p;
@@ -79,8 +79,6 @@ void CMSU_Boltzmann::Scatter(CMSUPart *part1,CMSUPart *part2,CMSUPart *part3,CMS
 	if(part4!=part2)
 		part4->resinfo=part2->resinfo;
 
-	m1=part1->GetMass();
-	m2=part2->GetMass();
 	for(alpha=0;alpha<4;alpha++){
 		ptot[alpha]=(*p1)[alpha]+(*p2)[alpha];
 		q[alpha]=0.5*((*p1)[alpha]-(*p2)[alpha]);
@@ -99,14 +97,16 @@ void CMSU_Boltzmann::Scatter(CMSUPart *part1,CMSUPart *part2,CMSUPart *part3,CMS
 	qprime[1]=qmag*stheta*cos(phi);
 	qprime[2]=qmag*stheta*sin(phi);
 
-	qprime[0]=sqrt(m1*m1+qmag*qmag);
+	qprime[0]=sqrt(part1->msquared+qmag*qmag);
 	Misc::Boost(u,qprime,*p3);
 	for(alpha=1;alpha<4;alpha++)
 		qprime[alpha]=-qprime[alpha];
-	qprime[0]=sqrt(m2*m2+qmag*qmag);
+	qprime[0]=sqrt(part2->msquared+qmag*qmag);
 	Misc::Boost(u,qprime,*p4);
-	part3->SetMass();
-	part4->SetMass();
+	part3->msquared=part1->msquared;
+	part4->msquared=part2->msquared;
+	part3->Setp0();
+	part4->Setp0();
 	part3->SetY();
 	part4->SetY();
 }

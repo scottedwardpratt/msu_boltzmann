@@ -10,7 +10,8 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 	vector<double> probmax;
 	double mtot,E0,netprob,Estarmax;
 	int imass,ibody;
-	//int ntry;
+	int ntry;
+	printf("getting masses\n");
 	for(ibody=0;ibody<nbodies;ibody++){
 		minmass_daughters+=daughter[ibody]->resinfo->minmass;
 		mass_daughters+=daughter[ibody]->resinfo->mass;
@@ -20,7 +21,7 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		CLog::Fatal("masses out of whack in decay\n");
 	}
 	if(mass[0]>minmass_daughters+0.5*(mass_daughters-minmass_daughters) && mass[0]>mass_daughters-width_daughters){
-		//ntry=0;
+		ntry=0;
 		do{
 			mtot=0.0;
 			for(ibody=0;ibody<nbodies;ibody++){
@@ -28,7 +29,11 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 				mass[ibody+1]=daughter[ibody]->resinfo->GenerateMassFromSF(netprob);
 				mtot+=mass[ibody+1];
 			}
-			//ntry+=1;
+			ntry+=1;
+			if(ntry>20){
+				mass[0]+=0.001;
+				printf("ntry=%d\n",ntry);
+			}
 		}while(mtot>mass[0]);
 		/*
 		if(ntry>10000){
@@ -51,7 +56,7 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 				}
 			}
 		}
-		//ntry=0;
+		ntry=0;
 		do{
 			mtot=0.0;
 			for(ibody=0;ibody<nbodies;ibody++){
@@ -63,7 +68,11 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 					mass[ibody+1]=daughter[ibody]->resinfo->mass;
 				mtot+=mass[ibody+1];
 			}
-			//ntry+=1;
+			ntry+=1;
+			if(ntry>20){
+				mass[0]+=0.001;
+				printf("ntry=%d\n",ntry);
+			}
 		}while(mtot>mass[0]); 
 		/*
 		if(ntry>10000){
@@ -77,9 +86,10 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		mcheck+=mass[ibody+1];
 	}
 	if(mcheck>mass[0]){
-		printf("CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
-		exit(1);
+		sprintf(message,"CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
+		CLog::Fatal(message);
 	}
+	printf("masses found\n");
 }
 
 void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
@@ -90,6 +100,10 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 	FourVector u,pprime;
 
 	mass[0]=mother->GetMass();
+	if(mass[0]!=mass[0]){
+		printf("mass[0]=%g\n",mass[0]);
+		exit(1);
+	}
 
 	GetMassesForDecay(mass,nbodies,daughter);
 	
@@ -147,6 +161,7 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 		dptr=daughter[ibody];
 		Misc::lorentz(u,p[ibody],pprime);
 		dptr->active=true;
+		dptr->balanceID=mother->balanceID;
 		for(alpha=0;alpha<4;alpha++)
 			dptr->p[alpha]=pprime[alpha];
 		//dptr->CopyPositionInfo(mother);
@@ -157,7 +172,8 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 		dptr->r[0]=tau*cosh(dptr->eta);
 		dptr->r[3]=tau*sinh(dptr->eta);
 		//dptr->msquared=pow(dptr->resinfo->mass,2);
-		dptr->SetMass();
+		dptr->msquared=mass[ibody+1]*mass[ibody+1];
+		dptr->Setp0();
 		//dptr->Setp0();
 		dptr->SetY();
 		//dptr->eta0=mother->eta0;

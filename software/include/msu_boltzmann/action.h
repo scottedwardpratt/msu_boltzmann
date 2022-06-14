@@ -28,7 +28,7 @@ public:
 	// These are the particles in the action
 	CMSUPartMap partmap;
 
-	void Kill();
+	bool Kill();
 	void AddPart(CMSUPart *partptr);
 	void Print();
 

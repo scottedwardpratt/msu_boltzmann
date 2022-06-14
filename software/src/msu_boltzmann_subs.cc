@@ -250,7 +250,7 @@ void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 CAction* CMSU_Boltzmann::GetDeadAction(){
 	if(DeadActionMap.size()==0){
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
-			new CAction(nactionstot);		
+			new CAction(-1);
 		//sprintf(message,"created %d new actions, nactionstot=%d\n",DELNACTIONSTOT*NSAMPLE,nactionstot);
 		//CLog::Info(message);
 	}
@@ -266,6 +266,9 @@ void CMSU_Boltzmann::CheckPartMap(){
 			part->Print();
 			sprintf(message,"----- FAILED CheckPartMap-----\n");
 			CLog::Fatal(message);
+		}
+		if(part->msquared!=part->msquared){
+			CLog::Fatal("In CheckPartMap, msquared!=msquared\n");
 		}
 	}
 }

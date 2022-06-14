@@ -30,7 +30,7 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 	}
 	if(epos->second!=this){
 		sprintf(message,"CAction::GetPos cannot find this action, key=%g\n",key);
-		CLog::Fatal(message);
+		CLog::Info(message);
 		return emap->end();
 	}
 	else
@@ -39,12 +39,12 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 
 void CAction::MoveToActionMap(){
 	CActionMap::iterator epos,eepos;
-	if(currentmap==&boltzmann->ActionMap){
+	if(currentmap==&(boltzmann->ActionMap)){
 		sprintf(message,"trying to move action to ActionMap even though action is already in ActionMap\n");
 		sprintf(message,"%sWrong current map\n",message);
 		CLog::Fatal(message);
 	}
-	if(currentmap==&boltzmann->DeadActionMap){
+	if(currentmap==&(boltzmann->DeadActionMap)){
 		epos=GetPos(currentmap);
 		if(epos!=currentmap->end()){
 			boltzmann->DeadActionMap.erase(epos);
@@ -56,29 +56,38 @@ void CAction::MoveToActionMap(){
 			CLog::Fatal(message);
 		}
 		key=tau;
-		AddToMap(&boltzmann->ActionMap);
+		AddToMap(&(boltzmann->ActionMap));
 	}
 }
 
-void CAction::Kill(){
+bool CAction::Kill(){
 	CMSUPart *part;
+	CActionMap::iterator eepos,epos;
 	CMSUPartMap::iterator ppos;
-	if(currentmap==&boltzmann->ActionMap){
-		CActionMap::iterator eepos,epos=GetPos(currentmap);
-		if(epos==currentmap->end()){
-			sprintf(message,"in CAction::Kill(), not in map\n");
-			sprintf(message,"%sboltzmann->ActionMap.size()=%d\n",message,int(boltzmann->ActionMap.size()));
-			CLog::Info(message);
-			ppos=partmap.begin();
+	epos=GetPos(currentmap);
+	if(epos==boltzmann->ActionMap.end()){
+		printf("trying to kill object not in ActionMap\n");
+		if(currentmap==&(boltzmann->DeadActionMap))
+			printf("object is in DeadActionMap already\n");
+		key=0;
+		ppos=partmap.begin();
+		while(ppos!=partmap.end()){
 			part=ppos->second;
-			part->Print();
-			epos=GetPos(&boltzmann->DeadActionMap);
-			if(epos!=boltzmann->DeadActionMap.end()){
-				sprintf(message,"found action in DeadActionMap\n");
+			epos=part->actionmap.begin();
+			while(epos!=part->actionmap.end()){
+				eepos=epos;
+				++eepos;
+				if(epos->second==this)
+					part->actionmap.erase(epos);
+				epos=eepos;
 			}
-			sprintf(message,"%snot in DeadActionMap either\n",message);
-			CLog::Fatal(message);
+			++ppos;
 		}
+		partmap.clear();
+		currentmap=&(boltzmann->DeadActionMap);
+		return false;
+	}
+	else{
 		currentmap->erase(epos);
 		boltzmann->nactionkills+=1;
 		key=0;
@@ -97,6 +106,8 @@ void CAction::Kill(){
 			}
 			++ppos;
 		}
+		//partmap.clear();
+		return true;
 	}
 }
 

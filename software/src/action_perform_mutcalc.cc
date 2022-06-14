@@ -17,7 +17,7 @@ void CAction::PerformMuTCalcUpdateNPE(){
 
 	for(ppos=boltzmann->PartMap.begin();ppos!=boltzmann->PartMap.end();++ppos){
 		part=ppos->second;
-		if(part->active){
+		if(part->active && part->balanceID<0){
 			//nB+=abs(part->resinfo->baryon);
 			//nactive+=1;
 			resinfo=part->resinfo;

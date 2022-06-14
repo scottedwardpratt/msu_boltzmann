@@ -12,7 +12,7 @@ void CAction::PerformActivate(){
 	part->CyclicReset();
 	part->tau_lastint=tau;
 	part->actionmother=boltzmann->nactions;
+	part->Setp0();
 	part->FindActions();
 	boltzmann->nactivate+=1;
-	part->SetMass();
 }

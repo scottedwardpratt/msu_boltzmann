@@ -12,8 +12,16 @@ void CAction::PerformDecay(){
 	ppos=partmap.begin();
 	mother=ppos->second;
 	boltzmann->GetDeadParts(product);
+	if(mother->msquared!=mother->msquared){
+		printf("PerformDecay:: mother->msquared already wrong\n");
+		exit(1);
+	}
 
 	mothermass=mother->GetMass();
+	if(mothermass!=mothermass){
+		mother->Print();
+		exit(1);
+	}
 	if(mother->cell!=NULL && mother->cell!=mother->FindCell() && tau<boltzmann->TAUCOLLMAX){
 		mother->CheckRapidity();
 		mother->cell->Print();
@@ -53,11 +61,18 @@ void CAction::PerformDecay(){
 		dptr->nscatt=0;
 		dptr->tau_lastint=tau;
 		dptr->actionmother=boltzmann->nactions;
+		if(dptr->msquared!=dptr->msquared){
+			CLog::Fatal("In PerformDecay, msquared!=msquared for daughter\n");
+		}
 		dptr->ChangeCell(dptr->FindCell());
 		if(dptr->currentmap!=&(boltzmann->PartMap))
 			dptr->ChangeMap(&(boltzmann->PartMap));
+		printf("check a\n");
 		dptr->FindActions();
+		printf("check b\n");
 	}
+	printf("check c\n");
 	mother->Kill();
+	printf("check d\n");
 	boltzmann->ndecay+=1;
 }

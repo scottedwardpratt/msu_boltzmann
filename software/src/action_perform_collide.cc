@@ -3,7 +3,7 @@
 
 void CAction::PerformCollide(){
 	int colltype,iproduct,nproducts;
-	double sigmatot;
+	double sigmatot,r;
 	CMSUPart *part1,*part2,*part;
 	CMSUPartMap::iterator ppos;
 	CMSU_BoltzmannCell *cell;
@@ -12,34 +12,41 @@ void CAction::PerformCollide(){
 	++ppos;
 	part2=ppos->second;
 	boltzmann->GetDeadParts(product);
+	if(part1->balanceID>=0 || part2->balanceID>=0){
+		printf("colliding particles with balanceIDs=%d,%d\n",part1->balanceID,part2->balanceID);
+		exit(1);
+	}
 
 	sigmatot=sigma_scatter+sigma_merge+sigma_annihilation+sigma_inel;
-	double r=boltzmann->randy->ran();
 
-	if(r<sigma_merge/sigmatot){
-		colltype=boltzmann->Collide_Merge(part1,part2,sigma_merge,dsigma_merge,nproducts,product);
+	if(part1->balanceID>=0 && part2->balanceID>=0){
+		printf("WTF!!! scattering to BF particles????\n");
+		exit(1);
 	}
-	else if(r<(sigma_scatter+sigma_merge)/sigmatot){
-		colltype=boltzmann->Collide_Scatter(part1,part2,nproducts,product);
-	}
-	else if(r<(sigma_scatter+sigma_merge+sigma_annihilation)/sigmatot){
-		colltype=boltzmann->Collide_Annihilate(part1,part2,nproducts,product);
-	}
-	/*
-	else{
-		if(!boltzmann->INELASTIC){
-			sprintf(message,"In PeformCollide: Trying to Perform Inelastic Collision???");
-			CLog::Fatal(message);
-		}
-		colltype=boltzmann->Collide_Inelastic(part1,part2,nproducts,product);
-	}
-	*/
-
-	//colltype=boltzmann->Collide(part1,part2,nproducts,product,pibsquared);
 
 	if((part1->balanceID<0 && part2->balanceID>=0) || (part1->balanceID>=0 && part2->balanceID<0)){
+		boltzmann->Collide_Scatter(part1,part2,nproducts,product);
 		colltype=-2;
+		printf("WTF!!! colltype=-2\n");
+		exit(1);
 	}
+	else{
+		r=boltzmann->randy->ran();
+		if(r<sigma_merge/sigmatot){
+			colltype=boltzmann->Collide_Merge(part1,part2,sigma_merge,dsigma_merge,nproducts,product);
+		}
+		else if(r<(sigma_scatter+sigma_merge)/sigmatot){
+			colltype=boltzmann->Collide_Scatter(part1,part2,nproducts,product);
+		}
+		else if(r<(sigma_scatter+sigma_merge+sigma_annihilation)/sigmatot){
+			colltype=boltzmann->Collide_Annihilate(part1,part2,nproducts,product);
+		}
+		else{
+			colltype=-999;
+			CLog::Fatal("Inside PerformCollide, should not happen");
+		}
+	}
+	//printf("colltype=%d\n",colltype);
 
 	if(colltype==0 || nproducts==0){
 		boltzmann->npass+=1;
@@ -47,13 +54,15 @@ void CAction::PerformCollide(){
 		part2->actionmother=boltzmann->nactions;
 	}
 	else if(colltype==-2){
+		printf("WTF!!! colltype=-2\n");
+		exit(1);
 		if(part1->balanceID>=0 && part2->balanceID<0){
 			part1->CopyMomentumInfo(product[0]);
-			part1->SetMass();
+			part1->Setp0();
 		}
 		if(part2->balanceID>=0 && part1->balanceID<0){
 			part2->CopyMomentumInfo(product[1]);
-			part2->SetMass();
+			part2->Setp0();
 		}
 		part1->tau_lastint=tau;
 		if(part1->currentmap!=&(boltzmann->PartMap))
@@ -73,7 +82,7 @@ void CAction::PerformCollide(){
 		part2->Kill();
 		for(iproduct=0;iproduct<nproducts;iproduct++){
 			part=product[iproduct];
-			part->SetMass();
+			part->Setp0();
 			part->active=true;
 			part->weight=1.0;
 			part->tau_lastint=tau;

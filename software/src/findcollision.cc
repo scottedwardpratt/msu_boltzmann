@@ -70,6 +70,8 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 	
 	if((part1->balanceID>=0 && part2->balanceID<0) || (part2->balanceID>=0 && part1->balanceID<0)){
 		sigma_scatter=SIGMABF/double(NSAMPLE);
+		sigmatot=sigma_scatter;
+		return sigmatot;
 	}
 	else{
 		sigma_scatter=SIGMADEFAULT/double(NSAMPLE);
