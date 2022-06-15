@@ -26,7 +26,6 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 		resinfo2=resinfo1;
 		resinfo1=resinfo;
 	}
-	printf("b1=%d, b2=%d\n",resinfo1->baryon,resinfo2->baryon);
 	netq=resinfo1->charge+resinfo2->charge;
 	nets=resinfo1->strange+resinfo2->strange;
 	// resinfo 1 = baryon, resinfo2 = antibaryon
@@ -36,7 +35,6 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 	nubar=-resinfo2->charge+1;
 	nsbar=resinfo2->strange;
 	ndbar=3-nubar-nsbar;
-	printf("nu=%d, nd=%d, ns=%d, nubar=%d, ndbar=%d, nsbar=%d\n",nu,nd,ns,nubar,ndbar,nsbar);
 
 	vector<int> quark(nbodies);
 	vector<int> antiq(nbodies);

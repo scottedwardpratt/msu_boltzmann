@@ -143,27 +143,6 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 	if(checkpossible){
 		sigmatot=GetSigma(part1,part2,Minv2,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel,dsigma_merge);
 		if(pibsquared<sigmatot){
-
-			Cmerge *merge;
-			int ir1,ir2,irflip;
-			ir1=part1->resinfo->ires;
-			ir2=part2->resinfo->ires;
-			if(ir1>ir2){
-				irflip=ir1; ir1=ir2; ir2=irflip;
-			}
-			merge=reslist->MergeArray[ir1][ir2];
-			int imerge=0;
-			double mergecheck=0.0;
-			while(merge!=NULL){
-				mergecheck+=dsigma_merge[imerge];
-				imerge+=1;
-				merge=merge->next;
-			}
-			if(fabs(mergecheck-sigma_merge)>0.00001){
-				printf("mergecheck=%g, sigma_merge=%g\n",mergecheck,sigma_merge);
-				exit(1);
-			}
-
 			AddAction_Collision(part1,part2,taucoll,pibsquared,
 						sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel,
 						dsigma_merge);

@@ -12,22 +12,12 @@ void CAction::PerformCollide(){
 	++ppos;
 	part2=ppos->second;
 	boltzmann->GetDeadParts(product);
-	if(part1->balanceID>=0 || part2->balanceID>=0){
-		printf("colliding particles with balanceIDs=%d,%d\n",part1->balanceID,part2->balanceID);
-		exit(1);
-	}
 	sigma_inel=0.0;
 	sigmatot=sigma_scatter+sigma_merge+sigma_annihilation+sigma_inel;
-	printf("sigma_scatter=%g, sigma_merge=%g, sigma_annihilation=%g\n",
-		sigma_scatter,sigma_merge,sigma_annihilation);
-	part1->resinfo->Print();
-	part2->resinfo->Print();
 
 	if((part1->balanceID<0 && part2->balanceID>=0) || (part1->balanceID>=0 && part2->balanceID<0)){
 		boltzmann->Collide_Scatter(part1,part2,nproducts,product);
 		colltype=-2;
-		printf("WTF!!! colltype=-2\n");
-		exit(1);
 	}
 	else{
 		r=boltzmann->randy->ran();
@@ -45,7 +35,6 @@ void CAction::PerformCollide(){
 			CLog::Fatal("Inside PerformCollide, should not happen");
 		}
 	}
-	//printf("colltype=%d\n",colltype);
 
 	if(colltype==0 || nproducts==0){
 		boltzmann->npass+=1;
@@ -53,8 +42,6 @@ void CAction::PerformCollide(){
 		part2->actionmother=boltzmann->nactions;
 	}
 	else if(colltype==-2){
-		printf("WTF!!! colltype=-2\n");
-		exit(1);
 		if(part1->balanceID>=0 && part2->balanceID<0){
 			part1->CopyMomentumInfo(product[0]);
 			part1->Setp0();

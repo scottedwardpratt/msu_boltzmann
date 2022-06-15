@@ -30,16 +30,11 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 			}
 			ntry+=1;
 			if(ntry>20){
-				mass[0]+=0.001;
-				printf("ntry=%d\n",ntry);
+				mass[0]+=0.005;
+				if(ntry>200)
+					CLog::Info("ntry="+to_string(ntry)+"\n");
 			}
 		}while(mtot>mass[0]);
-		/*
-		if(ntry>10000){
-			printf("A: ntry=%d\n",ntry);
-			printf("mass[0]=%g, minmass_daughters=%g, mass_daughters=%g, width_daughters=%g\n",mass[0],minmass_daughters, mass_daughters,width_daughters);
-		}
-		*/
 	}
 	else{
 		probmax.resize(nbodies);
@@ -69,16 +64,11 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 			}
 			ntry+=1;
 			if(ntry>20){
-				mass[0]+=0.001;
-				printf("ntry=%d\n",ntry);
+				mass[0]+=0.005;
+				if(ntry>200)
+					printf("ntry=%d\n",ntry);
 			}
 		}while(mtot>mass[0]); 
-		/*
-		if(ntry>10000){
-			printf("B: ntry=%d\n",ntry);
-			printf("mass[0]=%g, minmass_daughters=%g, mass_daughters=%g, width_daughters=%g\n",mass[0],minmass_daughters, mass_daughters,width_daughters);
-		}
-		*/
 	}
 	double mcheck=0.0;
 	for(ibody=0;ibody<nbodies;ibody++){
@@ -96,45 +86,10 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 	vector<double> mass(6);
 	vector<FourVector> p(5);
 	FourVector u,pprime;
-	printf("check in\n");
 
 	mass[0]=mother->GetMass();
-	if(mass[0]!=mass[0]){
-		printf("mass[0]=%g\n",mass[0]);
-		exit(1);
-	}
 
 	GetMassesForDecay(mass,nbodies,daughter);
-	
-	/* Make masses for daughters */
-	
-	
-
-	/*
-	int ntry=0;
-	do{
-		printf("-----------------------------------\n");
-		ntry+=1;
-		mtot=0.0;
-		for(ibody=0;ibody<nbodies;ibody++){
-			if(daughter[ibody]->resinfo->decay){
-				mass[ibody+1]=daughter[ibody]->resinfo->GenerateMassForDecay(Estarmax);
-			}
-			else
-				mass[ibody+1]=daughter[ibody]->resinfo->mass;
-			mtot+=mass[ibody+1];
-		}
-		printf("mtot=%g, mothermass=%g, minmass=%g, minmass_daugthers=%g\n",
-				mtot,mass[0],mother->resinfo->minmass,minmass_daughters);
-		if(ntry>100){
-			printf("mother info\n");
-			mother->Print();
-			mother->resinfo->Print();
-			//mother->resinfo->PrintSpectralFunction();
-			exit(1);
-		}
-	}while(mtot>mass[0]);
-	*/
 	
 	if(nbodies==2){
 		decay_nbody->SetMasses2(mass[0],mass[1],mass[2]);

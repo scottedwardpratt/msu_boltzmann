@@ -99,10 +99,6 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 	double et;
 	int ID;
 	resinfo=boltzmann->reslist->GetResInfoPtr(IDset);
-	if(fabs(resinfo->mass-mset)>1.0E-8){
-		printf("masses wrong\n");
-		exit(1);
-	}
 	ID=resinfo->pid;
 	if(ID!=IDset){
 		sprintf(message,"ID mismatch, ID=%d, resinfo->pidID=%d\n",IDset,ID);
@@ -137,11 +133,6 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 		CyclicReset();
 		sprintf(message,"performed cyclic reset in CMSUPart::Init()\n");
 		CLog::Fatal(message);
-	}
-	if(msquared!=msquared){
-		printf("In CMSUPart::Init()\n");
-		Print();
-		exit(1);
 	}
 	active=false;
 	ChangeMap(&(boltzmann->PartMap));

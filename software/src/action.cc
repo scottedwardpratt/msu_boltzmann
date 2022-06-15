@@ -66,9 +66,6 @@ bool CAction::Kill(){
 	CMSUPartMap::iterator ppos;
 	epos=GetPos(currentmap);
 	if(epos==boltzmann->ActionMap.end()){
-		printf("trying to kill object not in ActionMap\n");
-		if(currentmap==&(boltzmann->DeadActionMap))
-			printf("object is in DeadActionMap already\n");
 		key=0;
 		ppos=partmap.begin();
 		while(ppos!=partmap.end()){

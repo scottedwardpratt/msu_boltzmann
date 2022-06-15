@@ -322,8 +322,8 @@ void CMuTInfo::GetMuT(double mass,int degen,double rho_target,double epsilon_tar
 		mu=log(rho_target/(rho0*degen));
 	}
 	if(T!=T || mu!=mu){
-		printf("disaster, T=%g, mu=%g, rho_target=%g, epsilon_target=%g, e/rho=%g\n",T,mu,rho_target,epsilon_target,epsilon_target/rho_target);
-		exit(1);
+		sprintf(message, "disaster, T=%g, mu=%g, rho_target=%g, epsilon_target=%g, e/rho=%g\n",T,mu,rho_target,epsilon_target,epsilon_target/rho_target);
+		CLog::Fatal(message);
 	}
 }
 

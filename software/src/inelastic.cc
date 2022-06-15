@@ -119,9 +119,9 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 					return;
 				}
 			}
-		} else {
-			cout << "Error; inelastic file can't be opened" << endl;
-			exit(1);
+		}
+		else {
+			CLog::Fatal("Error; inelastic file can't be opened\n");
 		}
 		inelasticfile.close();
 	}

@@ -63,7 +63,6 @@ int CMSU_Boltzmann::Collide_Merge(CMSUPart *part1,CMSUPart *part2,double sigma_m
 	imerge=0;
 	sigmatot=dsigma_merge[0];
 	while(r>sigmatot/sigma_merge && merge!=NULL){
-		printf("dsigma_merge[%d]=%g\n",imerge,dsigma_merge[imerge]);
 		if(merge==NULL || sigmatot>sigma_merge){
 			sprintf(message,"In CMSU_Boltzmann::Collide_Merge, merge is NULL?? or sigmatot/sigma_merge=%g is >1, sigma_merge=%g, sigmatot=%g\n",sigmatot/sigma_merge,sigma_merge,sigmatot);
 			part1->Print();

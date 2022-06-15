@@ -38,11 +38,6 @@ void CMSU_Boltzmann::PerformAllActions(){
 	CActionMap::iterator epos=ActionMap.begin();
 	while(epos!=ActionMap.end()){
 		action=epos->second;
-		if(action->partmap.size()==0){
-			printf("action partmap size=0\n");
-			action->Print();
-			exit(1);
-		}
 		action->Perform();
 		epos=ActionMap.begin();
 	}
@@ -377,6 +372,17 @@ void CMSU_Boltzmann::CheckActions(){
 		if(action->partmap.size()==0){
 			action->Print();
 			exit(1);
+		}
+		if(action->type==2){
+			if(action->sigma_annihilation>0.01){
+				CMSUPartMap::iterator ppos;
+				for(ppos=action->partmap.begin();ppos!=action->partmap.end();++ppos){
+					CMSUPart *part=ppos->second;
+					if(part->resinfo->baryon==0){
+						printf("particle in annihating action??? with no baryon number\n");
+					}
+				}
+			}
 		}
 		++epos;
 	}

@@ -9,24 +9,10 @@ void CAction::PerformDecay(){
 	int ibody,nbodies;
 	double mt,etamax=boltzmann->ETAMAX,mothermass;
 	double deleta;
-	printf("check a, type=%d\n",type);
 	ppos=partmap.begin();
-	if(ppos==partmap.end()){
-		printf("NO PART TO DECAY\n");
-		exit(1);
-	}
 	mother=ppos->second;
-	printf("check aa\n");
 	boltzmann->GetDeadParts(product);
-	printf("check aaa\n");
-	if(mother->msquared!=mother->msquared){
-		printf("PerformDecay:: mother->msquared already wrong\n");
-		exit(1);
-	}
-	printf("check aaaa\n");
-
 	mothermass=mother->GetMass();
-	printf("check b\n");
 	if(mothermass!=mothermass){
 		mother->Print();
 		exit(1);
@@ -58,7 +44,6 @@ void CAction::PerformDecay(){
 	for(ibody=0;ibody<nbodies;ibody++){
 		product[ibody]->resinfo=daughterresinfo[ibody];
 	}
-	printf("check b\n");
 	boltzmann->Decay(mother,nbodies,product);
 	
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

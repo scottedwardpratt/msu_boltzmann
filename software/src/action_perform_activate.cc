@@ -4,8 +4,6 @@
 void CAction::PerformActivate(){
 	CMSUPart *part;
 	CMSUPartMap::iterator ppos,pend;
-	Print();
-	printf("activating, type=%d, partmap.size=%lu\n",type,partmap.size());
 	ppos=partmap.begin();
 	part=ppos->second;
 	part->active=true;

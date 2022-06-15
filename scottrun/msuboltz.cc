@@ -7,11 +7,12 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 	if (argc != 2) {
-		CLog::Info("Usage: msuboltz run_name\n");
+		CLog::Info("Usage: msuboltz run_number\n");
 		exit(-1);
   }
+	int run_number=atoi(argv[1]);
+  string run_name="pars"+to_string(run_number);
 	CparameterMap parmap;
-	string run_name=argv[1];
 	int NN=0,Npi=0,NK=0;
 	char message[200];
 	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,ndecay;
@@ -28,21 +29,19 @@ int main(int argc, char *argv[]){
 	CpartList *pl=new CpartList(&parmap,ms.reslist);
 
 	ms.partlist=pl;
-	ms.randy->reset(time(NULL));
+	ms.randy->reset(run_number);
 	ms.ReadHyper_OSU_2D();
 
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
 	msuboltz->InitCascade();
 	
 	nparts=0;
-	nevents=parmap.getI("SAMPLER_NEVENTS",10);
 	nevents=parmap.getI("MSU_BOLTZMANN_NEVENTSMAX",10);
 
 	CQualifiers qualifiers;
 	qualifiers.Read("qualifiers.txt");
 	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
 	msuboltz->ReadMuTInfo();
-	msuboltz->nevents=0;
 	Npi=NK=NN=0;
 	for(ievent=0;ievent<nevents;ievent++){
 		msuboltz->Reset();

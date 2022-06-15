@@ -18,18 +18,13 @@ void CMSU_Boltzmann::AddAction_Activate(CMSUPart *part){
 	action->type=0;
 	action->tau=part->tau0;
 	action->MoveToActionMap();
+	action->partmap.clear();
 	action->partmap.insert(CMSUPartPair(part->key,part));
 	if(action->tau<tau){
 		sprintf(message,"trying to AddAction_Activate at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
 	}
 	part->actionmap.insert(CActionPair(action->key,action));
-	if(action->partmap.size()==0){
-		printf("check, adding action\n");
-		action->Print();
-	}
-	if(fabs(action->tau-0.79)<1.0)
-		printf("adding activation action, tau=%g\n",action->tau);
 }
 
 void CMSU_Boltzmann::AddAction_Decay(CMSUPart *part,double taudecay){
@@ -46,10 +41,6 @@ void CMSU_Boltzmann::AddAction_Decay(CMSUPart *part,double taudecay){
 		sprintf(message,"CMSU_Boltzmann::AddAction_Decay, trying to AddAction_Decay at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
 	}
-	if(action->partmap.size()==0){
-		printf("check, adding action\n");
-		action->Print();
-	}
 }
 
 void CMSU_Boltzmann::AddAction_ExitCell(CMSUPart *part){
@@ -61,6 +52,7 @@ void CMSU_Boltzmann::AddAction_ExitCell(CMSUPart *part){
 		action->type=6;
 		action->tau=part->tauexit;
 		action->MoveToActionMap();
+		action->partmap.clear();
 		action->partmap.insert(CMSUPartPair(part->key,part));
 		part->actionmap.insert(CActionPair(action->key,action));
 		if(action->tau<tau-1.0E-10){
@@ -69,10 +61,6 @@ void CMSU_Boltzmann::AddAction_ExitCell(CMSUPart *part){
 			sprintf(message,"CMSU_Boltzmann::AddAction_ExitCell, trying to AddAction_ExitCell at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 			CLog::Fatal(message);
 		}
-	}
-	if(action->partmap.size()==0){
-		printf("check, adding action\n");
-		action->Print();
 	}
 }
 
@@ -88,14 +76,8 @@ void CMSU_Boltzmann::AddAction_Collision(CMSUPart *part1,CMSUPart *part2,double 
 	action->sigma_annihilation=sigma_annihilation;
 	action->sigma_inel=sigma_inel;
 	action->dsigma_merge.resize(dsigma_merge.size());
-	double mergecheck=0.0;
 	for(unsigned int imerge=0;imerge<dsigma_merge.size();imerge++){
 		action->dsigma_merge[imerge]=dsigma_merge[imerge];
-		mergecheck+=dsigma_merge[imerge];
-	}
-	if(fabs(mergecheck-sigma_merge)>0.00001){
-		printf("mergecheck=%g, sigma_merge=%g\n",mergecheck,sigma_merge);
-		exit(1);
 	}
 	//action->dsigma_merge=dsigma_merge;
 	action->MoveToActionMap();
@@ -104,15 +86,13 @@ void CMSU_Boltzmann::AddAction_Collision(CMSUPart *part1,CMSUPart *part2,double 
 		sprintf(message,"trying to AddAction_Collision at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
 	}
+	action->partmap.clear();
 	action->partmap.insert(CMSUPartPair(part1->key,part1));
 	action->partmap.insert(CMSUPartPair(part2->key,part2));
 
 	part1->actionmap.insert(CActionPair(action->key,action));
 	part2->actionmap.insert(CActionPair(action->key,action));
-	if(action->partmap.size()==0){
-		printf("check, adding action\n");
-		action->Print();
-	}
+	
 }
 
 void CMSU_Boltzmann::AddAction_DensCalc(double taucalc){
@@ -127,10 +107,6 @@ void CMSU_Boltzmann::AddAction_DensCalc(double taucalc){
 		sprintf(message,"trying to AddAction_DensCalc at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
 	}
-	if(action->partmap.size()==0){
-		printf("check, adding action\n");
-		action->Print();
-	}
 }
 
 void CMSU_Boltzmann::AddAction_MuTCalc_UpdateNPE(double taucalc){
@@ -144,9 +120,5 @@ void CMSU_Boltzmann::AddAction_MuTCalc_UpdateNPE(double taucalc){
 		action->Print();
 		sprintf(message,"trying to AddAction_MuTCalc at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
-	}
-	if(action->partmap.size()==0){
-		printf("check, adding action\n");
-		action->Print();
 	}
 }
