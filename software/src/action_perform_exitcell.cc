@@ -34,9 +34,7 @@ void CAction::PerformExitCell(){
 			sprintf(message,"In PerformExitCell, part in wrong map\n");
 			CLog::Fatal(message);
 		}
-		printf("check e\n");
 		part->FindActions();
-		printf("check f\n");
 		boltzmann->nexit+=1;
 	}
 	else{

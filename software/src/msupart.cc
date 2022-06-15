@@ -67,6 +67,7 @@ void CMSUPart::Copy(CMSUPart *part){  //copies all info except actionmap
 	bweight=part->bweight;
 	//eta0=part->eta0;
 	phi0=part->phi0;
+	actionmother=part->actionmother;
 }
 
 void CMSUPart::CopyPositionInfo(CMSUPart *part){  //copies all info except actionmap
@@ -79,12 +80,13 @@ void CMSUPart::CopyPositionInfo(CMSUPart *part){  //copies all info except actio
 }
 
 void CMSUPart::CopyMomentumInfo(CMSUPart *part){  //copies all info except actionmap
-	int alpha;
 	y=part->y;
 	msquared=part->msquared;
-	for(alpha=0;alpha<4;alpha++){
-		p[alpha]=part->p[alpha];
-	}
+	p[1]=part->p[1];
+	p[2]=part->p[2];
+	double eperp=sqrt(msquared+p[1]*p[1]+p[2]*p[2]);
+	p[3]=eperp*sinh(y);
+	Setp0();
 	bweight=part->bweight;
 }
 
@@ -561,9 +563,7 @@ void CMSUPart::FindCellExit(){
 }
 
 void CMSUPart::FindActions(){
-	printf("Howdy a\n");
 	KillActions();
-	printf("Howdy b\n");
 	if(active!=true){
 		sprintf(message,"CMSUPart::FindActions(), trying to Reset Inactive particle\n");
 		CLog::Info(message);
@@ -592,7 +592,6 @@ void CMSUPart::FindActions(){
 		Print();
 		CLog::Fatal(message);
 	}
-	printf("Adios\n");
 }
 
 double CMSUPart::GetPseudoRapidity(){

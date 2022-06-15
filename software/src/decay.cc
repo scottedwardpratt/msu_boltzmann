@@ -11,7 +11,6 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 	double mtot,E0,netprob,Estarmax;
 	int imass,ibody;
 	int ntry;
-	printf("getting masses\n");
 	for(ibody=0;ibody<nbodies;ibody++){
 		minmass_daughters+=daughter[ibody]->resinfo->minmass;
 		mass_daughters+=daughter[ibody]->resinfo->mass;
@@ -89,7 +88,6 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		sprintf(message,"CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
 		CLog::Fatal(message);
 	}
-	printf("masses found\n");
 }
 
 void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
@@ -98,6 +96,7 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 	vector<double> mass(6);
 	vector<FourVector> p(5);
 	FourVector u,pprime;
+	printf("check in\n");
 
 	mass[0]=mother->GetMass();
 	if(mass[0]!=mass[0]){

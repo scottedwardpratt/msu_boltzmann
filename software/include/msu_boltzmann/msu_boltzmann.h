@@ -125,6 +125,7 @@ public:
 	void KillAllParts();
 	void SplitPart(CMSUPart *part1,CMSUPart *part2);
 	void CheckPartMap();
+	void CheckActions();
 
 	void AddAction_Activate(CMSUPart *part);
 	void AddAction_Decay(CMSUPart *part,double taudecay);
@@ -178,7 +179,6 @@ public:
 	bool CancelAnnihilation(CMSUPart *part1,CMSUPart *part2);
 	int Annihilate(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart *,5> &product);
 
-	void CheckActions();
 	bool ERROR_PRINT;
 
 	long long int nscatter,nbscatter,n,nmerge,nswallow,npass,nexit;

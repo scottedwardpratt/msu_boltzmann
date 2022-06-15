@@ -48,7 +48,7 @@ void CAction::MoveToActionMap(){
 		epos=GetPos(currentmap);
 		if(epos!=currentmap->end()){
 			boltzmann->DeadActionMap.erase(epos);
-			partmap.clear();
+			//partmap.clear();
 		}
 		else{
 			sprintf(message,"cannot find epos for action in DeadActionMap!!!\n");

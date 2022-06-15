@@ -113,7 +113,7 @@ void CMSU_Boltzmann::ReadOSCARHeader(){
 			fgets(dummy,200,oscarfile);
 	}
 }
-
+/*
 int CMSU_Boltzmann::ReadOSCAR(int ievent){
 	CMSU_BoltzmannBinaryPartInfo bpart;
 	CresInfo *resinfo;
@@ -167,7 +167,7 @@ int CMSU_Boltzmann::ReadOSCAR(int ievent){
 		mother->Init(ID,r[1],r[2],tau0,eta,p[1],p[2],mass,rapidity,weight);
 	}
 	return nparts_read;
-}
+}*/
 
 double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 	CMSU_BoltzmannBinaryBalancePartInfo bpart;

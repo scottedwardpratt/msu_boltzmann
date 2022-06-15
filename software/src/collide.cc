@@ -61,15 +61,18 @@ int CMSU_Boltzmann::Collide_Merge(CMSUPart *part1,CMSUPart *part2,double sigma_m
 	merge=reslist->MergeArray[ir1][ir2];
 	r=randy->ran();
 	imerge=0;
-	sigmatot=dsigma_merge[imerge];
+	sigmatot=dsigma_merge[0];
 	while(r>sigmatot/sigma_merge && merge!=NULL){
-		merge=merge->next;
-		imerge+=1;
-		sigmatot+=dsigma_merge[imerge];
+		printf("dsigma_merge[%d]=%g\n",imerge,dsigma_merge[imerge]);
 		if(merge==NULL || sigmatot>sigma_merge){
-			sprintf(message,"In CMSU_Boltzmann::Collide_Merge, merge is NULL??, sigmatot/sigma_merge=%g\n",sigmatot/sigma_merge);
+			sprintf(message,"In CMSU_Boltzmann::Collide_Merge, merge is NULL?? or sigmatot/sigma_merge=%g is >1, sigma_merge=%g, sigmatot=%g\n",sigmatot/sigma_merge,sigma_merge,sigmatot);
+			part1->Print();
+			part2->Print();
 			CLog::Fatal(message);
 		}
+		imerge+=1;
+		merge=merge->next;
+		sigmatot+=dsigma_merge[imerge];
 	}
 	if(merge==NULL){
 		nproducts=0;

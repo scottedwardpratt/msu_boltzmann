@@ -16,13 +16,12 @@ void CAction::PerformCollide(){
 		printf("colliding particles with balanceIDs=%d,%d\n",part1->balanceID,part2->balanceID);
 		exit(1);
 	}
-
+	sigma_inel=0.0;
 	sigmatot=sigma_scatter+sigma_merge+sigma_annihilation+sigma_inel;
-
-	if(part1->balanceID>=0 && part2->balanceID>=0){
-		printf("WTF!!! scattering to BF particles????\n");
-		exit(1);
-	}
+	printf("sigma_scatter=%g, sigma_merge=%g, sigma_annihilation=%g\n",
+		sigma_scatter,sigma_merge,sigma_annihilation);
+	part1->resinfo->Print();
+	part2->resinfo->Print();
 
 	if((part1->balanceID<0 && part2->balanceID>=0) || (part1->balanceID>=0 && part2->balanceID<0)){
 		boltzmann->Collide_Scatter(part1,part2,nproducts,product);

@@ -38,6 +38,11 @@ void CMSU_Boltzmann::PerformAllActions(){
 	CActionMap::iterator epos=ActionMap.begin();
 	while(epos!=ActionMap.end()){
 		action=epos->second;
+		if(action->partmap.size()==0){
+			printf("action partmap size=0\n");
+			action->Print();
+			exit(1);
+		}
 		action->Perform();
 		epos=ActionMap.begin();
 	}
@@ -362,4 +367,18 @@ void CMSU_Boltzmann::WriteHadronCount(){
 		norm*hadroncount.NLambda,norm*hadroncount.NSigma,norm*hadroncount.NXi,
 		norm*hadroncount.NOmega,norm*NB,norm*Nhyper);
 	CLog::Info(message);
+}
+
+void CMSU_Boltzmann::CheckActions(){
+	CActionMap::iterator epos=ActionMap.begin();
+	CAction *action;
+	while(epos!=ActionMap.end()){
+		action=epos->second;
+		if(action->partmap.size()==0){
+			action->Print();
+			exit(1);
+		}
+		++epos;
+	}
+	printf("actions checked\n");
 }

@@ -207,7 +207,7 @@ void CMSU_Boltzmann::Reset(){
 	KillAllActions();
 	tau=0.0;
 	nactions=0;
-	//npartstot=0;
+	npartstot=0;
 	if(MUTCALC){
 		ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 		for(iitau=0;iitau<ntau;iitau++){

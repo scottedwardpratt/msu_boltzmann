@@ -6,14 +6,12 @@ void CAction::Perform(){
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
 	bool exists;
-	CLog::Info("Performing Action of type"+to_string(type)+"\n");
+	CLog::Info("Performing Action of type"+to_string(type)+", tau="+to_string(tau)+"\n");
 
 	boltzmann->nactions+=1;
-	printf("CHECK\n");
 	if(currentmap==&(boltzmann->ActionMap)){
 		boltzmann->tau=tau;
 		exists=Kill();
-		printf("CHECK, action killed itself\n");
 		if(exists){
 
 			for(ppos=partmap.begin();ppos!=partmap.end();++ppos){
@@ -35,7 +33,6 @@ void CAction::Perform(){
 				sprintf(message,"FATAL:: action earlier than tau!!!!, boltzmann->tau=%15.10e, action tau=%15.10e\n",boltzmann->tau,tau);
 				CLog::Fatal(message);
 			}
-			printf("check, action type=%d\n",type);
 			if(type==6){
 				PerformExitCell();
 			}
