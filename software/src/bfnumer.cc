@@ -191,7 +191,6 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 	string filename;
 	FILE *fptr;
 	int ibin,jbin;
-
 	string command="mkdir -p "+dirname+"/"+name;
 	system(command.c_str());
 	
