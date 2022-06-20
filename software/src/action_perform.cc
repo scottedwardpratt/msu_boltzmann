@@ -5,7 +5,7 @@ void CAction::Perform(){
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
-	//CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
+	CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
 
 	Kill();
 
@@ -51,5 +51,5 @@ void CAction::Perform(){
 		sprintf(message,"FATAL: action type = %d is unknown, exiting\n",type);
 		CLog::Fatal(message);
 	}
-	//CLog::Info("action performed\n");
+	CLog::Info("action performed\n");
 }
