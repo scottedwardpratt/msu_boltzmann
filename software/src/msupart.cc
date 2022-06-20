@@ -168,7 +168,7 @@ void CMSUPart::CyclicReset(){
 void CMSUPart::Print(){
 	sprintf(message,"________________ PART INFO FOR key=%d _____________________________\n",key);
 	CLog::Info(message);
-	sprintf(message,"Minv^2=%g, ID=%d -----  %s ------\n",p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],resinfo->pid,resinfo->name.c_str());
+	sprintf(message,"Minv^2=%g, ID=%d  balanceID=%d -----  %s ------\n",p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],resinfo->pid,balanceID,resinfo->name.c_str());
 	CLog::Info(message);
 	sprintf(message,"ID=%d, m_onshell=%g, M=%g, tau0=%g=?%g, tauexit=%g\n r=(%g,%g,%g,%g) eta=%g=?%g\n", 
 	resinfo->pid,resinfo->mass,sqrt(msquared),double(tau0),sqrt(r[0]*r[0]-r[3]*r[3]),tauexit,r[0],r[1],r[2],r[3],eta,GetEta(tau0));

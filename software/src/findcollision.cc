@@ -132,12 +132,20 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 	if((part1->balanceID>=0) && (part2->balanceID>=0)){
 		return false;
 	}
+	if(part1->resinfo->pid==22 || part2->resinfo->pid==22)
+		return false;
 	bool checkpossible;
 	double sigma_scatter=0.0,sigma_merge=0.0,sigma_annihilation=0.0,sigma_inel=0.0;
 	vector<double> dsigma_merge;
 	bool collide=false;
 	double pibsquared,Minv2,sigmatot;
 	dsigma_merge.clear();
+
+	if(part1->resinfo->ires<0 || part2->resinfo->ires<0){
+		part1->resinfo->Print();
+		part2->resinfo->Print();
+		exit(1);
+	}
 
 	checkpossible=CheckKinematics(part1,part2,Minv2,pibsquared,taucoll);
 	if(checkpossible){

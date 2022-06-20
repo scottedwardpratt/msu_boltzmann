@@ -12,6 +12,7 @@
 int CMSU_Boltzmann::Collide_Scatter(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart*,5> &product){
 	bool bjtranslate=false;
 	int colltype;
+
 	if(BJORKEN && ((part1->cell->ieta==0 && part2->cell->ieta==2*NETA-1) || (part1->cell->ieta==2*NETA-1 && part2->cell->ieta==0))){
 		bjtranslate=true;
 		part1->BjorkenTranslate();
