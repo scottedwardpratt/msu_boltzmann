@@ -30,6 +30,34 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 			}
 		}
 	}
+	/*
+	vector<int> nprotons;
+	nprotons.resize(maxbid+1);
+	for(bid=0;bid<maxbid;bid+=1)
+		nprotons[bid]=0;
+
+	CMSUPartMap::iterator ppos;
+	CMSUPart *part;
+	CresInfo *resinfo;
+	int np=0,npi=0,nhad=0;
+	for(ppos=PartMap.begin();ppos!=PartMap.end();++ppos){
+		part=ppos->second;
+		resinfo=part->resinfo;
+		if(part->balanceID>=0){
+			nhad+=1;
+			if(abs(resinfo->pid)==2212)
+				np+=1;
+			if(abs(resinfo->pid)==211)
+				npi+=1;
+		}
+		if(abs(resinfo->pid)==2212 && part->balanceID>=0)
+			nprotons[part->balanceID]+=1;
+	}
+	printf("From BF map, nhad=%d, nprotons=%d, npions=%d, maxbid=%d\n",nhad,np,npi,maxbid);
+	for(bid=0;bid<maxbid;bid+=2){
+		if(nprotons[bid]*nprotons[bid+1]!=0)
+			printf("%d %d\n",nprotons[bid],nprotons[bid+1]);
+	}*/
 }
 
 void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CCharge *charge){
@@ -79,8 +107,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	//string filename=dirname+"/"+parmap.getS("CHARGESINFO_FILENAME","uds.dat");
 	string filename=dirname+"/"+"uds"+chargefile+".dat";
 	Chyper *hyper;
-	double etaspread=0.0;
-	int neta=0,maxbid=0;
+	int maxbid=0;
 	char dummy[120];
 	vector<double> etaboost;
 	CChargeMap::iterator it;
@@ -92,7 +119,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
 	chargemap.clear();
-	double norm=0.0,ux2bar=0.0,uy2bar=0.0,udotrbar=0.0,x2bar=0.0,y2bar=0.0;
 	do{
 		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&balanceID,&qu,&qd,&qs,&w,&tau_read,&eta,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
@@ -106,10 +132,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 			charge->weight=w;
 			charge->tau=tau_read;
 			charge->eta=eta;
-			if(fabs(charge->q[2])==1){
-				etaspread+=eta*eta;
-				neta+=1;
-			}
 			charge->x=x;
 			charge->y=y;
 			hyper->tau=tau_read;
@@ -131,12 +153,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 			hyper->P=sampler->P0;
 			hyper->epsilon=sampler->epsilon0;
 			chargemap.insert(CChargePair(balanceID,charge));
-			norm+=1.0;
-			ux2bar+=ux*ux;
-			uy2bar+=uy*uy;
-			x2bar+=x*x;
-			y2bar+=y*y;
-			udotrbar+=ux*x+uy*y;
 			if(balanceID>maxbid)
 				maxbid=balanceID;
 		}
@@ -183,7 +199,6 @@ void CMSU_Boltzmann::IncrementChiTotFromCharges(){
 	pair<CChargeMap::iterator,CChargeMap::iterator> icpair_even,icpair_odd;
 	CChargeMap::iterator itc;
 	int a,b,bid,maxbid;
-	int NSAMPLE_HYDRO2UDS=parmap->getI("NSAMPLE_HYDRO2UDS",1);
 	Eigen::Vector3d qa;
 	Eigen::Vector3d qb;
 	itc=chargemap.end(); itc--;
@@ -218,8 +233,7 @@ void CMSU_Boltzmann::IncrementChiTotFromHadrons(){
 			bfpartmap.insert(CMSUPartPair(part->balanceID,part));
 	}
 	
-	int bid,count=0;
-	int NSAMPLE_HYDRO2UDS=parmap->getI("NSAMPLE_HYDRO2UDS",1);
+	int bid;
 	double dchi;
 	
 	for(bid=0;bid<=maxbid;bid+=2){
@@ -240,8 +254,6 @@ void CMSU_Boltzmann::IncrementChiTotFromHadrons(){
 								+0.5*parta->resinfo->q[b]*partb->resinfo->q[a]*parta->bweight*partb->bweight;
 							chitotH(a,b)-=0.5*dchi;
 							chitotH(b,a)-=0.5*dchi;
-							if(parta->resinfo->q[a]*partb->resinfo->q[b]!=0)
-								count+=1;
 						}
 					}
 				}

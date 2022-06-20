@@ -215,6 +215,8 @@ void CMSU_Boltzmann::SplitPart(CMSUPart *part1,CMSUPart *part2){
 
 CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 	if(DeadPartMap.size()==0){
+		printf("making new part,  PartMap Size=%ld, tau=%g\n",
+			PartMap.size(),tau);
 		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
 			new CMSUPart(npartstot);
 		}
@@ -225,6 +227,8 @@ CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 	int ipart;
 	while(DeadPartMap.size()<2){
+		printf("making new part,  PartMap Size=%ld, tau=%g\n",
+			PartMap.size(),tau);
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
 	}
@@ -249,10 +253,12 @@ void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 
 CAction* CMSU_Boltzmann::GetDeadAction(){
 	if(DeadActionMap.size()==0){
+		printf("making new action, ActionMap Size=%lu, DeadActionMap Size=%ld, tau=%g\n",
+			ActionMap.size(), DeadActionMap.size(),tau);
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
 			new CAction(-1);
-		//sprintf(message,"created %d new actions, nactionstot=%d\n",DELNACTIONSTOT*NSAMPLE,nactionstot);
-		//CLog::Info(message);
+		sprintf(message,"created %d new actions, nactionstot=%d\n",DELNACTIONSTOT*NSAMPLE,nactionstot);
+		CLog::Info(message);
 	}
 	return DeadActionMap.begin()->second;
 }
