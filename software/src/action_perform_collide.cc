@@ -38,8 +38,8 @@ void CAction::PerformCollide(){
 
 	if(colltype==0 || nproducts==0){
 		boltzmann->npass+=1;
-		part1->actionmother=boltzmann->nactions;
-		part2->actionmother=boltzmann->nactions;
+		part1->actionmother=boltzmann->nactionstot;
+		part2->actionmother=boltzmann->nactionstot;
 	}
 	else if(colltype==-2){
 		if(part1->balanceID>=0 && part2->balanceID<0){
@@ -54,13 +54,13 @@ void CAction::PerformCollide(){
 		if(part1->currentmap!=&(boltzmann->PartMap))
 			part1->ChangeMap(&(boltzmann->PartMap));
 		part1->active=true;
-		part1->actionmother=boltzmann->nactions;
+		part1->actionmother=boltzmann->nactionstot;
 		part1->FindActions();
 		part2->tau_lastint=tau;
 		if(part2->currentmap!=&(boltzmann->PartMap))
 			part2->ChangeMap(&(boltzmann->PartMap));
 		part2->active=true;
-		part2->actionmother=boltzmann->nactions;
+		part2->actionmother=boltzmann->nactionstot;
 		part2->FindActions();
 	}
 	else{
@@ -72,7 +72,7 @@ void CAction::PerformCollide(){
 			part->active=true;
 			part->weight=1.0;
 			part->tau_lastint=tau;
-			part->actionmother=boltzmann->nactions;
+			part->actionmother=boltzmann->nactionstot;
 			cell=part->FindCell();
 			part->ChangeCell(cell);
 			part->ChangeMap(&boltzmann->PartMap);

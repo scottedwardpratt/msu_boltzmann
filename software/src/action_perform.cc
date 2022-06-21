@@ -5,11 +5,13 @@ void CAction::Perform(){
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
-	//CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
+	if(tau>20 && type!=1){
+		CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
+		CLog::Info("nactionstot="+to_string(boltzmann->nactionstot)+"\n");
+	}
 
-	Kill();
 
-	boltzmann->nactions+=1;
+	boltzmann->nactionstot+=1;
 	boltzmann->tau=tau;
 	for(ppos=partmap.begin();ppos!=partmap.end();++ppos){
 		part=ppos->second;
@@ -51,5 +53,6 @@ void CAction::Perform(){
 		sprintf(message,"FATAL: action type = %d is unknown, exiting\n",type);
 		CLog::Fatal(message);
 	}
+	Kill();
 	//CLog::Info("action performed\n");
 }

@@ -13,10 +13,12 @@
 #include "msu_sampler/part.h"
 #include "msu_boltzmann/balancearrays.h"
 #include "msu_boltzmann/inelastic.h"
+#include "msu_boltzmann/decay.h"
 
 using namespace std;
 
 class CpartList;
+class CMSU_Decay;
 
 class ChadronCount{
 public:
@@ -57,7 +59,6 @@ public:
 	vector<vector<vector<CMSU_BoltzmannCell *> > > cell;
 	vector<vector<vector<CMuTInfo *>>> muTinfo;
 	vector<double> annihilation_array;
-	CDecay_NBody *decay_nbody;
 	
 	void ReadCharges(int ichargefile);
 	void GenHadronsFromCharges();
@@ -91,8 +92,8 @@ public:
 	int itau;
 	//
 	// READ IN FROM PARAMETER FILE
-	int NACTIONSMAX;
-	int NPARTSMAX,nbaryons,npartstot,nactionstot;
+	long long int NACTIONSMAX,nactionstot;
+	int NPARTSMAX,nbaryons,npartstot;
 	int NSAMPLE,NSAMPLE_UDS2BAL;
 	int DELNPARTSTOT,DELNACTIONSTOT;
 	bool BINARY_RW;
@@ -101,6 +102,7 @@ public:
 	string input_dataroot;
 	string output_dataroot;
 	string run_name,qualifier;
+	CMSU_Decay *msudecay;
 
 	string oscarfilename;
 	FILE *oscarfile;
@@ -183,7 +185,7 @@ public:
 
 	long long int nscatter,nbscatter,n,nmerge,nswallow,npass,nexit;
 	long long int nactivate,nannihilate,ncancel_annihilate,nregenerate,nactionkills;
-	long long int nactions,ninelastic, ncollisions,oldncollisions,ndecay,ncheck,ncheck1,ncheck2;
+	long long int ninelastic, ncollisions,oldncollisions,ndecay,ncheck,ncheck1,ncheck2;
 
 	void freegascalc_onespecies(double m,double t,double &p,double &e,double &dens,double &sigma2,double &dedt);
 	

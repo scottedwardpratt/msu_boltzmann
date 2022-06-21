@@ -134,6 +134,12 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 	}
 	if(part1->resinfo->pid==22 || part2->resinfo->pid==22)
 		return false;
+	if(part1->cell==NULL || part2->cell==NULL)
+		return false;
+	if(part1->tau0>TAUCOLLMAX || part2->tau0>TAUCOLLMAX)
+		return false;
+	if(part1->actionmother==part2->actionmother)
+		return false;
 	bool checkpossible;
 	double sigma_scatter=0.0,sigma_merge=0.0,sigma_annihilation=0.0,sigma_inel=0.0;
 	vector<double> dsigma_merge;
@@ -144,10 +150,12 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 	if(part1->resinfo->ires<0 || part2->resinfo->ires<0){
 		part1->resinfo->Print();
 		part2->resinfo->Print();
-		exit(1);
+		CLog::Fatal("ires1 or ires2<0 in FindCollision\n");
 	}
 
 	checkpossible=CheckKinematics(part1,part2,Minv2,pibsquared,taucoll);
+	if(taucoll>TAUCOLLMAX)
+		return false;
 	if(checkpossible){
 		sigmatot=GetSigma(part1,part2,Minv2,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel,dsigma_merge);
 		if(pibsquared<sigmatot){

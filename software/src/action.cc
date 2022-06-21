@@ -81,6 +81,7 @@ bool CAction::Kill(){
 			++ppos;
 		}
 		partmap.clear();
+		dsigma_merge.clear();
 		currentmap=&(boltzmann->DeadActionMap);
 		return false;
 	}
@@ -103,7 +104,8 @@ bool CAction::Kill(){
 			}
 			++ppos;
 		}
-		//partmap.clear();
+		dsigma_merge.clear();
+		partmap.clear();
 		return true;
 	}
 }

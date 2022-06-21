@@ -26,6 +26,18 @@ public:
 	int pid;
 	double msquared;
 	FourVector p,r;
+	CMSU_BoltzmannCell *cell,*nextcell;
+	double tau0,tau_lastint,tauexit,taudecay;
+	double y,eta;
+	double weight,bweight;
+	double eta0,phi0;
+	int listid,nscatt,balanceID,key;
+	int actionmother; //refers to action from which particle was created
+	CresInfo *resinfo;
+	bool active;
+	CMSUPartMap *currentmap; // PartList for a Cell, or boltzmann->DeadPartList
+
+
 	void Print();
 	double GetMass();
 	void AddPart(int pid,FourVector &p,FourVector &r);
@@ -38,16 +50,7 @@ public:
 	// Additional below are unique for Boltzmann
 
 	CMSUPart(int keyset);
-	CMSU_BoltzmannCell *cell,*nextcell;
-	double tau0,tau_lastint,tauexit,taudecay;
-	double y,eta;
-	double weight,bweight;
-	double eta0,phi0;
-	int listid,nscatt,balanceID,key;
-	int actionmother; //refers to action from which particle was created
-	CresInfo *resinfo;
-	bool active;
-	CMSUPartMap *currentmap; // PartList for a Cell, or boltzmann->DeadPartList
+	
 	
 	void InitBalance(int ID,double x,double y,double tau,double eta,double px,double py,double mass,double rapidity,double bweight,int balanceid);
 	void Propagate(double tau);

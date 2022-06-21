@@ -11,7 +11,7 @@ void CAction::PerformActivate(){
 	part->ChangeCell(part->FindCell());
 	part->CyclicReset();
 	part->tau_lastint=tau;
-	part->actionmother=boltzmann->nactions;
+	part->actionmother=boltzmann->nactionstot;
 	part->Setp0();
 	part->FindActions();
 	boltzmann->nactivate+=1;

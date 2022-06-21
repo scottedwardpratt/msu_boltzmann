@@ -127,8 +127,8 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 	}
 	mass[0]=sqrt(P[0]*P[0]-P[1]*P[1]-P[2]*P[2]-P[3]*P[3]);
 
-	decay_nbody->SetMasses(nbodies,mass);
-	decay_nbody->GenerateMomenta(p);
+	msudecay->decay_nbody->SetMasses(nbodies,mass);
+	msudecay->decay_nbody->GenerateMomenta(p);
 	
 	rbar[1]=0.5*(part1->r[1]+part2->r[1]);
 	rbar[2]=0.5*(part1->r[2]+part2->r[2]);
@@ -169,6 +169,8 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 			CLog::Fatal(message);
 		}
 	}
+	mass.clear();
+	p.clear();
 	return ndaughters;
 }
 

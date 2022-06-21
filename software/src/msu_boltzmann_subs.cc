@@ -34,7 +34,6 @@ void CMSU_Boltzmann::PerformAllActions(){
 	ninelastic=ncheck=nactionkills=nbaryons=ncheck1=ncheck2=0;
 	ncollisions=oldncollisions=nannihilate=ncancel_annihilate=nregenerate=0;
 	tau=0.0;
-	nactions=0;	
 	CActionMap::iterator epos=ActionMap.begin();
 	while(epos!=ActionMap.end()){
 		action=epos->second;
@@ -51,7 +50,6 @@ void CMSU_Boltzmann::KillAllActions(){
 		action->Kill();
 		epos=ActionMap.begin();
 	}
-	nactions=0;
 }
 
 void CMSU_Boltzmann::KillAllParts(){
@@ -257,7 +255,7 @@ CAction* CMSU_Boltzmann::GetDeadAction(){
 			ActionMap.size(), DeadActionMap.size(),tau);
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
 			new CAction(-1);
-		sprintf(message,"created %d new actions, nactionstot=%d\n",DELNACTIONSTOT*NSAMPLE,nactionstot);
+		sprintf(message,"created %d new actions, Action Map Size=%lu\n",DELNACTIONSTOT*NSAMPLE,ActionMap.size());
 		CLog::Info(message);
 	}
 	return DeadActionMap.begin()->second;

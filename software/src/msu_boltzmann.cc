@@ -32,22 +32,20 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set,CparameterMap *parmap_set,Cre
 	tau=0.0;
 	chitotH.setZero();
 	chitotQ.setZero();
-	npartstot=nactionstot=0;
 	PartMap.clear();
 	DeadPartMap.clear();
 	ActionMap.clear();
 	DeadActionMap.clear();
 	randy=new Crandy(-1234);
+	msudecay=new CMSU_Decay(randy);
 	CAction::boltzmann=this;
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
+	msudecay->boltzmann=this;
 	oscarfile=NULL;
-
-	decay_nbody=new CDecay_NBody(randy);
 }
 
 void CMSU_Boltzmann::CopyParMapPars(){
-	NACTIONSMAX=parmap->getI("MSU_BOLTZMANN_NACTIONSMAX",100000);
 	NPARTSMAX=parmap->getI("MSU_BOLTZMANN_NPARTSMAX",200000);
 	TAUCOLLMAX=parmap->getD("MSU_BOLTZMANN_TAUCOLLMAX",50.0);
 	DENSWRITE=parmap->getB("MSU_BOLTZMANN_DENSWRITE",false);
@@ -83,7 +81,6 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	RESONANCE_DECAYS=parmap->getB("MSU_BOLTZMANN_RESONANCE_DECAYS",true);
 	SIGMABF=parmap->getD("MSU_BOLTZMANN_SIGMABF",2.3);
 	NPARTSMAX*=NSAMPLE;
-	NACTIONSMAX*=NSAMPLE;
 	DXY=XYMAX/double(NXY);
 	DETA=ETAMAX/double(NETA);
 }
@@ -206,7 +203,7 @@ void CMSU_Boltzmann::Reset(){
 	KillAllParts();
 	KillAllActions();
 	tau=0.0;
-	nactions=0;
+	nactionstot=0;
 	npartstot=0;
 	if(MUTCALC){
 		ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);

@@ -13,6 +13,7 @@ void CAction::PerformDecay(){
 	mother=ppos->second;
 	boltzmann->GetDeadParts(product);
 	mothermass=mother->GetMass();
+
 	if(mothermass!=mothermass){
 		mother->Print();
 		exit(1);
@@ -44,7 +45,7 @@ void CAction::PerformDecay(){
 	for(ibody=0;ibody<nbodies;ibody++){
 		product[ibody]->resinfo=daughterresinfo[ibody];
 	}
-	boltzmann->Decay(mother,nbodies,product);
+	boltzmann->msudecay->Decay(mother,nbodies,product);
 	
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -55,7 +56,7 @@ void CAction::PerformDecay(){
 		dptr->balanceID=mother->balanceID;
 		dptr->nscatt=0;
 		dptr->tau_lastint=tau;
-		dptr->actionmother=boltzmann->nactions;
+		dptr->actionmother=boltzmann->nactionstot;
 		if(dptr->msquared!=dptr->msquared){
 			CLog::Fatal("In PerformDecay, msquared!=msquared for daughter\n");
 		}

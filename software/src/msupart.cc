@@ -137,7 +137,7 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 	active=false;
 	ChangeMap(&(boltzmann->PartMap));
 	boltzmann->AddAction_Activate(this);
-	actionmother=boltzmann->nactions;
+	actionmother=0;
 }
 
 void CMSUPart::CheckRapidity(){
@@ -496,6 +496,10 @@ void CMSUPart::FindDecay(){
 }
 
 void CMSUPart::FindCellExit(){
+	if(tau0>boltzmann->TAUCOLLMAX){
+		tauexit=tau0;
+		nextcell=cell=NULL;
+	}
 	if(active){
 		double t,taux,tauy,taueta,z;
 		double etamax=cell->etamax,etamin=cell->etamin;
@@ -606,6 +610,7 @@ void CMSUPart::BoostP(FourVector &u){
 	Misc::Boost(u,p,pprime);
 	for(alpha=0;alpha<4;alpha++)
 		p[alpha]=pprime[alpha];
+	Setp0();
 	y=atanh(p[3]/p[0]);
 }
 

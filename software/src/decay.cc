@@ -4,10 +4,19 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_commonutils/misc.h"
 #include "msu_commonutils/constants.h"
+#include "msu_boltzmann/decay.h"
+#include "msu_commonutils/decay_nbody.h"
 
-void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPart *,5> &daughter){
+CMSU_Decay::CMSU_Decay(Crandy *randyset){
+	randy=randyset;
+	mass.resize(6);
+	p.resize(5);
+	probmax.resize(5);
+	decay_nbody=new CDecay_NBody(randy);
+}
+
+void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPart *,5> &daughter){
 	double minmass_daughters=0.0,mass_daughters=0.0,width_daughters=0.0;
-	vector<double> probmax;
 	double mtot,E0,netprob,Estarmax;
 	int imass,ibody;
 	int ntry;
@@ -17,6 +26,12 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		width_daughters+=daughter[ibody]->resinfo->width;
 	}
 	if(mass_daughters<minmass_daughters || mass[0]<minmass_daughters){
+		sprintf(message,"mothermass=%g, daughter masses=(",mass[0]);
+		for(int i=1;i<=nbodies;i++){
+			sprintf(message,"%s%g, ",message,mass[i]);
+		}
+		sprintf(message,"%s)\n",message);
+		CLog::Info(message);
 		CLog::Fatal("masses out of whack in decay\n");
 	}
 	if(mass[0]>minmass_daughters+0.5*(mass_daughters-minmass_daughters) && mass[0]>mass_daughters-width_daughters){
@@ -37,7 +52,6 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		}while(mtot>mass[0]);
 	}
 	else{
-		probmax.resize(nbodies);
 		Estarmax=mass[0]-minmass_daughters;
 		for(ibody=0;ibody<nbodies;ibody++){
 			if(daughter[ibody]->resinfo->decay){
@@ -78,17 +92,13 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		sprintf(message,"CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
 		CLog::Fatal(message);
 	}
-	probmax.clear();
 }
 
-void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
+void CMSU_Decay::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
 	int ibody,alpha;
 	CMSUPart *dptr;
-	vector<double> mass(6);
-	vector<FourVector> p(5);
-	FourVector u,pprime;
-
-	mass[0]=mother->GetMass();
+	double tau=boltzmann->tau;
+	mass[0]=sqrt(mother->msquared);
 
 	GetMassesForDecay(mass,nbodies,daughter);
 	
