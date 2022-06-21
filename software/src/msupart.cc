@@ -558,7 +558,6 @@ void CMSUPart::FindActions(){
 	if(active!=true){
 		sprintf(message,"CMSUPart::FindActions(), trying to Reset Inactive particle\n");
 		CLog::Info(message);
-		KillActions();
 	}
 	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass-1.0E-5){
 		sprintf(message,"msquared too small, M=%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);

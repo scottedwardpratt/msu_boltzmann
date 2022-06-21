@@ -78,6 +78,7 @@ void CMSU_Boltzmann::GetMassesForDecay(vector<double> &mass,int nbodies,array<CM
 		sprintf(message,"CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
 		CLog::Fatal(message);
 	}
+	probmax.clear();
 }
 
 void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter){
@@ -113,7 +114,7 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 		u[alpha]=mother->p[alpha]/mass[0];
 	for(ibody=0;ibody<nbodies;ibody++){
 		dptr=daughter[ibody];
-		Misc::lorentz(u,p[ibody],pprime);
+		Misc::Boost(u,p[ibody],pprime);
 		dptr->active=true;
 		dptr->balanceID=mother->balanceID;
 		for(alpha=0;alpha<4;alpha++)
@@ -133,4 +134,7 @@ void CMSU_Boltzmann::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &da
 		//dptr->eta0=mother->eta0;
 		dptr->phi0=mother->phi0;
 	}
+	p.clear();
+	mass.clear();
+	
 }

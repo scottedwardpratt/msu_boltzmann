@@ -62,8 +62,8 @@ bool CMSU_Boltzmann::CheckKinematics(CMSUPart *part1,CMSUPart *part2,
 }
 
 double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
-		double &sigma_scatter,double &sigma_merge,double &sigma_annihilation,double &sigma_inel,
-		vector<double> &dsigma_merge){
+		double &sigma_scatter,double &sigma_merge,double &sigma_annihilation,
+		double &sigma_inel,vector<double> &dsigma_merge){
 	double sigmatot=0.0,M,Gamma,b,degenR,degen1,degen2,q2,dsigma,sf;
 	int ir1,ir2,irflip;
 	Cmerge *merge;
@@ -157,6 +157,7 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 			collide=true;
 		}
 	}
+	dsigma_merge.clear();
 	return collide;
 }		
 

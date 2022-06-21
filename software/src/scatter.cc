@@ -50,12 +50,12 @@ void CMSU_Boltzmann::InelasticScatter(CMSUPart *part1,CMSUPart *part2,CMSUPart *
 		m0=sqrt(m0squared);
 		for(alpha=0;alpha<4;alpha++)
 			u[alpha]=p0tot[alpha]/m0;
-		Misc::lorentz(u,*p3,pprime);
+		Misc::Boost(u,*p3,pprime);
 		for(alpha=0;alpha<4;alpha++)
 			(*p3)[alpha]=pprime[alpha];
 		part3->msquared=m3squared;
 		part3->SetY();
-		Misc::lorentz(u,*p4,pprime);
+		Misc::Boost(u,*p4,pprime);
 		for(alpha=0;alpha<4;alpha++)
 			(*p4)[alpha]=pprime[alpha];
 		part4->msquared=m4squared;

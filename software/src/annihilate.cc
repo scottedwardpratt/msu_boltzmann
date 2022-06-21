@@ -139,7 +139,7 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 		u[alpha]=P[alpha]/mass[0];
 	for(ibody=0;ibody<nbodies;ibody++){
 		dptr=daughter[ibody];
-		Misc::lorentz(u,p[ibody],pprime);
+		Misc::Boost(u,p[ibody],pprime);
 		dptr->active=true;
 		for(alpha=0;alpha<4;alpha++){
 			dptr->p[alpha]=pprime[alpha];
