@@ -5,10 +5,10 @@ void CAction::Perform(){
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
-	if(tau>20 && type!=1){
-		CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
-		CLog::Info("nactionstot="+to_string(boltzmann->nactionstot)+"\n");
-	}
+	//if(tau>20 && type!=1){
+		//CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
+		//CLog::Info("nactionstot="+to_string(boltzmann->nactionstot)+"\n");
+	//}
 
 
 	boltzmann->nactionstot+=1;
