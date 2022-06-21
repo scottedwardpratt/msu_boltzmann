@@ -13,8 +13,6 @@ void CAction::PerformMuTCalcUpdateNPE(){
 	CMuTInfo *mti;
 	double gamma,gammav,E,px,py,eta,t,x,y;
 
-	//int nactive=0,npi=0,nB=0;
-
 	for(ppos=boltzmann->PartMap.begin();ppos!=boltzmann->PartMap.end();++ppos){
 		part=ppos->second;
 		if(part->active && part->balanceID<0){
