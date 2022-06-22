@@ -213,11 +213,10 @@ void CMSU_Boltzmann::SplitPart(CMSUPart *part1,CMSUPart *part2){
 
 CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 	if(DeadPartMap.size()==0){
-		printf("making new part,  PartMap Size=%ld, tau=%g\n",
-			PartMap.size(),tau);
 		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
 			new CMSUPart(npartstot);
 		}
+		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
 	}
 	return DeadPartMap.begin()->second;
 }
@@ -225,10 +224,9 @@ CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 	int ipart;
 	while(DeadPartMap.size()<2){
-		printf("making new part,  PartMap Size=%ld, tau=%g\n",
-			PartMap.size(),tau);
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
+		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	part1=ppos->second;
@@ -238,9 +236,10 @@ void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 
 void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 	int ipart;
-	while(DeadPartMap.size()<5){
+	while(DeadPartMap.size()<6){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
+		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	for(ipart=0;ipart<5;ipart++){
