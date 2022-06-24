@@ -5,7 +5,7 @@
 #include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/cell.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 
 //!An action in the CMSU_Boltzmann model.
 /*!

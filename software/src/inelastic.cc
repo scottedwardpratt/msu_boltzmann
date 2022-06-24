@@ -2,7 +2,7 @@
 #include "msu_boltzmann/inelastic.h"
 #include "msu_boltzmann/boltzmanndefs.h"
 #include "msu_boltzmann/msu_boltzmann.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 #include "msu_commonutils/misc.h"
 
 CMSU_Boltzmann *CInelasticList::boltzmann=NULL;

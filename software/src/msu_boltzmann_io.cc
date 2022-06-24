@@ -3,7 +3,7 @@
 #include "msu_commonutils/misc.h"
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_sampler/classdefs.h"
 #include "msu_sampler/part.h"

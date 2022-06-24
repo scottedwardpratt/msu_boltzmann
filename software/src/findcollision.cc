@@ -1,7 +1,7 @@
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/cell.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 #include "msu_commonutils/constants.h"
 
 bool CMSU_Boltzmann::CheckKinematics(CMSUPart *part1,CMSUPart *part2,

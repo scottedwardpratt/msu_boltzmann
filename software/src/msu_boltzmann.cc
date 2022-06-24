@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <utility>
 #include "msu_boltzmann/msupart.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_sampler/sampler.h"
 #include "msu_boltzmann/balancearrays.h"

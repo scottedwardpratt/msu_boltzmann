@@ -8,7 +8,7 @@
 #include "msu_boltzmann/mutinfo.h"
 #include "msu_commonutils/decay_nbody.h"
 #include "msu_boltzmann/acceptance.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 #include "msu_commonutils/log.h"
 #include "msu_sampler/part.h"
 #include "msu_boltzmann/balancearrays.h"
@@ -32,7 +32,7 @@ class CMSU_Boltzmann{
 public:
 	int nevents;
 	CparameterMap *parmap;
-	CChargeMap chargemap;
+	CHBChargeMap chargemap;
 	CMSUPartMap DeadPartMap;
 	CMSUPartMap PartMap;		//!< A C++ map for active CMSUPart objects in the model.
 
@@ -62,7 +62,7 @@ public:
 	
 	void ReadCharges(int ichargefile);
 	void GenHadronsFromCharges();
-	void GenHadronsFromCharge(int balanceID,CCharge *charge);
+	void GenHadronsFromCharge(int balanceID,CHBCharge *charge);
 	void TestChargeConservation(int pid);
 	
 	

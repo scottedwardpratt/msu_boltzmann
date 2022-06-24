@@ -1,5 +1,5 @@
 #include "msu_boltzmann/msu_boltzmann.h"
-#include "msu_hydrobalance/charge.h"
+#include "msu_hydrobalance/hbcharge.h"
 #include "msu_sampler/part.h"
 #include "msu_sampler/sampler.h"
 #include "msu_commonutils/constants.h"
@@ -9,9 +9,9 @@ using namespace std;
 
 void CMSU_Boltzmann::GenHadronsFromCharges(){
 	int maxbid,bid;
-	CCharge *chargea,*chargeb;
-	pair<CChargeMap::iterator,CChargeMap::iterator> icpair_even,icpair_odd;
-	CChargeMap::iterator itc0,itc1;
+	CHBCharge *chargea,*chargeb;
+	pair<CHBChargeMap::iterator,CHBChargeMap::iterator> icpair_even,icpair_odd;
+	CHBChargeMap::iterator itc0,itc1;
 	CMSUPartMap::iterator itp;
 	itc1=chargemap.end(); itc1--;
 	maxbid=itc1->first;
@@ -60,7 +60,7 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 	}*/
 }
 
-void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CCharge *charge){
+void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	int ires;
 	double delN,bweight;
 	double rapidity,mass;
@@ -68,7 +68,7 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CCharge *charge){
 	CMSUPart *part;
 	FourVector p;
 	Csampler *sampler;
-	CChargeMap::iterator it;
+	CHBChargeMap::iterator it;
 	Eigen::Vector3d Qprime,Q,q;
 	CresInfoMap::iterator itr;
 	CresInfo *resinfo;
@@ -110,8 +110,8 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	int maxbid=0;
 	char dummy[120];
 	vector<double> etaboost;
-	CChargeMap::iterator it;
-	CCharge *charge;
+	CHBChargeMap::iterator it;
+	CHBCharge *charge;
 	int balanceID,qu,qd,qs,bidcharge;
 	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
 	double pitildexy,pitildeyy;
@@ -123,7 +123,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&balanceID,&qu,&qd,&qs,&w,&tau_read,&eta,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
 		if(!feof(fptr)){
-			charge=new CCharge();
+			charge=new CHBCharge();
 			hyper=&(charge->hyper);
 			hyper->T0=parmap->getD("FREEZEOUT_TEMP",0.155);
 			charge->q[0]=qu;
@@ -152,7 +152,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 			hyper->T0=sampler->Tf;
 			hyper->P=sampler->P0;
 			hyper->epsilon=sampler->epsilon0;
-			chargemap.insert(CChargePair(balanceID,charge));
+			chargemap.insert(CHBChargePair(balanceID,charge));
 			if(balanceID>maxbid)
 				maxbid=balanceID;
 		}
@@ -181,8 +181,8 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 }
 
 void CMSU_Boltzmann::DeleteCharges(){
-	CChargeMap::iterator it,itnext;
-	CCharge *charge;
+	CHBChargeMap::iterator it,itnext;
+	CHBCharge *charge;
 	it=chargemap.begin();
 	while(it!=chargemap.end()){
 		itnext=it;
@@ -196,14 +196,14 @@ void CMSU_Boltzmann::DeleteCharges(){
 }
 
 void CMSU_Boltzmann::IncrementChiTotFromCharges(){
-	pair<CChargeMap::iterator,CChargeMap::iterator> icpair_even,icpair_odd;
-	CChargeMap::iterator itc;
+	pair<CHBChargeMap::iterator,CHBChargeMap::iterator> icpair_even,icpair_odd;
+	CHBChargeMap::iterator itc;
 	int a,b,bid,maxbid;
 	Eigen::Vector3d qa;
 	Eigen::Vector3d qb;
 	itc=chargemap.end(); itc--;
 	maxbid=itc->first;
-	CCharge *chargea,*chargeb;
+	CHBCharge *chargea,*chargeb;
 	for(bid=0;bid<maxbid;bid+=2){
 		icpair_even=chargemap.equal_range(bid);
 		itc=icpair_even.first;

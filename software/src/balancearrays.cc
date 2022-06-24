@@ -3,7 +3,7 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/acceptance.h"
 #include "msu_commonutils/randy.h"
-#include "msu_sampler/resonances.h"
+#include "msu_eos/resonances.h"
 #include "msu_commonutils/constants.h"
 #include "msu_commonutils/misc.h"
 
