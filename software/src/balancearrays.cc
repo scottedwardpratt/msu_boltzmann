@@ -167,16 +167,16 @@ void CBalanceArrays::CreateBFArrays(){
 void CBalanceArrays::ConstructBFs(){
 	bool NoQ=false;
 	if(!PPBAR_ONLY){
-		ConstructBF(numer_pipi,denom_pi,bf_pipi,1.0,NoQ);
-		ConstructBF(numer_piK,denom_pi,bf_piK,0.5,NoQ);
-		ConstructBF(numer_pip,denom_pi,bf_pip,0.5,NoQ);
-		ConstructBF(numer_KK,denom_K,bf_KK,1.0,NoQ);
-		ConstructBF(numer_Kp,denom_K,bf_Kp,0.5,NoQ);
+		ConstructBF(numer_pipi,denom_pi,bf_pipi,2.0,NoQ);
+		ConstructBF(numer_piK,denom_pi,bf_piK,1.0,NoQ);
+		ConstructBF(numer_pip,denom_pi,bf_pip,1.0,NoQ);
+		ConstructBF(numer_KK,denom_K,bf_KK,2.0,NoQ);
+		ConstructBF(numer_Kp,denom_K,bf_Kp,1.0,NoQ);
 	}
-	ConstructBF(numer_pp,denom_p,bf_pp,1.0,NoQ);
+	ConstructBF(numer_pp,denom_p,bf_pp,2.0,NoQ);
 	NoQ=true;
 	if(!PPBAR_ONLY){
-		ConstructBF(numer_allcharges,denom_allcharges,bf_allcharges,1.0,NoQ);
+		ConstructBF(numer_allcharges,denom_allcharges,bf_allcharges,2.0,NoQ);
 		ConstructBF(numer_allcharges_phi0,denom_allcharges_phi0,bf_allcharges_phi0,1.0,NoQ);
 		ConstructBF(numer_allcharges_phi45,denom_allcharges_phi45,bf_allcharges_phi45,1.0,NoQ);
 		ConstructBF(numer_allcharges_phi90,denom_allcharges_phi90,bf_allcharges_phi90,1.0,NoQ);
@@ -355,18 +355,19 @@ void CBalanceArrays::ProcessBFPartMap(){
 		if(ita0!=itaf && itb0!=itbf){
 			for(ita=ita0;ita!=itaf;++ita){
 				parta=ita->second;
-				ya=atanh(parta->p[3]/parta->p[0]);
-				pida=parta->resinfo->pid;
-				if(abs(pida)==211 || abs(pida)==321 || abs(pida)==2212){
+				pida=abs(parta->resinfo->pid);
+				if(pida==2212 || pida==211 || pida==321){
+					ya=parta->y;
 					for(itb=itb0;itb!=itbf;++itb){
 						partb=itb->second;
-						pidb=partb->resinfo->pid;
-						yb=atanh(partb->p[3]/partb->p[0]);
-						dely=fabs(ya-yb);
-						delymax=acceptance->GetDelYMax(pida,pidb);
-						if(dely<delymax){
-							IncrementNumer(parta,partb);
-							IncrementNumer(partb,parta);
+						pidb=abs(partb->resinfo->pid);
+						if(pidb==2212 || pidb==211 || pidb==321){
+							yb=partb->y;
+							dely=fabs(ya-yb);
+							delymax=acceptance->GetDelYMax(pida,pidb);
+							if(dely<delymax){
+								IncrementNumer(parta,partb);
+							}
 						}
 					}
 				}
@@ -376,7 +377,8 @@ void CBalanceArrays::ProcessBFPartMap(){
 	bfpartmap.clear();
 }
 
-void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from cascade
+void CBalanceArrays::ProcessPartMap(){
+  // makes denom + correlations from cascade
 	multimap<double,CMSUPart *> ppartmap;
 	double ya,yb,dely,delymax,MSU_BOLTZMANN_ETAMAX=boltzmann->ETAMAX;
 	CMSUPartMap::iterator it;
@@ -414,7 +416,8 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 		ita=ppartmap.begin();
 		do{
 			parta=ita->second;
-			if(abs(parta->resinfo->charge)==1){
+			pida=abs(parta->resinfo->pid);
+			if(pida==211 || pida==321 || pida==2212){
 				pida=parta->resinfo->pid;
 				IncrementDenom(parta);
 				ya=ita->first;
@@ -425,7 +428,8 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 				dely=0.0;
 				do{
 					partb=itb->second;
-					if(abs(partb->resinfo->charge)==1){
+					pidb=abs(partb->resinfo->pid);
+					if(pidb==211 || pidb==321 || pidb==2212){
 						yb=itb->first;
 						dely=yb-ya;
 						if(dely<0.0)
@@ -436,7 +440,6 @@ void CBalanceArrays::ProcessPartMap(){   // makes denom + correlations from casc
 						delymax=acceptance->GetDelYMax(pida,pidb);
 						if(dely<delymax){
 							IncrementNumer(parta,partb);
-							IncrementNumer(partb,parta);
 						}
 					}
 					++itb;
@@ -498,6 +501,7 @@ void CBalanceArrays::IncrementDenom(CMSUPart *part){
 		ya=BF_YMIN+randy->ran()*(BF_YMAX-BF_YMIN);
 		dely=ya-parta.y;
 		parta.BoostRap(dely);
+
 		acceptance->CalcAcceptance(accepta,effa,&parta);
 		if(accepta){
 			if(abs(pid)==211){
@@ -510,7 +514,7 @@ void CBalanceArrays::IncrementDenom(CMSUPart *part){
 			}
 		}
 		
-		acceptance->CalcAcceptanceNoID(accepta,effa,&parta);		
+		acceptance->CalcAcceptanceNoID(accepta,effa,&parta);	
 		if(accepta){	
 			if(iy>=0 && iy<10)
 				rapdist[iy]+=effa;
@@ -627,6 +631,23 @@ void CBalanceArrays::IncrementNumer(CMSUPart *parta,CMSUPart *partb){
 				if(phia>90.0-BF_PHICUT){
 					numer_allcharges_phi90->Increment(&partaa,&partbb,effaNoID,effbNoID);
 				}
+				phib=phib*180.0/PI;
+				if(phib<0.0){
+					phib=-phib;
+				}
+				if(phib>90.0){
+					phib=180-phib;
+				}
+				if(phib<BF_PHICUT){
+					numer_allcharges_phi0->Increment(&partbb,&partaa,effbNoID,effaNoID);
+				}
+				if(phib>45.0-BF_PHICUT && phib<45.0+BF_PHICUT){
+					numer_allcharges_phi45->Increment(&partbb,&partaa,effbNoID,effaNoID);
+				}
+				if(phia>90.0-BF_PHICUT){
+					numer_allcharges_phi90->Increment(&partaa,&partbb,effbNoID,effaNoID);
+				}
+
 				IncrementGammaP(&partaa,&partbb,effaNoID,effbNoID);
 			}			
 		}
