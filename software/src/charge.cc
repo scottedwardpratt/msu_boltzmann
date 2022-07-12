@@ -105,7 +105,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	char chargefile[10];
 	sprintf(chargefile,"%d",ichargefile);
 	//string filename=dirname+"/"+parmap.getS("CHARGESINFO_FILENAME","uds.dat");
-	string filename=dirname+"/"+"uds"+chargefile+".dat";
+	string filename=dirname+"/"+"uds"+chargefile+".txt";
 	Chyper *hyper;
 	int maxbid=0;
 	char dummy[120];
@@ -116,6 +116,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
 	double pitildexy,pitildeyy;
 	Csampler *sampler;
+	printf("opening %s\n",filename.c_str());
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
 	chargemap.clear();
