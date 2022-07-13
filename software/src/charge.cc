@@ -104,7 +104,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	string dirname="udsdata/"+qualifier;
 	char chargefile[10];
 	sprintf(chargefile,"%d",ichargefile);
-	//string filename=dirname+"/"+parmap.getS("CHARGESINFO_FILENAME","uds.dat");
 	string filename=dirname+"/"+"uds"+chargefile+".txt";
 	Chyper *hyper;
 	int maxbid=0;

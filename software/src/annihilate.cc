@@ -229,21 +229,22 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 		cancel=true;
 		return cancel;
 	}
-	
+
 	mti1=muTinfo[iitau][ix1][iy1];
 	mti2=muTinfo[iitau][ix2][iy2];
 	btype1=part1->resinfo->Btype;
 	btype2=part2->resinfo->Btype;
-	if(mti1->Tpi<0.05 || mti2->Tpi<0.05 || btype1==-1 || btype2==-1 || mti1->Tpi<0.05 || mti2->Tpi<0.05){
+	if(btype1==-1 || btype2==-1 || mti1->Tpi<0.05 || mti2->Tpi<0.05){
 		cancel=false;
 		//printf("annihilation proceeding, due to small T or funky btype\n");
+		//printf("Tpi=%g,%g,  btype=%d,%d\n",mti1->Tpi,mti2->Tpi,btype1,btype2);
 		return cancel;
 	}
 	if(!mti1->sufficientNB[btype1] || !mti2->sufficientNB[btype2] || !mti1->sufficientNpi || !mti2->sufficientNpi || !mti1->sufficientNK || !mti2->sufficientNK){
 		cancel=false;
 		//printf("annihilation proceeding because of insufficent Npi-NK-NB\n");
 		//printf("     Npi=%d,%d, NK=%d,%d, NB=%d,%d\n",mti1->Npi,mti2->Npi,mti1->NK,mti2->NK,
-			//mti1->NB[btype1],mti2->NB[btype2]);
+		//	mti1->NB[btype1],mti2->NB[btype2]);
 		return cancel;
 	}
 
@@ -312,6 +313,7 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 		cancel=false;
 		return cancel;
 	}
+
 	/*
 	printf("------------------------------------\n");
 	printf("annihilation canceled, tau=%g, reduction_factor=%g, betameson=%g, betaB=%g, EB=%g\n",tau,reduction_factor,betameson,betaB,EB);

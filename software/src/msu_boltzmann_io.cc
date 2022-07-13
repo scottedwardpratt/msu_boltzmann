@@ -476,6 +476,8 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 						mti->sufficientNB[btype]=false;
 					mti->TB[btype]=T;
 					mti->muB[btype]=mu;
+					if(fabs(mu)>0.0001)
+					printf("btype=%d, muB=%g\n",btype,mu);
 					mti->UxB[btype]=Ux;
 					mti->UyB[btype]=Uy;
 					mti->NB[btype]=0;

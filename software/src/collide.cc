@@ -106,8 +106,10 @@ int CMSU_Boltzmann::Collide_Annihilate(CMSUPart *part1,CMSUPart *part2,int &npro
 		bjtranslate=true;
 		part1->BjorkenTranslate();
 	}
+	printf("CHECK a\n");
 
 	if(CancelAnnihilation(part1,part2)){
+		printf("CHECK b\n");
 		if(bjtranslate)
 			part1->BjorkenUnTranslate();
 		nregenerate+=1;
@@ -116,6 +118,7 @@ int CMSU_Boltzmann::Collide_Annihilate(CMSUPart *part1,CMSUPart *part2,int &npro
 		ncancel_annihilate+=1;
 	}
 	else{
+		printf("CHECK c\n");
 		Annihilate(part1,part2,nproducts,product);
 		if(bjtranslate && fabs(product[0]->eta)>ETAMAX){
 			for(int iprod=0;iprod<nproducts;iprod++)
