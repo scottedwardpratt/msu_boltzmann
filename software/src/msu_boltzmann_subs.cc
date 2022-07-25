@@ -389,5 +389,4 @@ void CMSU_Boltzmann::CheckActions(){
 		}
 		++epos;
 	}
-	printf("actions checked\n");
 }
