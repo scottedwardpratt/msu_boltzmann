@@ -59,6 +59,8 @@ public:
 	vector<vector<vector<CMSU_BoltzmannCell *> > > cell;
 	vector<vector<vector<CMuTInfo *>>> muTinfo;
 	vector<double> annihilation_array;
+
+	int Npions_fromcharges,Nprotons_fromcharges;
 	
 	void ReadCharges(int ichargefile);
 	void GenHadronsFromCharges();

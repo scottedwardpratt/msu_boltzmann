@@ -15,6 +15,7 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 	CMSUPartMap::iterator itp;
 	itc1=chargemap.end(); itc1--;
 	maxbid=itc1->first;
+	Npions_fromcharges=Nprotons_fromcharges=0;
 
 	for(bid=0;bid<maxbid;bid+=2){
 		icpair_even=chargemap.equal_range(bid);
@@ -30,6 +31,9 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 			}
 		}
 	}
+
+	printf("------- Npions_fromcharges=%d, Nprotons_fromcharges=%d\n",Npions_fromcharges,Nprotons_fromcharges);
+
 	/*
 	vector<int> nprotons;
 	nprotons.resize(maxbid+1);
@@ -73,11 +77,18 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	CresInfoMap::iterator itr;
 	CresInfo *resinfo;
 	sampler=charge->hyper.sampler;
+
 	
 	Q(0)=charge->q[0];
 	Q(1)=charge->q[1];
 	Q(2)=charge->q[2];
 	Qprime=sampler->chiinv0*Q;
+
+/*
+	cout << sampler->chi0 << endl;
+	cout << sampler->chiinv0 << endl;
+	printf("Qprime=(%g,%g,%g)\n",Qprime[0],Qprime[1],Qprime[2]);
+	printf("------------\n"); */
 
 	for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
 		resinfo=itr->second;
@@ -85,6 +96,7 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){ 
 			q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
 			delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
+			//delN=sampler->density0i[ires];
 			bweight=charge->weight*delN/fabs(delN);
 			randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
 			while(randy->test_threshold(0.0)){
@@ -93,6 +105,10 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 				part=GetDeadPart();
 				rapidity=charge->eta+asinh(p[3]/sqrt(mass*mass+p[1]*p[1]+p[2]*p[2]));
 				part->InitBalance(resinfo->pid,charge->x,charge->y,charge->tau,charge->eta,p[1],p[2],mass,rapidity,bweight,balanceID);
+				if(abs(resinfo->pid)==211)
+					Npions_fromcharges+=1;
+				if(abs(resinfo->pid)==2212)
+					Nprotons_fromcharges+=1;
 				randy->increase_threshold();
 			}
 		}
