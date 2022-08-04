@@ -93,23 +93,25 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
 		resinfo=itr->second;
 		ires=resinfo->ires;
-		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){ 
-			q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
-			delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
-			//delN=sampler->density0i[ires];
-			bweight=charge->weight*delN/fabs(delN);
-			randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
-			while(randy->test_threshold(0.0)){
-				sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
-				mass=resinfo->mass;
-				part=GetDeadPart();
-				rapidity=charge->eta+asinh(p[3]/sqrt(mass*mass+p[1]*p[1]+p[2]*p[2]));
-				part->InitBalance(resinfo->pid,charge->x,charge->y,charge->tau,charge->eta,p[1],p[2],mass,rapidity,bweight,balanceID);
-				if(abs(resinfo->pid)==211)
-					Npions_fromcharges+=1;
-				if(abs(resinfo->pid)==2212)
-					Nprotons_fromcharges+=1;
-				randy->increase_threshold();
+		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
+			if(balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112){
+				q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
+				delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
+				//delN=sampler->density0i[ires];
+				bweight=charge->weight*delN/fabs(delN);
+				randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
+				while(randy->test_threshold(0.0)){
+					sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
+					mass=resinfo->mass;
+					part=GetDeadPart();
+					rapidity=charge->eta+asinh(p[3]/sqrt(mass*mass+p[1]*p[1]+p[2]*p[2]));
+					part->InitBalance(resinfo->pid,charge->x,charge->y,charge->tau,charge->eta,p[1],p[2],mass,rapidity,bweight,balanceID);
+					if(abs(resinfo->pid)==211)
+						Npions_fromcharges+=1;
+					if(abs(resinfo->pid)==2212)
+						Nprotons_fromcharges+=1;
+					randy->increase_threshold();
+				}
 			}
 		}
 	}
@@ -123,6 +125,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	string filename=dirname+"/"+"uds"+chargefile+".txt";
 	Chyper *hyper;
 	int maxbid=0;
+	double Tfo=parmap->getD("FREEZEOUT_TEMP",0.155);
 	char dummy[120];
 	vector<double> etaboost;
 	CHBChargeMap::iterator it;
@@ -141,7 +144,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		if(!feof(fptr)){
 			charge=new CHBCharge();
 			hyper=&(charge->hyper);
-			hyper->T0=parmap->getD("FREEZEOUT_TEMP",0.155);
+			hyper->T0=Tfo;
 			charge->q[0]=qu;
 			charge->q[1]=qd;
 			charge->q[2]=qs;
