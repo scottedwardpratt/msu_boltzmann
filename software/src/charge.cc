@@ -94,7 +94,8 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 		resinfo=itr->second;
 		ires=resinfo->ires;
 		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
-			if(balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112){
+			if(!balancearrays->PPBAR_ONLY 
+				|| (balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112)){
 				q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
 				delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
 				//delN=sampler->density0i[ires];
@@ -134,7 +135,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
 	double pitildexy,pitildeyy;
 	Csampler *sampler;
-	printf("opening %s\n",filename.c_str());
+	printf("opening uds file %s\n",filename.c_str());
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
 	chargemap.clear();
