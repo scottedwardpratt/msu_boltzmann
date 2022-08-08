@@ -12,11 +12,8 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 	CHBCharge *chargea,*chargeb;
 	pair<CHBChargeMap::iterator,CHBChargeMap::iterator> icpair_even,icpair_odd;
 	CHBChargeMap::iterator itc0,itc1;
-	CMSUPartMap::iterator itp;
 	itc1=chargemap.end(); itc1--;
 	maxbid=itc1->first;
-	Npions_fromcharges=Nprotons_fromcharges=0;
-
 	for(bid=0;bid<maxbid;bid+=2){
 		icpair_even=chargemap.equal_range(bid);
 		itc0=icpair_even.first;
@@ -31,8 +28,6 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 			}
 		}
 	}
-
-	printf("------- Npions_fromcharges=%d, Nprotons_fromcharges=%d\n",Npions_fromcharges,Nprotons_fromcharges);
 
 	/*
 	vector<int> nprotons;
@@ -84,21 +79,18 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	Q(2)=charge->q[2];
 	Qprime=sampler->chiinv0*Q;
 
-/*
-	cout << sampler->chi0 << endl;
-	cout << sampler->chiinv0 << endl;
-	printf("Qprime=(%g,%g,%g)\n",Qprime[0],Qprime[1],Qprime[2]);
-	printf("------------\n"); */
-
 	for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
 		resinfo=itr->second;
 		ires=resinfo->ires;
 		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
+			if(balancearrays->PPBAR_ONLY){
+				printf("should not be true\n");
+				exit(1);
+			}
 			if(!balancearrays->PPBAR_ONLY 
 				|| (balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112)){
 				q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
 				delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
-				//delN=sampler->density0i[ires];
 				bweight=charge->weight*delN/fabs(delN);
 				randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
 				while(randy->test_threshold(0.0)){
