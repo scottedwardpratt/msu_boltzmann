@@ -29,34 +29,6 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 		}
 	}
 
-	/*
-	vector<int> nprotons;
-	nprotons.resize(maxbid+1);
-	for(bid=0;bid<maxbid;bid+=1)
-		nprotons[bid]=0;
-
-	CMSUPartMap::iterator ppos;
-	CMSUPart *part;
-	CresInfo *resinfo;
-	int np=0,npi=0,nhad=0;
-	for(ppos=PartMap.begin();ppos!=PartMap.end();++ppos){
-		part=ppos->second;
-		resinfo=part->resinfo;
-		if(part->balanceID>=0){
-			nhad+=1;
-			if(abs(resinfo->pid)==2212)
-				np+=1;
-			if(abs(resinfo->pid)==211)
-				npi+=1;
-		}
-		if(abs(resinfo->pid)==2212 && part->balanceID>=0)
-			nprotons[part->balanceID]+=1;
-	}
-	printf("From BF map, nhad=%d, nprotons=%d, npions=%d, maxbid=%d\n",nhad,np,npi,maxbid);
-	for(bid=0;bid<maxbid;bid+=2){
-		if(nprotons[bid]*nprotons[bid+1]!=0)
-			printf("%d %d\n",nprotons[bid],nprotons[bid+1]);
-	}*/
 }
 
 void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
@@ -83,10 +55,6 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 		resinfo=itr->second;
 		ires=resinfo->ires;
 		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
-			if(balancearrays->PPBAR_ONLY){
-				printf("should not be true\n");
-				exit(1);
-			}
 			if(!balancearrays->PPBAR_ONLY 
 				|| (balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112)){
 				q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
