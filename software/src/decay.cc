@@ -26,11 +26,11 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 		width_daughters+=daughter[ibody]->resinfo->width;
 	}
 	if(mass_daughters<minmass_daughters || mass[0]<minmass_daughters){
-		snprintf(message,sizeof(message),"mothermass=%g, daughter masses=(",mass[0]);
+		snprintf(message,CLog::CHARLENGTH,"mothermass=%g, daughter masses=(",mass[0]);
 		for(int i=1;i<=nbodies;i++){
-			snprintf(message,sizeof(message),"%s%g, ",message,mass[i]);
+			snprintf(message,CLog::CHARLENGTH,"%s%g, ",message,mass[i]);
 		}
-		snprintf(message,sizeof(message),"%s)\n",message);
+		snprintf(message,CLog::CHARLENGTH,"%s)\n",message);
 		CLog::Info(message);
 		CLog::Fatal("masses out of whack in decay\n");
 	}
@@ -89,7 +89,7 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 		mcheck+=mass[ibody+1];
 	}
 	if(mcheck>mass[0]){
-		snprintf(message,sizeof(message),"CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
+		snprintf(message,CLog::CHARLENGTH,"CMSU_Boltzmann::GetMassesForDecay -- masses too big %g < %g\n",mass[0],mcheck);
 		CLog::Fatal(message);
 	}
 }

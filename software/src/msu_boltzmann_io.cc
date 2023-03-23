@@ -49,7 +49,7 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 	CMSUPartMap::iterator ppos;
 	
 	int nparts=PartMap.size();
-	snprintf(message,sizeof(message),"writing %d particles to %s\n",nparts,oscarfilename.c_str());
+	snprintf(message,CLog::CHARLENGTH,"writing %d particles to %s\n",nparts,oscarfilename.c_str());
 	CLog::Info(message);
 	if(oscarfile==NULL){
 		if(BINARY_RW)
@@ -93,7 +93,7 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 			fprintf(oscarfile,"%5d %5d %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %12.6e %g\n",
 		ipart,part->resinfo->pid,part->p[1],part->p[2],part->p[3],part->p[0],sqrt(part->msquared),part->r[1],part->r[2],part->r[3],part->r[0],part->weight);
 		if(ppos==PartMap.end()){
-			snprintf(message,sizeof(message),"ppos shouldn't be here\n");
+			snprintf(message,CLog::CHARLENGTH,"ppos shouldn't be here\n");
 			CLog::Fatal(message);
 		}
 		++ppos;
@@ -134,7 +134,7 @@ int CMSU_Boltzmann::ReadOSCAR(int ievent){
 	else{
 		fscanf(oscarfile,"%d %d %lf %lf",&ievent_read,&nparts_read,&bmin,&bmax);
 		if(!feof(oscarfile) && ievent_read!=ievent){
-			snprintf(message,sizeof(message),"trying to read wrong event, ievent=%d, ievent_read=%d\n",ievent,ievent_read);
+			snprintf(message,CLog::CHARLENGTH,"trying to read wrong event, ievent=%d, ievent_read=%d\n",ievent,ievent_read);
 			CLog::Fatal(message);
 		}
 	}
@@ -225,7 +225,7 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 		++ppos;
 		ipart+=1;
 	} while(ipart<nparts);
-	snprintf(message,sizeof(message),"WriteBalance -- sigma=%g\n",sqrt(sigma/double(nsigma)));
+	snprintf(message,CLog::CHARLENGTH,"WriteBalance -- sigma=%g\n",sqrt(sigma/double(nsigma)));
 	CLog::Info(message);
 	return dnchdy/(2.0*ETAMAX);
 }
@@ -250,7 +250,7 @@ int CMSU_Boltzmann::ReadBalanceParts(int ievent){
 	else{
 		fscanf(oscarfile,"%d %d %lf %lf",&ievent_read,&nparts_read,&bmin,&bmax);
 		if(!feof(oscarfile) && ievent_read!=ievent){
-			snprintf(message,sizeof(message),"trying to read wrong event, ievent=%d, ievent_read=%d\n",ievent,ievent_read);
+			snprintf(message,CLog::CHARLENGTH,"trying to read wrong event, ievent=%d, ievent_read=%d\n",ievent,ievent_read);
 			CLog::Fatal(message);
 		}
 	}
@@ -268,7 +268,7 @@ int CMSU_Boltzmann::ReadBalanceParts(int ievent){
 			balanceID=bpart.balanceID;
 		}
 		else{
-			snprintf(message,sizeof(message),"should only work for binary rw\n");
+			snprintf(message,CLog::CHARLENGTH,"should only work for binary rw\n");
 			CLog::Fatal(message);
 			//fscanf(oscarfile,"%d %d %lf %lf %lf",&ipart,&ID,&p[1],&p[2],&rapidity);
 		}
@@ -310,11 +310,11 @@ void CMSU_Boltzmann::WriteDens(){
 }
 
 void CMSU_Boltzmann::WriteMuTInfo(){
-	char dummy[500];
+	char dummy[CLog::CHARLENGTH];
 	string dirname;
 	int ix,iy,iitau,ntau,btype;
 	double tau_print;
-	char filename[50];
+	char filename[CLog::CHARLENGTH];
 	bool sufficientN;
 	FILE *fptr;
 	CMuTInfo *mti;
@@ -328,9 +328,9 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 				mti=muTinfo[iitau][ix][iy];
 			}
 		}
-		snprintf(filename,sizeof(filename),"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_print);
+		snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_print);
 		fptr=fopen(filename,"w");
-		fgets(dummy,500,fptr);
+		fgets(dummy,CLog::CHARLENGTH,fptr);
 		fprintf(fptr,"#  ix    iy     Npi       Tpi    Uxpi    Uypi     mupi     rho    epsilon   Uxpi_alt    Uyp_alt\n");
 		for(ix=0;ix<CMuTInfo::NXY;ix++){
 			for(iy=0;iy<CMuTInfo::NXY;iy++){
@@ -350,9 +350,9 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 		}
 		fclose(fptr);
 
-		snprintf(filename,sizeof(filename),"%s/mutinfo_K_tau%g.txt",dirname.c_str(),tau_print);
+		snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_K_tau%g.txt",dirname.c_str(),tau_print);
 		fptr=fopen(filename,"w");
-		fgets(dummy,500,fptr);
+		fgets(dummy,CLog::CHARLENGTH,fptr);
 		fprintf(fptr,"#  ix    iy     NK      TK    UxK    UyK      muK      rho      epsilon  UxK_alt   UyK_alt\n");
 		for(ix=0;ix<CMuTInfo::NXY;ix++){
 			for(iy=0;iy<CMuTInfo::NXY;iy++){
@@ -372,9 +372,9 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 		fclose(fptr);
 
 		for(btype=0;btype<8;btype++){
-			snprintf(filename,sizeof(filename),"%s/mutinfo_B%d_tau%g.txt",dirname.c_str(),btype,tau_print);
+			snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_B%d_tau%g.txt",dirname.c_str(),btype,tau_print);
 			fptr=fopen(filename,"w");
-			fgets(dummy,500,fptr);
+			fgets(dummy,CLog::CHARLENGTH,fptr);
 			fprintf(fptr,"#  ix    iy     NB      TB    UxB       UyB       muB       rhoB     epsilonB\n");
 			for(ix=0;ix<CMuTInfo::NXY;ix++){
 				for(iy=0;iy<CMuTInfo::NXY;iy++){
@@ -399,12 +399,12 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 }
 
 void CMSU_Boltzmann::ReadMuTInfo(){
-	char dummy[500];
+	char dummy[CLog::CHARLENGTH];
 	string dirname;
 	int ix,iy,iitau,N,NB,ntau,btype;
 	double T,Ux,Uy,Ux_alt,Uy_alt,mu,rho,epsilon;
 	double tau_read;
-	char filename[60];
+	char filename[CLog::CHARLENGTH];
 	bool READN=false;
 	FILE *fptr;
 	CMuTInfo *mti;
@@ -412,10 +412,10 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_INPUT_DIR","mutcalc_input");
 	for(iitau=0;iitau<ntau;iitau++){
 		tau_read=(iitau+1)*MUTCALC_DELTAU;
-		snprintf(filename,sizeof(filename),"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_read);
+		snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_read);
 		fptr=fopen(filename,"r");
 		if(fptr){
-			fgets(dummy,500,fptr);
+			fgets(dummy,CLog::CHARLENGTH,fptr);
 			fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 			while(!feof(fptr)){
 				mti=muTinfo[iitau][ix][iy];
@@ -437,10 +437,10 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 			fclose(fptr);
 		}
 
-		snprintf(filename,sizeof(filename),"%s/mutinfo_K_tau%g.txt",dirname.c_str(),tau_read);
+		snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_K_tau%g.txt",dirname.c_str(),tau_read);
 		fptr=fopen(filename,"r");
 		if(fptr){
-			fgets(dummy,500,fptr);
+			fgets(dummy,CLog::CHARLENGTH,fptr);
 			fscanf(fptr,"%d %d %d  %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&N,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 			while(!feof(fptr)){
 				mti=muTinfo[iitau][ix][iy];
@@ -463,10 +463,10 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 		}
 
 		for(btype=0;btype<8;btype++){
-			snprintf(filename,sizeof(filename),"%s/mutinfo_B%d_tau%g.txt",dirname.c_str(),btype,tau_read);
+			snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_B%d_tau%g.txt",dirname.c_str(),btype,tau_read);
 			fptr=fopen(filename,"r");
 			if(fptr){
-				fgets(dummy,500,fptr);
+				fgets(dummy,CLog::CHARLENGTH,fptr);
 				fscanf(fptr,"%d %d %d %lf %lf %lf %lf %lf %lf %lf %lf\n",&ix,&iy,&NB,&T,&Ux,&Uy,&mu,&rho,&epsilon,&Ux_alt,&Uy_alt);
 				while(!feof(fptr)){
 					mti=muTinfo[iitau][ix][iy];

@@ -57,24 +57,24 @@ CMuTInfo::CMuTInfo(double tau_set){
 }
 
 void CMuTInfo::Print(){
-	char message[500];
-	snprintf(message,sizeof(message),"-------- MuT Info, tau=%g ----------\n",tau);
+	char message[CLog::CHARLENGTH];
+	snprintf(message,CLog::CHARLENGTH,"-------- MuT Info, tau=%g ----------\n",tau);
 
-	snprintf(message,sizeof(message),"%sNpi=%d, Epi/N=%g, Pxpi/Npi=%g, Pypi/Npi=%g\n",
+	snprintf(message,CLog::CHARLENGTH,"%sNpi=%d, Epi/N=%g, Pxpi/Npi=%g, Pypi/Npi=%g\n",
 		message,Npi,Epi/Npi,Pxpi/Npi,Pypi/Npi);
-	snprintf(message,sizeof(message),"%sTpi=%g, mupi=%g\n",message,Tpi,mupi);
+	snprintf(message,CLog::CHARLENGTH,"%sTpi=%g, mupi=%g\n",message,Tpi,mupi);
 
-	snprintf(message,sizeof(message),"%sNK=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
+	snprintf(message,CLog::CHARLENGTH,"%sNK=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
 		message,NK,EK/NK,PxK/NK,PyK/NK);
-	snprintf(message,sizeof(message),"%sTK=%g, muK=%g\n",message,TK,muK);
+	snprintf(message,CLog::CHARLENGTH,"%sTK=%g, muK=%g\n",message,TK,muK);
 
 	CLog::Info(message);
 
 	for(int btype=0;btype<8;btype++){
-		snprintf(message,sizeof(message),"btype=%d\n",btype);
-		snprintf(message,sizeof(message),"%sNB=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
+		snprintf(message,CLog::CHARLENGTH,"btype=%d\n",btype);
+		snprintf(message,CLog::CHARLENGTH,"%sNB=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
 			message,NB[btype],EB[btype]/NB[btype],PxB[btype]/NB[btype],PyB[btype]/NB[btype]);
-		snprintf(message,sizeof(message),"%sTK=%g, muK=%g\n",message,TB[btype],muB[btype]);
+		snprintf(message,CLog::CHARLENGTH,"%sTK=%g, muK=%g\n",message,TB[btype],muB[btype]);
 		CLog::Info(message);
 	}
 }
@@ -82,7 +82,7 @@ void CMuTInfo::Print(){
 void CMuTInfo::CalcAllMuTU(){
 	double Txx,Tyy,Txy,T00,T0x,T0y,gamma,degen;
 	int btype;
-	char message[200];
+	char message[CLog::CHARLENGTH];
 
 	double volume=4.0*tau*2.0*boltzmann->ETAMAX*DXY*DXY*double(NETEVENTS);   // factor or 4 due to combining quadrants
 
@@ -141,10 +141,10 @@ void CMuTInfo::CalcAllMuTU(){
 			rhoB[btype]=double(NB[btype])/(gamma*volume);
 			GetMuT(massB[btype],degenB[btype],rhoB[btype],epsilonB[btype],TB[btype],muB[btype]);
 			if(TB[btype]!=TB[btype] || muB[btype]!=muB[btype]){
-				snprintf(message,sizeof(message),"btype=%d: Disaster, m=%g, rho=%g, degen=%d, epsilon=%g\n",
+				snprintf(message,CLog::CHARLENGTH,"btype=%d: Disaster, m=%g, rho=%g, degen=%d, epsilon=%g\n",
 					btype,massB[btype],rhoB[btype],degenB[btype],epsilonB[btype]);
 				CLog::Info(message);
-				snprintf(message,sizeof(message),"NB=%d, T00/rho=%g, epsilon/rho=%g, EB/NB=%g, TB=%g, muB=%g\n",NB[btype],T00/rhoB[btype],epsilonB[btype]/rhoB[btype],EB[btype]/NB[btype],TB[btype],muB[btype]);
+				snprintf(message,CLog::CHARLENGTH,"NB=%d, T00/rho=%g, epsilon/rho=%g, EB/NB=%g, TB=%g, muB=%g\n",NB[btype],T00/rhoB[btype],epsilonB[btype]/rhoB[btype],EB[btype]/NB[btype],TB[btype],muB[btype]);
 				CLog::Fatal(message);
 			}
 		}
@@ -202,10 +202,10 @@ double &Ux,double &Uy,double &epsilon){
 	}while(!success && ntry<200);
 	if(!success){
 		char message[300];
-		snprintf(message,sizeof(message),"Yikes, No Convergence in CMuTInfo::GetEpsilonU\n");
-		snprintf(message,sizeof(message),"%sQx=%g, Qy=%g, Ux=%g, Uy=%g\n",message,Qx,Qy,Ux,Uy);
-		snprintf(message,sizeof(message),"%sT00=%g, T0x=%g, T0y=%g\n",message,T00,T0x,T0y);
-		snprintf(message,sizeof(message),"%sTxx=%g, Tyy=%g, Txy=%g\n",message,Txx,Tyy,Txy);
+		snprintf(message,CLog::CHARLENGTH,"Yikes, No Convergence in CMuTInfo::GetEpsilonU\n");
+		snprintf(message,CLog::CHARLENGTH,"%sQx=%g, Qy=%g, Ux=%g, Uy=%g\n",message,Qx,Qy,Ux,Uy);
+		snprintf(message,CLog::CHARLENGTH,"%sT00=%g, T0x=%g, T0y=%g\n",message,T00,T0x,T0y);
+		snprintf(message,CLog::CHARLENGTH,"%sTxx=%g, Tyy=%g, Txy=%g\n",message,Txx,Tyy,Txy);
 		CLog::Fatal(message);
 	}
 	gamma=sqrt(1.0+Ux*Ux+Uy*Uy);
@@ -263,23 +263,23 @@ void CMuTInfo::TestEpsilonU(double T00,double T0x,double T0y,double Txx,double T
 			}
 		}
 	}
-	char message[400];
-	snprintf(message,sizeof(message),"epsilon=%g =? %g =? %g\n",epsilon,Ttilde[0][0],epsilontest);
+	char message[CLog::CHARLENGTH];
+	snprintf(message,CLog::CHARLENGTH,"epsilon=%g =? %g =? %g\n",epsilon,Ttilde[0][0],epsilontest);
 	CLog::Info(message);
-	snprintf(message,sizeof(message),"------ Ttilde --------\n");
+	snprintf(message,CLog::CHARLENGTH,"------ Ttilde --------\n");
 	for(alpha=0;alpha<4;alpha++){
 		for(beta=0;beta<4;beta++){
-			snprintf(message,sizeof(message),"%s%10.5f ",message,1000*Ttilde[alpha][beta]);
+			snprintf(message,CLog::CHARLENGTH,"%s%10.5f ",message,1000*Ttilde[alpha][beta]);
 		}
-		snprintf(message,sizeof(message),"%s\n",message);
+		snprintf(message,CLog::CHARLENGTH,"%s\n",message);
 	}
 	CLog::Info(message);
-	snprintf(message,sizeof(message),"------ Gtest --------\n");
+	snprintf(message,CLog::CHARLENGTH,"------ Gtest --------\n");
 	for(alpha=0;alpha<4;alpha++){
 		for(beta=0;beta<4;beta++){
-			snprintf(message,sizeof(message),"%s%10.5f ",message,Gtest[alpha][beta]);
+			snprintf(message,CLog::CHARLENGTH,"%s%10.5f ",message,Gtest[alpha][beta]);
 		}
-		snprintf(message,sizeof(message),"%s\n",message);
+		snprintf(message,CLog::CHARLENGTH,"%s\n",message);
 	}
 	CLog::Info(message);
 }
@@ -287,7 +287,7 @@ void CMuTInfo::TestEpsilonU(double T00,double T0x,double T0y,double Txx,double T
 void CMuTInfo::GetMuT(double mass,int degen,double rho_target,double epsilon_target,double &T,double &mu){
 	double E,dEdT,ETarget,epsilon0,dedT,P,rho0,dT;
 	int ntry=0;
-	char message[100];
+	char message[CLog::CHARLENGTH];
 	ETarget=epsilon_target/rho_target;
 	if(ETarget<mass+0.01){
 		T=0.005;
@@ -311,7 +311,7 @@ void CMuTInfo::GetMuT(double mass,int degen,double rho_target,double epsilon_tar
 				T+=dT;
 			}while(fabs(dT)>1.0E-5 && ntry<30);
 			if(ntry==50 || T!=T){
-				snprintf(message,sizeof(message),"CMuTInfo::GetMuT did not converge!!!, T=%g, dT=%g\n",
+				snprintf(message,CLog::CHARLENGTH,"CMuTInfo::GetMuT did not converge!!!, T=%g, dT=%g\n",
 					T,dT);
 				CLog::Info("T="+to_string(T)+", ETarget="+to_string(ETarget)+", mass="+to_string(mass)+"\n");
 				CLog::Info("rho_target="+to_string(rho_target)+", epsilon_target="+to_string(epsilon_target)+"\n");
@@ -322,7 +322,7 @@ void CMuTInfo::GetMuT(double mass,int degen,double rho_target,double epsilon_tar
 		mu=log(rho_target/(rho0*degen));
 	}
 	if(T!=T || mu!=mu){
-		snprintf(message,sizeof(message), "disaster, T=%g, mu=%g, rho_target=%g, epsilon_target=%g, e/rho=%g\n",T,mu,rho_target,epsilon_target,epsilon_target/rho_target);
+		snprintf(message,CLog::CHARLENGTH, "disaster, T=%g, mu=%g, rho_target=%g, epsilon_target=%g, e/rho=%g\n",T,mu,rho_target,epsilon_target,epsilon_target/rho_target);
 		CLog::Fatal(message);
 	}
 }

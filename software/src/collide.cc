@@ -65,7 +65,7 @@ int CMSU_Boltzmann::Collide_Merge(CMSUPart *part1,CMSUPart *part2,double sigma_m
 	sigmatot=dsigma_merge[0];
 	while(r>sigmatot/sigma_merge && merge!=NULL){
 		if(merge==NULL || sigmatot>sigma_merge){
-			snprintf(message,sizeof(message),"In CMSU_Boltzmann::Collide_Merge, merge is NULL?? or sigmatot/sigma_merge=%g is >1, sigma_merge=%g, sigmatot=%g\n",sigmatot/sigma_merge,sigma_merge,sigmatot);
+			snprintf(message,CLog::CHARLENGTH,"In CMSU_Boltzmann::Collide_Merge, merge is NULL?? or sigmatot/sigma_merge=%g is >1, sigma_merge=%g, sigmatot=%g\n",sigmatot/sigma_merge,sigma_merge,sigmatot);
 			part1->Print();
 			part2->Print();
 			CLog::Fatal(message);
@@ -129,7 +129,7 @@ int CMSU_Boltzmann::Collide_Annihilate(CMSUPart *part1,CMSUPart *part2,int &npro
 
 // warning Inelastic Scattering NEEDS to be tested
 int CMSU_Boltzmann::Collide_Inelastic(CMSUPart *part1,CMSUPart *part2,int &nproducts,array<CMSUPart*,5> &product){
-	snprintf(message,sizeof(message),"INELASTIC IS UNTESTED!!!!\n");
+	snprintf(message,CLog::CHARLENGTH,"INELASTIC IS UNTESTED!!!!\n");
 	CLog::Fatal(message);
 	const int NWMAX=5000;
 	const double g[4]={1,-1,-1,-1};
@@ -219,7 +219,7 @@ int CMSU_Boltzmann::Collide_Inelastic(CMSUPart *part1,CMSUPart *part2,int &nprod
 		netq-=part3->resinfo->charge+part4->resinfo->charge;
 		nets-=part3->resinfo->strange+part4->resinfo->strange;
 		if(netb!=0 || netq!=0 || nets!=0){
-			snprintf(message,sizeof(message),"WARNING: charge not conserved in inel collision, netb=%d, netq=%d, nets=%d\n",netb,netq,nets);
+			snprintf(message,CLog::CHARLENGTH,"WARNING: charge not conserved in inel collision, netb=%d, netq=%d, nets=%d\n",netb,netq,nets);
 			CLog::Info(message);
 		}
 		nproducts=2;

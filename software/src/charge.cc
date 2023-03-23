@@ -81,8 +81,8 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 
 void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	string dirname="udsdata/"+qualifier;
-	char chargefile[10];
-	snprintf(chargefile,sizeof(chargefile),"%d",ichargefile);
+	char chargefile[20];
+	snprintf(chargefile,20,"%d",ichargefile);
 	string filename=dirname+"/"+"uds"+chargefile+".txt";
 	Chyper *hyper;
 	int maxbid=0;

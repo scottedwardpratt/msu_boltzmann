@@ -47,7 +47,7 @@ void CBalanceArrays::InitArrays(){
 		acceptance=new CAcceptance_ALICE_Perfect(parmap);
 	}
 	else{
-		snprintf(message,sizeof(message),"Define BF_ACCEPTANCE in parameters.txt\n");
+		snprintf(message,CLog::CHARLENGTH,"Define BF_ACCEPTANCE in parameters.txt\n");
 		CLog::Fatal(message);
 	}
 	CBFNumer::acceptance=acceptance;
@@ -103,10 +103,10 @@ void CBalanceArrays::PrintBFNumer(){
 }
 
 void CBalanceArrays::PrintBFDenom(){
-	snprintf(message,sizeof(message),"pi+,pi-: nplus=%g, minus=%g\n",denom_pi->Nplus,denom_pi->Nminus);
-	snprintf(message,sizeof(message),"%sK+,K-  : nplus=%g, minus=%g\n",message,denom_K->Nplus,denom_K->Nminus);
-	snprintf(message,sizeof(message),"%sp,pbar : nplus=%g, minus=%g\n",message,denom_p->Nplus,denom_p->Nminus);
-	snprintf(message,sizeof(message),"%sN+,N-  : nplus=%g, minus=%g\n",message,denom_allcharges->Nplus,denom_allcharges->Nminus);
+	snprintf(message,CLog::CHARLENGTH,"pi+,pi-: nplus=%g, minus=%g\n",denom_pi->Nplus,denom_pi->Nminus);
+	snprintf(message,CLog::CHARLENGTH,"%sK+,K-  : nplus=%g, minus=%g\n",message,denom_K->Nplus,denom_K->Nminus);
+	snprintf(message,CLog::CHARLENGTH,"%sp,pbar : nplus=%g, minus=%g\n",message,denom_p->Nplus,denom_p->Nminus);
+	snprintf(message,CLog::CHARLENGTH,"%sN+,N-  : nplus=%g, minus=%g\n",message,denom_allcharges->Nplus,denom_allcharges->Nminus);
 	CLog::Info(message);
 }
 
@@ -181,7 +181,7 @@ void CBalanceArrays::ConstructBFs(){
 		ConstructBF(numer_allcharges_phi45,denom_allcharges_phi45,bf_allcharges_phi45,1.0,NoQ);
 		ConstructBF(numer_allcharges_phi90,denom_allcharges_phi90,bf_allcharges_phi90,1.0,NoQ);
 	}
-	snprintf(message,sizeof(message),"v2=%g, v2prime=%g\n",v2/v2norm,v2prime/v2primenorm);
+	snprintf(message,CLog::CHARLENGTH,"v2=%g, v2prime=%g\n",v2/v2norm,v2prime/v2primenorm);
 	CLog::Info(message);
 }
 
@@ -243,7 +243,7 @@ void CBalanceArrays::ConstructBF(CBFNumer *numer,CBFDenom *denom,CBFNumer *bf,do
 			bf->Cyphi[iy][iphi]=numer->Cyphi[iy][iphi];
 		}
 	}
-	snprintf(message,sizeof(message),"%7s: normalization=%g, npairs=%lld\n",bf->name.c_str(),norm,bf->npairs);
+	snprintf(message,CLog::CHARLENGTH,"%7s: normalization=%g, npairs=%lld\n",bf->name.c_str(),norm,bf->npairs);
 	CLog::Info(message);
 }
 
@@ -306,7 +306,7 @@ void CBalanceArrays::WriteGammaP(){
 		gp=gammap/(Ntot*0.5*mult);
 	}
 	fprintf(fptr,"%g %g %g %g\n",gp,2.0*gammap/gammapnorm,normtest,mult);
-	snprintf(message,sizeof(message),"gammap=%g =? %g, gammapnorm=%g, normtest=%g, mult=%g, NSAMPLE_HYDRO2UDS=%g, NSAMPLE_UDS2BAL=%d, NEVENTS=%d, Ntot=%g\n",
+	snprintf(message,CLog::CHARLENGTH,"gammap=%g =? %g, gammapnorm=%g, normtest=%g, mult=%g, NSAMPLE_HYDRO2UDS=%g, NSAMPLE_UDS2BAL=%d, NEVENTS=%d, Ntot=%g\n",
 	gp,2.0*gammap/gammapnorm,gammapnorm,normtest,mult,NSAMPLE_HYDRO2UDS,NSAMPLE_UDS2BAL,NEVENTS,Ntot);
 	CLog::Info(message);
 	fclose(fptr);
@@ -342,7 +342,7 @@ void CBalanceArrays::ProcessBFPartMap(){
 		if(part->balanceID>=0)
 			bfpartmap.insert(CMSUPartPair(part->balanceID,part));
 	}
-	snprintf(message,sizeof(message),"maxbid=%d, bfpartmap.size=%d\n",maxbid,int(bfpartmap.size()));
+	snprintf(message,CLog::CHARLENGTH,"maxbid=%d, bfpartmap.size=%d\n",maxbid,int(bfpartmap.size()));
 	CLog::Info(message);
 	
 	for(balanceID=0;balanceID<maxbid;balanceID+=2){
@@ -386,7 +386,7 @@ void CBalanceArrays::ProcessPartMap(){
 	int pida,pidb;
 	CMSUPart *parta,*partb;
 	pair<CMSUPartMap::iterator,CMSUPartMap::iterator> itpair;
-	snprintf(message,sizeof(message),"processing %d parts in PartMap\n",int(boltzmann->PartMap.size()));
+	snprintf(message,CLog::CHARLENGTH,"processing %d parts in PartMap\n",int(boltzmann->PartMap.size()));
 	CLog::Info(message);
 	NEVENTS+=1;
 	if(FROM_UDS){
@@ -672,7 +672,7 @@ void CBalanceArrays::SetQualifier(string qualifier_set){
 		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_alice";
 	}
 	else{
-		snprintf(message,sizeof(message),"acceptance_description not recognized in CBalanceArrays::SetQualifier()\n");
+		snprintf(message,CLog::CHARLENGTH,"acceptance_description not recognized in CBalanceArrays::SetQualifier()\n");
 		CLog::Fatal(message);
 	}
 	command="mkdir -p "+bf_results_dirname;

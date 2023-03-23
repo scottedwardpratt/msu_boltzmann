@@ -13,11 +13,11 @@ void CMSU_Boltzmann::WriteAnnihilationData(){
 		double total=0.0;
 		int iitau,imax=lrint(TAUCOLLMAX);
 		for(iitau=0;iitau<imax;iitau++){
-			snprintf(message,sizeof(message),"%6.2f %g\n",(iitau+0.5),annihilation_array[iitau]);
+			snprintf(message,CLog::CHARLENGTH,"%6.2f %g\n",(iitau+0.5),annihilation_array[iitau]);
 			CLog::Info(message);
 			total+=annihilation_array[iitau];
 		}
-		snprintf(message,sizeof(message),"%g total annihilations, nbaryons=%d, annihilation fraction=%g\n",total,nbaryons,2.0*total/double(nbaryons));
+		snprintf(message,CLog::CHARLENGTH,"%g total annihilations, nbaryons=%d, annihilation fraction=%g\n",total,nbaryons,2.0*total/double(nbaryons));
 		CLog::Info(message);
 	}
 }
@@ -60,10 +60,10 @@ void CMSU_Boltzmann::KillAllParts(){
 	while(ppos!=PartMap.end()){
 		part=ppos->second;
 		if(part->currentmap!=&PartMap){
-			snprintf(message,sizeof(message),"Fatal: KillAllParts:  currentpart not listed as PartMap\n");
+			snprintf(message,CLog::CHARLENGTH,"Fatal: KillAllParts:  currentpart not listed as PartMap\n");
 			CLog::Info(message);
 			part->Print();
-			snprintf(message,sizeof(message),"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
+			snprintf(message,CLog::CHARLENGTH,"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
 			part->currentmap=&PartMap;
 			CLog::Fatal(message);
 			//Misc::Pause();
@@ -76,10 +76,10 @@ void CMSU_Boltzmann::KillAllParts(){
 	for(ppos=DeadPartMap.begin();ppos!=DeadPartMap.end();++ppos){
 		part=ppos->second;
 		if(part->currentmap!=&DeadPartMap){
-			snprintf(message,sizeof(message),"particle in dead part map has wrong current map\n");
+			snprintf(message,CLog::CHARLENGTH,"particle in dead part map has wrong current map\n");
 			CLog::Info(message);
 			part->Print();
-			snprintf(message,sizeof(message),"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
+			snprintf(message,CLog::CHARLENGTH,"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
 			CLog::Fatal(message);
 		}
 	}
@@ -108,7 +108,7 @@ void CMSU_Boltzmann::KillAllParts(){
 void CMSU_Boltzmann::PrintActionMap(CActionMap *actionmap){
 	CActionMap::iterator epos;
 	CAction *action;
-	snprintf(message,sizeof(message),"_________________ ACTIONMAP %d actions _________________________\n",int(actionmap->size()));
+	snprintf(message,CLog::CHARLENGTH,"_________________ ACTIONMAP %d actions _________________________\n",int(actionmap->size()));
 	CLog::Info(message);
 	for(epos=actionmap->begin();epos!=actionmap->end();++epos){
 		action=epos->second;
@@ -142,15 +142,15 @@ void CMSU_Boltzmann::FindAllCollisions(){
 void CMSU_Boltzmann::PrintPartList(){
 	CMSUPartMap::iterator ppos2,ppos1=PartMap.begin();
 	while(ppos1!=PartMap.end()){
-		snprintf(message,sizeof(message),"%d ",ppos1->second->listid);
+		snprintf(message,CLog::CHARLENGTH,"%d ",ppos1->second->listid);
 		ppos2=ppos1; ++ppos2;
 		if(ppos2!=PartMap.end()){
 			if(ppos1->second->actionmother!=ppos2->second->actionmother)
-				snprintf(message,sizeof(message),"%s| ",message);
+				snprintf(message,CLog::CHARLENGTH,"%s| ",message);
 		}
 		++ppos1;
 	}
-	snprintf(message,sizeof(message),"%s\n",message);
+	snprintf(message,CLog::CHARLENGTH,"%s\n",message);
 	CLog::Info(message);
 }
 
@@ -158,13 +158,13 @@ void CMSU_Boltzmann::ListFutureCollisions(){
 	CActionMap::iterator epos=ActionMap.begin();
 	CAction *action;
 	CMSUPartMap::iterator p1,p2;
-	snprintf(message,sizeof(message),"------------------- LIST OF FUTURE COLLISIONS ---------------------\n");
+	snprintf(message,CLog::CHARLENGTH,"------------------- LIST OF FUTURE COLLISIONS ---------------------\n");
 	while(epos!=ActionMap.end()){
 		action=epos->second;
 		if(action->type==2){
 			p1=action->partmap.begin();
 			p2=p1; ++p2;
-			snprintf(message,sizeof(message),"%s%d  %d  will collide at %g\n",message,p1->second->listid,p2->second->listid,double(action->tau));
+			snprintf(message,CLog::CHARLENGTH,"%s%d  %d  will collide at %g\n",message,p1->second->listid,p2->second->listid,double(action->tau));
 		}
 		epos++;
 	}
@@ -254,7 +254,7 @@ CAction* CMSU_Boltzmann::GetDeadAction(){
 			ActionMap.size(), DeadActionMap.size(),tau);
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
 			new CAction(-1);
-		snprintf(message,sizeof(message),"created %d new actions, Action Map Size=%lu\n",DELNACTIONSTOT*NSAMPLE,ActionMap.size());
+		snprintf(message,CLog::CHARLENGTH,"created %d new actions, Action Map Size=%lu\n",DELNACTIONSTOT*NSAMPLE,ActionMap.size());
 		CLog::Info(message);
 	}
 	return DeadActionMap.begin()->second;
@@ -267,7 +267,7 @@ void CMSU_Boltzmann::CheckPartMap(){
 		part=iter->second;
 		if(part->currentmap!=&PartMap){
 			part->Print();
-			snprintf(message,sizeof(message),"----- FAILED CheckPartMap-----\n");
+			snprintf(message,CLog::CHARLENGTH,"----- FAILED CheckPartMap-----\n");
 			CLog::Fatal(message);
 		}
 		if(part->msquared!=part->msquared){
@@ -357,11 +357,11 @@ void CMSU_Boltzmann::IncrementHadronCount(){
 }
 
 void CMSU_Boltzmann::WriteHadronCount(){
-	char message[200];
+	char message[CLog::CHARLENGTH];
 	double norm=1.0/double(nevents*NSAMPLE);
 	long long int NB=hadroncount.NN+hadroncount.NLambda+hadroncount.NSigma+hadroncount.NXi+hadroncount.NOmega;
 	long long int Nhyper=NB-hadroncount.NN;
-	snprintf(message,sizeof(message),"Npi     %g\nNK      %g\nNN      %g\nNLambda %g\nNsigma  %g\nNXi     %g\nNOmega  %g\nNB      %g\nNhyper  %g\n",norm*hadroncount.Npi,norm*hadroncount.NK,norm*hadroncount.NN,
+	snprintf(message,CLog::CHARLENGTH,"Npi     %g\nNK      %g\nNN      %g\nNLambda %g\nNsigma  %g\nNXi     %g\nNOmega  %g\nNB      %g\nNhyper  %g\n",norm*hadroncount.Npi,norm*hadroncount.NK,norm*hadroncount.NN,
 		norm*hadroncount.NLambda,norm*hadroncount.NSigma,norm*hadroncount.NXi,
 		norm*hadroncount.NOmega,norm*NB,norm*Nhyper);
 	CLog::Info(message);

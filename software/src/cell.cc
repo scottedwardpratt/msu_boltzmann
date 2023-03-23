@@ -11,9 +11,9 @@ CMSU_BoltzmannCell::CMSU_BoltzmannCell(double xminset,double xmaxset,double ymin
 }
 
 void CMSU_BoltzmannCell::Print(){
-	snprintf(message,sizeof(message),"___ CELL INFO _____\n");
-	snprintf(message,sizeof(message),"%six=%d, iy=%d, ieta=%d, xmin=%g, xmax=%g, ymin=%g, ymax=%g, etamin=%g, etamax=%g\n",message, ix,iy,ieta,xmin,xmax,ymin,ymax,etamin,etamax);
-	snprintf(message,sizeof(message),"%s%d parts in cell\n",message,int(partmap.size()));
-	snprintf(message,sizeof(message),"%s---------------------\n",message);
+	snprintf(message,CLog::CHARLENGTH,"___ CELL INFO _____\n");
+	snprintf(message,CLog::CHARLENGTH,"%six=%d, iy=%d, ieta=%d, xmin=%g, xmax=%g, ymin=%g, ymax=%g, etamin=%g, etamax=%g\n",message, ix,iy,ieta,xmin,xmax,ymin,ymax,etamin,etamax);
+	snprintf(message,CLog::CHARLENGTH,"%s%d parts in cell\n",message,int(partmap.size()));
+	snprintf(message,CLog::CHARLENGTH,"%s---------------------\n",message);
 	CLog::Info(message);
 }

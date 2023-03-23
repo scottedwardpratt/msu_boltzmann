@@ -12,49 +12,6 @@ CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
 	PTMAX=1.600;
 	parmap=parmapin;
 	CENTRALITY=parmap->getI("STARCENTRALITY",0);   // CENTRALITY=0 is most central
-	//  cen=0 0-5%	
-	//  cen=1 5-10%	
-	//  cen=2 10-20%	
-	//  cen=3 20-30%	
-	//  cen=4 30-40%	
-	//  cen=5 40-50%	
-	//  cen=6 50-60%	
-	//  cen=7 60-70%	
-	//  cen=8 70-80%
-	
-	/*
-	// initialize arrays for ID of non-identified (from Manuel Calderon)
-	for (size_t i = 0; i<20; ++i)
-	for (size_t j = 0; j<30; ++j) {
-		ManuelData[i][j] = 0;
-	}
-
-	// read actual data from file
-	char filename[100],identstring[100];
-// Hi : 0 - 20%   (i.e. central events)
-// Me : 20 - 50%
-// Lo : 50 - 80%  (i.e. peripheral events)
-	//Unfortunately, I only have the Hi CENTRALITY arrays from Manuel
-	if(CENTRALITY==0 || CENTRALITY==1 || CENTRALITY==2)
-		snprintf(identstring,sizeof(identstring),"PiMinusHi");
-	else if(CENTRALITY==3 || CENTRALITY==4 || CENTRALITY==5)
-		snprintf(identstring,sizeof(identstring),"PiMinusHi");
-	else
-		snprintf(identstring,sizeof(identstring),"PiMinusHi");
-  s,printf(filename,sizeof(filename),"../acceptancedata/manuel/full_field/efficiency%s.txt",identstring);
-	ifstream ifs(filename);
-	//assert(ifs);
-	int eta_index, pt_index;
-	double value, error;
-	while (!ifs.eof()) {
-		ifs >> eta_index >> pt_index >> value >> error;
-		ManuelData[eta_index][pt_index] = value;
-
-		// I'm not using an array for the error, but if needed, it can be
-		// treated just like the ManuelData array.
-	}
-	ifs.close();
-	*/
     
 }
 
@@ -68,7 +25,7 @@ void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *
 	else if(pid==2212) starpid=4;
 	else{
 		if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
-			snprintf(message,sizeof(message),"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
+			snprintf(message,CLog::CHARLENGTH,"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
 			CLog::Fatal(message);
 		}
 		accept=false;
@@ -94,7 +51,7 @@ void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPa
 	double dca[4];
 	int pid=part->resinfo->pid;
 	if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
-		snprintf(message,sizeof(message),"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
+		snprintf(message,CLog::CHARLENGTH,"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
 		CLog::Fatal(message);
 	}
 	part->CalcDCA(dca);

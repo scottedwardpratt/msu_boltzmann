@@ -28,7 +28,7 @@ void CAction::Perform(){
 		}
 	}
 	if(tau+1.0E-4<boltzmann->tau){
-		snprintf(message,sizeof(message),"FATAL:: action earlier than tau!!!!, boltzmann->tau=%15.10e, action tau=%15.10e\n",boltzmann->tau,tau);
+		snprintf(message,CLog::CHARLENGTH,"FATAL:: action earlier than tau!!!!, boltzmann->tau=%15.10e, action tau=%15.10e\n",boltzmann->tau,tau);
 		CLog::Fatal(message);
 	}
 	if(type==6){
@@ -50,7 +50,7 @@ void CAction::Perform(){
 		PerformMuTCalcUpdateNPE();
 	}
 	else{
-		snprintf(message,sizeof(message),"FATAL: action type = %d is unknown, exiting\n",type);
+		snprintf(message,CLog::CHARLENGTH,"FATAL: action type = %d is unknown, exiting\n",type);
 		CLog::Fatal(message);
 	}
 	Kill();
