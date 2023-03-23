@@ -29,7 +29,7 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 		++epos;
 	}
 	if(epos->second!=this){
-		sprintf(message,"CAction::GetPos cannot find this action, key=%g\n",key);
+		snprintf(message,sizeof(message),"CAction::GetPos cannot find this action, key=%g\n",key);
 		CLog::Info(message);
 		return emap->end();
 	}
@@ -40,8 +40,8 @@ CActionMap::iterator CAction::GetPos(CActionMap *emap){
 void CAction::MoveToActionMap(){
 	CActionMap::iterator epos,eepos;
 	if(currentmap==&(boltzmann->ActionMap)){
-		sprintf(message,"trying to move action to ActionMap even though action is already in ActionMap\n");
-		sprintf(message,"%sWrong current map\n",message);
+		snprintf(message,sizeof(message),"trying to move action to ActionMap even though action is already in ActionMap\n");
+		snprintf(message,sizeof(message),"%sWrong current map\n",message);
 		CLog::Fatal(message);
 	}
 	if(currentmap==&(boltzmann->DeadActionMap)){
@@ -51,8 +51,8 @@ void CAction::MoveToActionMap(){
 			//partmap.clear();
 		}
 		else{
-			sprintf(message,"cannot find epos for action in DeadActionMap!!!\n");
-			sprintf(message,"%sDeadActionMap.size=%d\n",message,int(boltzmann->DeadActionMap.size()));
+			snprintf(message,sizeof(message),"cannot find epos for action in DeadActionMap!!!\n");
+			snprintf(message,sizeof(message),"%sDeadActionMap.size=%d\n",message,int(boltzmann->DeadActionMap.size()));
 			CLog::Fatal(message);
 		}
 		key=tau;
@@ -125,7 +125,7 @@ void CAction::AddPart(CMSUPart *part){
 }
 
 void CAction::Print(){
-	sprintf(message,"___________ type=%d, tau=%g, nparts=%d ___________\n",type,tau,int(partmap.size()));
+	snprintf(message,sizeof(message),"___________ type=%d, tau=%g, nparts=%d ___________\n",type,tau,int(partmap.size()));
 	CLog::Info(message);
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
@@ -133,7 +133,7 @@ void CAction::Print(){
 		part=ppos->second;
 		part->Print();
 	}
-	sprintf(message,"_________________________________________________\n");
+	snprintf(message,sizeof(message),"_________________________________________________\n");
 	CLog::Info(message);
 }
 
@@ -146,8 +146,8 @@ void CAction::CheckPartList(){
 		ppos2=part->GetPos(&(boltzmann->PartMap));
 		if(ppos2==boltzmann->PartMap.end()){
 			part->Print();
-			sprintf(message,"%s____________ CAction::CheckPartList FATAL, action type=%d ________________\n",message,type);
-			sprintf(message,"%siterator not in expected pmap\n",message);
+			snprintf(message,sizeof(message),"%s____________ CAction::CheckPartList FATAL, action type=%d ________________\n",message,type);
+			snprintf(message,sizeof(message),"%siterator not in expected pmap\n",message);
 			CLog::Fatal(message);
 		}
 		++ppos;
@@ -158,7 +158,7 @@ void CAction::PerformDensCalc(){
 	int itau;
 	itau=lrint(floor((tau-0.001)/boltzmann->DENSWRITE_DELTAU));
 	if(itau>=boltzmann->DENSWRITE_NTAU){
-		sprintf(message,"trying to perform CAction::DensCalc() for itau>=DENSWRITE_NTAU, =%d",itau);
+		snprintf(message,sizeof(message),"trying to perform CAction::DensCalc() for itau>=DENSWRITE_NTAU, =%d",itau);
 		CLog::Fatal(message);
 	}
 	CMSU_BoltzmannCell *cell;

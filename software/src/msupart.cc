@@ -101,7 +101,7 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 	resinfo=boltzmann->reslist->GetResInfoPtr(IDset);
 	ID=resinfo->pid;
 	if(ID!=IDset){
-		sprintf(message,"ID mismatch, ID=%d, resinfo->pidID=%d\n",IDset,ID);
+		snprintf(message,sizeof(message),"ID mismatch, ID=%d, resinfo->pidID=%d\n",IDset,ID);
 		CLog::Info(message);
 	}
 	p[1]=pxset; p[2]=pyset; msquared=mset*mset; y=rapidityset;
@@ -118,20 +118,20 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 	nscatt=0;
 	bweight=bweightset;
 	if(fabs(eta)>boltzmann->ETAMAX && boltzmann->BJORKEN){
-		sprintf(message,"in part->init, eta out of bounds, =%g\n",eta);
+		snprintf(message,sizeof(message),"in part->init, eta out of bounds, =%g\n",eta);
 		CLog::Info(message);
-		sprintf(message,"boltzmann->ETAMAX=%g\n",boltzmann->ETAMAX);
+		snprintf(message,sizeof(message),"boltzmann->ETAMAX=%g\n",boltzmann->ETAMAX);
 		CLog::Fatal(message);
 	}
 	
 	if(tau0<0.0){
 		Print();
-		sprintf(message,"FATAL: tau0<0, tau0^2=%g\n",tau0);
+		snprintf(message,sizeof(message),"FATAL: tau0<0, tau0^2=%g\n",tau0);
 		CLog::Fatal(message);
 	}
 	if(boltzmann->BJORKEN && fabs(eta)>boltzmann->ETAMAX){
 		CyclicReset();
-		sprintf(message,"performed cyclic reset in CMSUPart::Init()\n");
+		snprintf(message,sizeof(message),"performed cyclic reset in CMSUPart::Init()\n");
 		CLog::Fatal(message);
 	}
 	active=false;
@@ -143,7 +143,7 @@ void CMSUPart::Init(int IDset,double rxset,double ryset,double tauset,double eta
 void CMSUPart::CheckRapidity(){
 	if(fabs(y-atanh(p[3]/p[0]))>0.001){
 		Print();
-		sprintf(message,"rapidity screwed up!\n");
+		snprintf(message,sizeof(message),"rapidity screwed up!\n");
 		CLog::Fatal(message);
 	}
 }
@@ -166,30 +166,30 @@ void CMSUPart::CyclicReset(){
 }
 
 void CMSUPart::Print(){
-	sprintf(message,"________________ PART INFO FOR key=%d _____________________________\n",key);
+	snprintf(message,sizeof(message),"________________ PART INFO FOR key=%d _____________________________\n",key);
 	CLog::Info(message);
-	sprintf(message,"Minv^2=%g, ID=%d  balanceID=%d -----  %s ------\n",p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],resinfo->pid,balanceID,resinfo->name.c_str());
+	snprintf(message,sizeof(message),"Minv^2=%g, ID=%d  balanceID=%d -----  %s ------\n",p[0]*p[0]-p[1]*p[1]-p[2]*p[2]-p[3]*p[3],resinfo->pid,balanceID,resinfo->name.c_str());
 	CLog::Info(message);
-	sprintf(message,"ID=%d, m_onshell=%g, M=%g, tau0=%g=?%g, tauexit=%g\n r=(%g,%g,%g,%g) eta=%g=?%g\n", 
+	snprintf(message,sizeof(message),"ID=%d, m_onshell=%g, M=%g, tau0=%g=?%g, tauexit=%g\n r=(%g,%g,%g,%g) eta=%g=?%g\n", 
 	resinfo->pid,resinfo->mass,sqrt(msquared),double(tau0),sqrt(r[0]*r[0]-r[3]*r[3]),tauexit,r[0],r[1],r[2],r[3],eta,GetEta(tau0));
 	CLog::Info(message);
-	sprintf(message,"bweight=%g, key=%d, actionmother=%d, active=%d, balanceID=%d\n",
+	snprintf(message,sizeof(message),"bweight=%g, key=%d, actionmother=%d, active=%d, balanceID=%d\n",
 	bweight,key,actionmother,int(active),balanceID);
 	CLog::Info(message);
-	sprintf(message,"p=(%15.9e,%15.9e,%15.9e,%15.9e), y=%g =? %g\n",p[0],p[1],p[2],p[3],y,atanh(p[3]/p[0]));
+	snprintf(message,sizeof(message),"p=(%15.9e,%15.9e,%15.9e,%15.9e), y=%g =? %g\n",p[0],p[1],p[2],p[3],y,atanh(p[3]/p[0]));
 	CLog::Info(message);
 	string currentmapname="IN CELL";
 	if(currentmap==&(boltzmann->PartMap)) currentmapname="PartMap";
 	if(currentmap==&(boltzmann->DeadPartMap)) currentmapname="DeadPartMap";
-	sprintf(message,"currentmap=%s\n",currentmapname.c_str());
+	snprintf(message,sizeof(message),"currentmap=%s\n",currentmapname.c_str());
 	CLog::Info(message);
-	if(cell==NULL) sprintf(message,"CELL=NULL\n");
+	if(cell==NULL) snprintf(message,sizeof(message),"CELL=NULL\n");
 	CLog::Info(message);
-	if(nextcell==NULL) sprintf(message,"NEXTCELL=NULL\n");
+	if(nextcell==NULL) snprintf(message,sizeof(message),"NEXTCELL=NULL\n");
 	CLog::Info(message);
-	if(cell!=NULL) sprintf(message,"Cell No: ix=%d, iy=%d, ieta=%d\n",cell->ix,cell->iy,cell->ieta);
+	if(cell!=NULL) snprintf(message,sizeof(message),"Cell No: ix=%d, iy=%d, ieta=%d\n",cell->ix,cell->iy,cell->ieta);
 	CLog::Info(message);
-	sprintf(message,"________________________________________________________________________\n");
+	snprintf(message,sizeof(message),"________________________________________________________________________\n");
 	CLog::Info(message);CLog::Info(message);
 }
 
@@ -206,9 +206,9 @@ CMSUPartMap::iterator CMSUPart::DeleteFromCurrentMap(){
 	neighbor=ppos;
 	neighbor++;
 	if(ppos==currentmap->end()){
-		sprintf(message,"FATAL: In CMSUPart::DeleteFromCurrentMap, can't find ppos!!!\n");
+		snprintf(message,sizeof(message),"FATAL: In CMSUPart::DeleteFromCurrentMap, can't find ppos!!!\n");
 		Print();
-		sprintf(message,"currentmap has length %d\n",int(currentmap->size()));
+		snprintf(message,sizeof(message),"currentmap has length %d\n",int(currentmap->size()));
 		CLog::Fatal(message);
 	}
 	else currentmap->erase(ppos);
@@ -222,7 +222,7 @@ CMSUPartMap::iterator CMSUPart::DeleteFromMap(CMSUPartMap *partmap){
 	neighbor=ppos;
 	if(ppos==partmap->end()){
 		Print();
-		sprintf(message,"FATAL: In CMSUPart::DeleteFromMap, can't find ppos!!!\n");
+		snprintf(message,sizeof(message),"FATAL: In CMSUPart::DeleteFromMap, can't find ppos!!!\n");
 		CLog::Fatal(message);
 	}
 	else{
@@ -255,9 +255,9 @@ void CMSUPart::AddAction(CAction *action){
 
 void CMSUPart::Propagate(double tau){
 	if(boltzmann->BJORKEN && fabs(eta)>boltzmann->ETAMAX){
-		sprintf(message,"eta screwy before propagation\n");
+		snprintf(message,sizeof(message),"eta screwy before propagation\n");
 		CLog::Info(message);
-		sprintf(message,"eta=%g\n",eta);
+		snprintf(message,sizeof(message),"eta=%g\n",eta);
 		CLog::Info(message);
 	}
 	double t0;
@@ -265,7 +265,7 @@ void CMSUPart::Propagate(double tau){
 	if(active==true){
 		eta=GetEta(tau);//y-asinh((tau0/tau)*sinh(y-eta));
 		if(currentmap==&(boltzmann->PartMap) && boltzmann->tau<boltzmann->TAUCOLLMAX && fabs(eta)>boltzmann->ETAMAX && boltzmann->BJORKEN && boltzmann->COLLISIONS){
-			//sprintf(message,"eta out of bounds after propagation,correcting, etai=%g, etaf=%g, taui=%g, tauf=%g\n",etai,eta,tau0,tau);
+			//snprintf(message,sizeof(message),"eta out of bounds after propagation,correcting, etai=%g, etaf=%g, taui=%g, tauf=%g\n",etai,eta,tau0,tau);
 			//CLog::Info(message);
 			//Print();
 			if(eta>boltzmann->ETAMAX)
@@ -299,14 +299,14 @@ void CMSUPart::CheckMap(CMSUPartMap *expectedpartmap){
 		
 		Print();
 		if(currentmap==&(boltzmann->DeadPartMap)){
-			sprintf(message,"particle in DeadPartMap\n");
+			snprintf(message,sizeof(message),"particle in DeadPartMap\n");
 			CLog::Info(message);
 		}
 		if(currentmap==&(boltzmann->PartMap)){
-			sprintf(message,"particlein PartMap\n");
+			snprintf(message,sizeof(message),"particlein PartMap\n");
 			CLog::Info(message);
 		}
-		sprintf(message,"XXXXXXXXX particle not in expected map XXXXXXXXX\n");
+		snprintf(message,sizeof(message),"XXXXXXXXX particle not in expected map XXXXXXXXX\n");
 		CLog::Fatal(message);
 	}
 }
@@ -348,7 +348,7 @@ double CMSUPart::GetEta(double tau){
 double CMSUPart::GetMT(){
 	if(p[0]<fabs(p[3])){
 		Print();
-		sprintf(message,"CMSUPart::GetMT, catastrophe\n");
+		snprintf(message,sizeof(message),"CMSUPart::GetMT, catastrophe\n");
 		CLog::Fatal(message);
 	}
 	return sqrt(p[0]*p[0]-p[3]*p[3]);
@@ -385,7 +385,7 @@ void CMSUPart::Kill(){
 
 void CMSUPart::BjorkenTranslate(){
 	if(eta<-boltzmann->ETAMAX || eta>boltzmann->ETAMAX){
-		sprintf(message,"eta out of bounds before translation\n");
+		snprintf(message,sizeof(message),"eta out of bounds before translation\n");
 		CLog::Info(message);
 		Print();
 		if(eta>boltzmann->ETAMAX)
@@ -560,11 +560,11 @@ void CMSUPart::FindCellExit(){
 void CMSUPart::FindActions(){
 	KillActions();
 	if(active!=true){
-		sprintf(message,"CMSUPart::FindActions(), trying to Reset Inactive particle\n");
+		snprintf(message,sizeof(message),"CMSUPart::FindActions(), trying to Reset Inactive particle\n");
 		CLog::Info(message);
 	}
 	if(resinfo->pid!=22 && msquared<resinfo->minmass*resinfo->minmass-1.0E-5){
-		sprintf(message,"msquared too small, M=%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
+		snprintf(message,sizeof(message),"msquared too small, M=%14.9e, minmass=%14.9e\n",sqrt(msquared),resinfo->minmass);
 		CLog::Info(message);
 		msquared=resinfo->minmass*resinfo->minmass;
 		Setp0();
@@ -582,7 +582,7 @@ void CMSUPart::FindActions(){
 	if(resinfo->decay)
 		FindDecay();
 	if(currentmap!=&(boltzmann->PartMap)){
-		sprintf(message,"FindActions: part in wrong map\n");
+		snprintf(message,sizeof(message),"FindActions: part in wrong map\n");
 		Print();
 		CLog::Fatal(message);
 	}
@@ -628,9 +628,9 @@ void CMSUPart::RemoveFromCell(){
 	if(cell!=NULL){
 		CMSUPartMap::iterator ppos=GetPos(&(cell->partmap));
 		if(ppos==cell->partmap.end()){
-			sprintf(message,"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
+			snprintf(message,sizeof(message),"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
 			Print();
-			sprintf(message,"cell partmap has length %d\n",int(cell->partmap.size()));
+			snprintf(message,sizeof(message),"cell partmap has length %d\n",int(cell->partmap.size()));
 			CLog::Fatal(message);
 		}
 		else{
@@ -643,9 +643,9 @@ void CMSUPart::CheckCell(){
 	if(cell!=NULL){
 		CMSUPartMap::iterator ppos=GetPos(&(cell->partmap));
 		if(ppos==cell->partmap.end()){
-			sprintf(message,"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
+			snprintf(message,sizeof(message),"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
 			Print();
-			sprintf(message,"cell partmap has length %d\n",int(cell->partmap.size()));
+			snprintf(message,sizeof(message),"cell partmap has length %d\n",int(cell->partmap.size()));
 			CLog::Fatal(message);
 		}
 	}
@@ -696,12 +696,12 @@ void CMSUPart::CalcDCA(double *dca){
 	for(alpha=1;alpha<4;alpha++)
 		dca[alpha]=(r[alpha]-pdotr*p[alpha])/1.0E13;
 	dca[0]=sqrt(dca[1]*dca[1]+dca[2]*dca[2]+dca[3]*dca[3]);
-	sprintf(nantestc,"%g",r[0]);
+	snprintf(nantestc,sizeof(nantestc),"%g",r[0]);
 	nantests=nantestc;
 	if(nantests=="NaN" || nantests=="nan" || nantests=="inf" || nantests=="INF"){
-		sprintf(message,"::: dca=(%g,%g,%g,%g)\n",dca[0],dca[1],dca[2],dca[3]);
-		sprintf(message,"::: r=(%g,%g,%g,%g)\n",r[0],r[1],r[2],r[3]);
-		sprintf(message,"::: p=(%g,%g,%g,%g)\n",r[0],r[1],r[2],r[3]);
+		snprintf(message,sizeof(message),"::: dca=(%g,%g,%g,%g)\n",dca[0],dca[1],dca[2],dca[3]);
+		snprintf(message,sizeof(message),"::: r=(%g,%g,%g,%g)\n",r[0],r[1],r[2],r[3]);
+		snprintf(message,sizeof(message),"::: p=(%g,%g,%g,%g)\n",r[0],r[1],r[2],r[3]);
 		CLog::Fatal(message);
 	}
 }

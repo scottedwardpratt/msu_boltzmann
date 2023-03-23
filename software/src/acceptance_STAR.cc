@@ -36,12 +36,12 @@ CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
 // Lo : 50 - 80%  (i.e. peripheral events)
 	//Unfortunately, I only have the Hi CENTRALITY arrays from Manuel
 	if(CENTRALITY==0 || CENTRALITY==1 || CENTRALITY==2)
-		sprintf(identstring,"PiMinusHi");
+		snprintf(identstring,sizeof(identstring),"PiMinusHi");
 	else if(CENTRALITY==3 || CENTRALITY==4 || CENTRALITY==5)
-		sprintf(identstring,"PiMinusHi");
+		snprintf(identstring,sizeof(identstring),"PiMinusHi");
 	else
-		sprintf(identstring,"PiMinusHi");
-  sprintf(filename,"../acceptancedata/manuel/full_field/efficiency%s.txt",identstring);
+		snprintf(identstring,sizeof(identstring),"PiMinusHi");
+  s,printf(filename,sizeof(filename),"../acceptancedata/manuel/full_field/efficiency%s.txt",identstring);
 	ifstream ifs(filename);
 	//assert(ifs);
 	int eta_index, pt_index;
@@ -68,7 +68,7 @@ void CAcceptance_STAR::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *
 	else if(pid==2212) starpid=4;
 	else{
 		if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
-			sprintf(message,"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
+			snprintf(message,sizeof(message),"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
 			CLog::Fatal(message);
 		}
 		accept=false;
@@ -94,7 +94,7 @@ void CAcceptance_STAR::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPa
 	double dca[4];
 	int pid=part->resinfo->pid;
 	if(abs(pid)!=2112 && abs(pid)!=311 && abs(pid)!=111 && abs(pid)!=22){
-		sprintf(message,"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
+		snprintf(message,sizeof(message),"CAcceptance_STAR::CalcAcceptance, pid=%d isn't in STAR list\n",pid);
 		CLog::Fatal(message);
 	}
 	part->CalcDCA(dca);

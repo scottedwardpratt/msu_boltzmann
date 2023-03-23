@@ -31,7 +31,7 @@ void CAction::PerformExitCell(){
 		}
 		part->ChangeCell(part->nextcell);
 		if(part->currentmap!=&(boltzmann->PartMap)){
-			sprintf(message,"In PerformExitCell, part in wrong map\n");
+			snprintf(message,sizeof(message),"In PerformExitCell, part in wrong map\n");
 			CLog::Fatal(message);
 		}
 		part->FindActions();

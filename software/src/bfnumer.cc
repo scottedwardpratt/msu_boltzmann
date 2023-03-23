@@ -96,7 +96,7 @@ void CBFNumer::Increment(CMSUPart *parta,CMSUPart *partb,double effa,double effb
 	npairs+=1;
 	
 	if(dely<0.0 || deleta<0.0 || qout<0.0 || qside<0.0 || qlong <0.0 || qinv<0.0 || deletas<0.0){
-		sprintf(message,"bad sign: dely=%g, deleta=%g, deletas=%g, q=(%g,%g,%g,%g)\n",dely,deleta,deletas,qout,qside,qlong,qinv);
+		snprintf(message,sizeof(message),"bad sign: dely=%g, deleta=%g, deletas=%g, q=(%g,%g,%g,%g)\n",dely,deleta,deletas,qout,qside,qlong,qinv);
 		CLog::Fatal(message);
 	}
 	
@@ -182,7 +182,7 @@ void CBFDenom::Increment(CMSUPart *part,double eff){
 	else if(charge==-1)
 		Nminus+=eff;
 	else if (fabs(charge)>1){
-		sprintf(message,"charge in CBFDenom::Increment > 1 !! = %d", charge);
+		snprintf(message,sizeof(message),"charge in CBFDenom::Increment > 1 !! = %d", charge);
 		CLog::Info(message);
 	}
 }
@@ -271,19 +271,19 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 
 void CBFNumer::Print(){
 	int ibin;
-	sprintf(message,"----- By ------\n");
+	snprintf(message,sizeof(message),"----- By ------\n");
 	for(ibin=0;ibin<Nybins;ibin++){
-		sprintf(message,"%s%6.1f %10.3e\n",message,(0.5+ibin)*Dy,By[ibin]);
+		snprintf(message,sizeof(message),"%s%6.1f %10.3e\n",message,(0.5+ibin)*Dy,By[ibin]);
 	}
 	CLog::Info(message);
-	sprintf(message,"----- Beta -----\n");
+	snprintf(message,sizeof(message),"----- Beta -----\n");
 	for(ibin=0;ibin<Netabins;ibin++){
-		sprintf(message,"%s%6.1f %9.5f %9.5f\n",message,(0.5+ibin)*Deta,Beta[ibin],Beta1[ibin]);
+		snprintf(message,sizeof(message),"%s%6.1f %9.5f %9.5f\n",message,(0.5+ibin)*Deta,Beta[ibin],Beta1[ibin]);
 	}
 	CLog::Info(message);
-	sprintf(message,"----- Bphi -----\n");
+	snprintf(message,sizeof(message),"----- Bphi -----\n");
 	for(ibin=0;ibin<Nphibins;ibin++){
-		sprintf(message,"%s%3d: %6.1f %10.3e\n",message,ibin,-180.0+(0.5+ibin)*Dphi,Bphi[ibin]);
+		snprintf(message,sizeof(message),"%s%3d: %6.1f %10.3e\n",message,ibin,-180.0+(0.5+ibin)*Dphi,Bphi[ibin]);
 	}
 	CLog::Info(message);
 	

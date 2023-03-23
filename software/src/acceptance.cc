@@ -20,7 +20,7 @@ CAcceptance::CAcceptance(CparameterMap *parmapin){
 }
 
 void CAcceptance::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *part){
-	sprintf(message,"hmmmmmm, should not be here in dummy routing for CalcAcceptance\n");
+	snprintf(message,sizeof(message),"hmmmmmm, should not be here in dummy routing for CalcAcceptance\n");
 	CLog::Fatal(message);
 	if(part==NULL){
 		accept=true; efficiency=1.0; 
@@ -29,7 +29,7 @@ void CAcceptance::CalcAcceptance(bool &accept,double &efficiency,CMSUPart *part)
 }
 
 void CAcceptance::CalcAcceptanceNoID(bool &accept,double &efficiency,CMSUPart *part){
-	sprintf(message,"hmmmmmm, should not be here in dummy routing for CalcAcceptanceNoID\n");
+	snprintf(message,sizeof(message),"hmmmmmm, should not be here in dummy routing for CalcAcceptanceNoID\n");
 	CLog::Fatal(message);
 	if(part==NULL){
 		accept=true; efficiency=1.0; 

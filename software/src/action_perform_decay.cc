@@ -23,7 +23,7 @@ void CAction::PerformDecay(){
 		mother->cell->Print();
 		mother->FindCell()->Print();
 		mother->Print();
-		sprintf(message,"Cells don't match for decaying mother\n");
+		snprintf(message,sizeof(message),"Cells don't match for decaying mother\n");
 		CLog::Fatal(message);
 	}
 	if(tau>boltzmann->TAUCOLLMAX || mother->cell==NULL){

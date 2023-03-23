@@ -111,11 +111,11 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 	}
 
 	if(netq!= nKplus+npiplus-nKminus-npiminus){
-		sprintf(message,"charges don't add up, netq=%d\n",netq);
+		snprintf(message,sizeof(message),"charges don't add up, netq=%d\n",netq);
 		CLog::Fatal(message);
 	}
 	if(nets!= nKplus+nK0-nKminus-nK0bar){
-		sprintf(message,"charges don't add up, nets=%d\n",nets);
+		snprintf(message,sizeof(message),"charges don't add up, nets=%d\n",nets);
 		CLog::Fatal(message);
 	}
 
@@ -161,11 +161,11 @@ int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,a
 
 		dptr->ChangeMap(&PartMap);
 		if(fabs(dptr->eta)>ETAMAX){
-			sprintf(message,"eta out of range in Annihilate\n");
+			snprintf(message,sizeof(message),"eta out of range in Annihilate\n");
 			CLog::Fatal(message);
 		}
 		if(dptr->p[0]<0.0){
-			sprintf(message,"dptr->p[0]=%g\n",dptr->p[0]);
+			snprintf(message,sizeof(message),"dptr->p[0]=%g\n",dptr->p[0]);
 			CLog::Fatal(message);
 		}
 	}

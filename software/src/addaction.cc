@@ -7,12 +7,12 @@ void CMSU_Boltzmann::AddAction_Activate(CMSUPart *part){
 	part->active=false;
 	CAction *action;
 	if(BJORKEN && fabs(part->eta)>ETAMAX){
-		sprintf(message,"CMSU_Boltzmann::AddAction_Activate, eta out of bounds, =%g\n",fabs(part->eta));
+		snprintf(message,sizeof(message),"CMSU_Boltzmann::AddAction_Activate, eta out of bounds, =%g\n",fabs(part->eta));
 		CLog::Fatal(message);
 	}
 	action=GetDeadAction();
 	if(action->currentmap==&ActionMap){
-		sprintf(message,"don't even try, action wasn't dead, key=%d\n",int(action->key));
+		snprintf(message,sizeof(message),"don't even try, action wasn't dead, key=%d\n",int(action->key));
 		CLog::Fatal(message);
 	}
 	action->type=0;
@@ -21,7 +21,7 @@ void CMSU_Boltzmann::AddAction_Activate(CMSUPart *part){
 	action->partmap.clear();
 	action->partmap.insert(CMSUPartPair(part->key,part));
 	if(action->tau<tau){
-		sprintf(message,"trying to AddAction_Activate at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
+		snprintf(message,sizeof(message),"trying to AddAction_Activate at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
 	}
 	part->actionmap.insert(CActionPair(action->key,action));
@@ -38,7 +38,7 @@ void CMSU_Boltzmann::AddAction_Decay(CMSUPart *part,double taudecay){
 	if(action->tau<tau){
 		part->Print();
 		part->cell->Print();
-		sprintf(message,"CMSU_Boltzmann::AddAction_Decay, trying to AddAction_Decay at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
+		snprintf(message,sizeof(message),"CMSU_Boltzmann::AddAction_Decay, trying to AddAction_Decay at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
 	}
 }
@@ -58,7 +58,7 @@ void CMSU_Boltzmann::AddAction_ExitCell(CMSUPart *part){
 		if(action->tau<tau-1.0E-10){
 			part->Print();
 			part->cell->Print();
-			sprintf(message,"CMSU_Boltzmann::AddAction_ExitCell, trying to AddAction_ExitCell at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
+			snprintf(message,sizeof(message),"CMSU_Boltzmann::AddAction_ExitCell, trying to AddAction_ExitCell at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 			CLog::Fatal(message);
 		}
 	}
@@ -83,7 +83,7 @@ void CMSU_Boltzmann::AddAction_Collision(CMSUPart *part1,CMSUPart *part2,double 
 	action->MoveToActionMap();
 	if(action->tau<tau){
 		action->Print();
-		sprintf(message,"trying to AddAction_Collision at earler time!!!  tau=%g\n",tau);
+		snprintf(message,sizeof(message),"trying to AddAction_Collision at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
 	}
 	action->partmap.clear();
@@ -104,7 +104,7 @@ void CMSU_Boltzmann::AddAction_DensCalc(double taucalc){
 	action->partmap.clear(); 
 	if(action->tau<tau){
 		action->Print();
-		sprintf(message,"trying to AddAction_DensCalc at earler time!!!  tau=%g\n",tau);
+		snprintf(message,sizeof(message),"trying to AddAction_DensCalc at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
 	}
 }
@@ -118,7 +118,7 @@ void CMSU_Boltzmann::AddAction_MuTCalc_UpdateNPE(double taucalc){
 	action->partmap.clear(); 
 	if(action->tau<tau){
 		action->Print();
-		sprintf(message,"trying to AddAction_MuTCalc at earler time!!!  tau=%g\n",tau);
+		snprintf(message,sizeof(message),"trying to AddAction_MuTCalc at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
 	}
 }
