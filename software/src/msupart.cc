@@ -318,8 +318,6 @@ double CMSUPart::GetMass(){
 		return sqrt(msquared);
 }
 
-/* in sampler there is an array of densities and temperature. also make array of densities of minmass*/
-
 void CMSUPart::Setp0(){
 	p[0]=sqrt(p[1]*p[1]+p[2]*p[2]+p[3]*p[3]+msquared);
 }
