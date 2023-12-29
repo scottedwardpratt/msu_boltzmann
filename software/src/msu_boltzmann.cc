@@ -10,6 +10,9 @@
 #include "msu_commonutils/randy.h"
 #include "msu_boltzmann/action.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 CMSU_Boltzmann::CMSU_Boltzmann(){
 };
 

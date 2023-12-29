@@ -5,6 +5,7 @@
 #include "msu_commonutils/misc.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 CAcceptance_ALICE::CAcceptance_ALICE(CparameterMap *parmapin) : CAcceptance(){
 	ETAMIN=-0.9; // Don't bother calling Acceptance Routine if outside these boundaries.

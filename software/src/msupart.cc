@@ -9,6 +9,9 @@
 #include "msu_commonutils/misc.h"
 #include "msu_commonutils/randy.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 CMSU_Boltzmann *CMSUPart::boltzmann=NULL;
 CBalance *CMSUPart::cb=NULL;
 char *CMSUPart::message=new char[500];

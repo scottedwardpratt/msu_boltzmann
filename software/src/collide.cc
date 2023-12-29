@@ -5,6 +5,9 @@
 #include "msu_commonutils/misc.h"
 #include "msu_commonutils/constants.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 //#define __SCATTERING_ON__
 
 // If two particles pass one another, Collide will determine whether to scatter and how

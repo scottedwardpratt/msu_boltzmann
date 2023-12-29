@@ -1,6 +1,9 @@
 #include "msu_boltzmann/action.h"
 #include "msu_boltzmann/msupart.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 void CAction::PerformCollide(){
 	int colltype,iproduct,nproducts;
 	double sigmatot,r;
@@ -82,5 +85,6 @@ void CAction::PerformCollide(){
 			part=product[iproduct];
 			part->Kill();
 		}
-	}
+	}	
 }
+

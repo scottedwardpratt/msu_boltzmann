@@ -2,6 +2,9 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/cell.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 void CAction::PerformExitCell(){
 	CMSUPart *part;
 	CMSUPartMap::iterator ppos;

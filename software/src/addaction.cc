@@ -2,6 +2,9 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/cell.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 void CMSU_Boltzmann::AddAction_Activate(CMSUPart *part){
 	CActionMap::iterator epos;
 	part->active=false;

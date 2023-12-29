@@ -1,6 +1,9 @@
 #include "msu_boltzmann/action.h"
 #include "msu_boltzmann/msupart.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 void CAction::Perform(){
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;

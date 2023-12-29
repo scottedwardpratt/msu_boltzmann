@@ -1,6 +1,7 @@
 #include "msu_boltzmann/acceptance.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 CAcceptance::CAcceptance(){
 	ETAMIN=-1.0;

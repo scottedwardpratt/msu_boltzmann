@@ -4,6 +4,7 @@
 #include "msu_eos/resonances.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 CAcceptance_STAR::CAcceptance_STAR(CparameterMap *parmapin) : CAcceptance(){
 	ETAMIN=-0.9; // Don't bother calling Acceptance Routine if outside these boundaries.

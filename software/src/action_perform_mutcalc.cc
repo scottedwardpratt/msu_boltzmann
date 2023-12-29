@@ -4,6 +4,9 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_eos/resonances.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 void CAction::PerformMuTCalcUpdateNPE(){
 	int ix,iy,itau,btype,pid;
 	itau=lrint(tau/boltzmann->MUTCALC_DELTAU)-1;

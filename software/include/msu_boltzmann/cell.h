@@ -15,6 +15,8 @@ using namespace std;
 In the CMSU_Boltzmann model, the model space is expressed as a mesh grid of cells that expand as time propogates. The mesh is populated by cells, which are CMSU_BoltzmannCell objects. This class keeps track of the particles populating it (in a particle map), as well as its spatial dimensions and neighbors. The neighbors are especially relevant, as actions such as collisions are scheduled by checking against particles inside its the current cell, as well as all neighboring cells.
 */
 
+namespace NMSUPratt{
+
 class CMSU_BoltzmannCell{
 public:
 	class CMSU_BoltzmannCell *neighbor[3][3][3];
@@ -41,5 +43,7 @@ public:
 
 In the CMSU_Boltzmann model, the model space is expressed as a mesh grid of cells that expand as time propogates. The mesh is populated by cells, which are CMSU_BoltzmannCell objects. This class keeps track of the particles populating it (in a particle map), as well as its spatial dimensions and neighbors. The neighbors are especially relevant, as actions such as collisions are scheduled by checking against particles inside its the current cell, as well as all neighboring cells.
 */
+
+}
 
 #endif

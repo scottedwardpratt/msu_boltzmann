@@ -7,6 +7,9 @@
 #include "msu_boltzmann/decay.h"
 #include "msu_commonutils/decay_nbody.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 CMSU_Decay::CMSU_Decay(Crandy *randyset){
 	randy=randyset;
 	mass.resize(6);

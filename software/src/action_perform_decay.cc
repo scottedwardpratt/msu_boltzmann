@@ -2,6 +2,9 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_eos/resonances.h"
+#include "msu_boltzmann/boltzmanndefs.h"
+
+using namespace NMSUPratt;
 
 void CAction::PerformDecay(){
 	CMSUPart *mother,*dptr;

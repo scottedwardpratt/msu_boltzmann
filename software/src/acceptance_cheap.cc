@@ -7,6 +7,7 @@
 #include "msu_commonutils/parametermap.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 CAcceptance_CHEAP::CAcceptance_CHEAP(CparameterMap *parmapin) : CAcceptance(){
 	ETAMAX=parmapin->getD("MSU_BOLTZMANN_ETAMAX",6.0);

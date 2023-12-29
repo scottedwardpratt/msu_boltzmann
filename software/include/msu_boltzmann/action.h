@@ -7,6 +7,9 @@
 #include "msu_boltzmann/cell.h"
 #include "msu_eos/resonances.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 //!An action in the CMSU_Boltzmann model.
 /*!
 \version 1.0
@@ -17,48 +20,53 @@ This class handles any actions that the model takes during execution. Examples o
 
 Actions are allocated and are moved from the map of future actions (CMSU_Boltzmann::ActionMap) to the list of completed actions (CMSU_Boltzmann::DeadActionMap) once they have been performed.
 */
-class CAction{
-public:
-	double tau;
-	double pibsquared,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel;
-	vector<double> dsigma_merge;
-	int listid;
-	double key;
-	int type; // =0 for activation, 1 for decay, 2 for collision, ....  6 for ExitCell
-	// These are the particles in the action
-	CMSUPartMap partmap;
 
-	bool Kill();
-	void AddPart(CMSUPart *partptr);
-	void Print();
+namespace NMSUPratt{
 
-	void Perform();
-	void PerformDensCalc();
-	void PerformMuTCalcUpdateNPE();
-	void PerformSECalc();
-	void PerformActivate();
-	void PerformExitCell();
-	void PerformDecay();
-	void PerformCollide();
-	void PerformCollide_BALANCE();
-	void PerformResetCollisions();
-	array <CresInfo *,5> daughterresinfo;
-	//void PerformSwallowParticles();
-	CAction();
-	CAction(int keyset);
-	~CAction();
+	class CAction{
+	public:
+		double tau;
+		double pibsquared,sigma_scatter,sigma_merge,sigma_annihilation,sigma_inel;
+		vector<double> dsigma_merge;
+		int listid;
+		double key;
+		int type; // =0 for activation, 1 for decay, 2 for collision, ....  6 for ExitCell
+		// These are the particles in the action
+		CMSUPartMap partmap;
 
-	static CMSU_Boltzmann *boltzmann;
-	static char *message;
+		bool Kill();
+		void AddPart(CMSUPart *partptr);
+		void Print();
 
-	CActionMap::iterator GetPos(CActionMap *actionmap);
-	void MoveToActionMap();
-	void RemoveFromActionMap();
-	void AddToMap(CActionMap *newmap);
-	void AddToMap(CActionMap::iterator guess,CActionMap *newmap);
-	void CheckPartList();
-	CActionMap *currentmap;
-	array<CMSUPart *,5> product;
-};
+		void Perform();
+		void PerformDensCalc();
+		void PerformMuTCalcUpdateNPE();
+		void PerformSECalc();
+		void PerformActivate();
+		void PerformExitCell();
+		void PerformDecay();
+		void PerformCollide();
+		void PerformCollide_BALANCE();
+		void PerformResetCollisions();
+		array <CresInfo *,5> daughterresinfo;
+		//void PerformSwallowParticles();
+		CAction();
+		CAction(int keyset);
+		~CAction();
+
+		static CMSU_Boltzmann *boltzmann;
+		static char *message;
+
+		CActionMap::iterator GetPos(CActionMap *actionmap);
+		void MoveToActionMap();
+		void RemoveFromActionMap();
+		void AddToMap(CActionMap *newmap);
+		void AddToMap(CActionMap::iterator guess,CActionMap *newmap);
+		void CheckPartList();
+		CActionMap *currentmap;
+		array<CMSUPart *,5> product;
+	};
+
+}
 
 #endif

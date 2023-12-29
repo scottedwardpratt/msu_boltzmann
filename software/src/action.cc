@@ -1,6 +1,9 @@
 #include  "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/action.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 CMSU_Boltzmann *CAction::boltzmann=NULL;
 char *CAction::message=new char[500];
 

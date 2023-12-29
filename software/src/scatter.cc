@@ -5,7 +5,8 @@
 #include "msu_boltzmann/msupart.h"
 #include "msu_eos/resonances.h"
 
-//using namespace Misc;
+using namespace std;
+using namespace NMSUPratt;
 
 /*
 InelasticScatter: Method to implement inelastic scattering. Right now, it magically

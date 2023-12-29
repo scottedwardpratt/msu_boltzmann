@@ -5,6 +5,9 @@
 #include "msu_eos/resonances.h"
 #include "msu_commonutils/misc.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 CMSU_Boltzmann *CInelasticList::boltzmann=NULL;
 bool CInelasticList::UseFile = false;
 bool CInelasticList::UseInelasticArray = false;

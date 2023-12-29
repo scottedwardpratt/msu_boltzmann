@@ -8,6 +8,7 @@
 #include "msu_commonutils/misc.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 CBalanceArrays::CBalanceArrays(CMSU_Boltzmann *boltzmannset){
 	boltzmann=boltzmannset;

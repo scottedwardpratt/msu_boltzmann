@@ -6,7 +6,9 @@
 #include "msu_boltzmann/msu_boltzmann.h"
 #include "msu_boltzmann/cell.h"
 #include "msu_eos/resonances.h"
-//using namespace MSU_EOS;
+
+using namespace std;
+using namespace NMSUPratt;
 
 CMSU_Boltzmann *CMuTInfo::boltzmann=NULL;
 int CMuTInfo::NETEVENTS=0;

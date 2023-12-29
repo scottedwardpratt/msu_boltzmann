@@ -5,6 +5,8 @@
 
 using namespace std;
 
+namespace NMSUPratt{
+
 class CMSU_Decay{
 public:
 	vector<double> mass,probmax;
@@ -18,5 +20,7 @@ public:
 	void Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daughter);
 	CMSU_Boltzmann *boltzmann;
 };
+
+}
 
 #endif

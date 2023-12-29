@@ -4,6 +4,8 @@
 #include "msu_commonutils/commondefs.h"
 
 using namespace std;
+namespace NMSUPratt;
+using namespace NMSUPratt;
 
 class CMSU_Boltzmann;
 

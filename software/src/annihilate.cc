@@ -6,6 +6,9 @@
 #include "msu_commonutils/constants.h"
 #include "msu_commonutils/misc.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 
 int CMSU_Boltzmann::Annihilate(CMSUPart *part1,CMSUPart *part2,int &ndaughters,array<CMSUPart*,5> &daughter){
 	CMSUPart *dptr;

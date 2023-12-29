@@ -6,6 +6,7 @@
 #include "msu_commonutils/randy.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 void CMSU_Boltzmann::GenHadronsFromCharges(){
 	int maxbid,bid;

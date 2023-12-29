@@ -4,6 +4,9 @@
 #include "msu_eos/resonances.h"
 #include "msu_commonutils/constants.h"
 
+using namespace std;
+using namespace NMSUPratt;
+
 bool CMSU_Boltzmann::CheckKinematics(CMSUPart *part1,CMSUPart *part2,
 	double &Minv2,double &pibsquared,double &taucoll){
 	
