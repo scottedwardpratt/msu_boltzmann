@@ -72,7 +72,9 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 			mtot=0.0;
 			for(ibody=0;ibody<nbodies;ibody++){
 				if(daughter[ibody]->resinfo->decay){
-					netprob=randy->ran()*probmax[ibody];
+					do{
+						netprob=randy->ran()*probmax[ibody];
+					}while(netprob>1.0);
 					mass[ibody+1]=daughter[ibody]->resinfo->GenerateMassFromSF(netprob);
 				}
 				else
