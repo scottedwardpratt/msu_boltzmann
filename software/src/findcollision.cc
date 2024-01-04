@@ -123,11 +123,6 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 		merge=merge->next;
 	}
 	sigmatot=sigma_scatter+sigma_inel+sigma_annihilation+sigma_merge;
-	/*
-	if(part1->resinfo->pid==-211 && part2->resinfo->pid==211)
-		printf("m1=%g, m2=%g, Minv=%g, q=%g, sigmatot=%g\n",
-			part1->resinfo->mass,part2->resinfo->mass,sqrt(Minv2),sqrt(q2),10.0*sigmatot);
-		*/	
 	return sigmatot;
 }
 

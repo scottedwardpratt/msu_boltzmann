@@ -96,7 +96,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
 	double pitildexy,pitildeyy;
 	Csampler *sampler;
-	printf("opening uds file %s\n",filename.c_str());
+	CLog::Info("opening uds file "+filename+"\n");
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
 	chargemap.clear();

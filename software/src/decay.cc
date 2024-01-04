@@ -50,7 +50,7 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 			if(ntry>20){
 				mass[0]+=0.005;
 				if(ntry>200)
-					CLog::Info("ntry="+to_string(ntry)+"\n");
+					CLog::Info("In CMSU_Decay::GetMassesForDecay, ntry="+to_string(ntry)+"\n");
 			}
 		}while(mtot>mass[0]);
 	}
@@ -83,7 +83,7 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 			if(ntry>20){
 				mass[0]+=0.005;
 				if(ntry>200)
-					printf("ntry=%d\n",ntry);
+					CLog::Info("ntry="+to_string(ntry)+"\n");
 			}
 		}while(mtot>mass[0]); 
 	}

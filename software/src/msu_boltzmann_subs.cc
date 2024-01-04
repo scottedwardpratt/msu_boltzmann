@@ -250,8 +250,7 @@ void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 
 CAction* CMSU_Boltzmann::GetDeadAction(){
 	if(DeadActionMap.size()==0){
-		printf("making new action, ActionMap Size=%lu, DeadActionMap Size=%ld, tau=%g\n",
-			ActionMap.size(), DeadActionMap.size(),tau);
+		CLog::Info("making new action, ActionMap Size="+to_string(ActionMap.size())+", tau="+to_string(tau)+"\n");
 		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
 			new CAction(-1);
 		snprintf(message,CLog::CHARLENGTH,"created %d new actions, Action Map Size=%lu\n",DELNACTIONSTOT*NSAMPLE,ActionMap.size());
@@ -382,7 +381,7 @@ void CMSU_Boltzmann::CheckActions(){
 				for(ppos=action->partmap.begin();ppos!=action->partmap.end();++ppos){
 					CMSUPart *part=ppos->second;
 					if(part->resinfo->baryon==0){
-						printf("particle in annihating action??? with no baryon number\n");
+						CLog::Info("particle in annihating action??? with no baryon number\n");
 					}
 				}
 			}

@@ -85,7 +85,5 @@ void CAction::PerformMuTCalcUpdateNPE(){
 			}
 		}
 	}
-	//printf("CAction::PerformMuTCalcUpdateNPE(): tau=%g, nactive=%d, npi=%d, nB=%d, ndecay=%d\n",
-		//tau,nactive,npi,nB,int(boltzmann->ndecay)+2*int(boltzmann->nannihilate));
 
 }

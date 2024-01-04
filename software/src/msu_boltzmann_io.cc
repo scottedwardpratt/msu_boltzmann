@@ -9,6 +9,7 @@
 #include "msu_sampler/part.h"
 
 using namespace std;
+using namespace NMSUPratt;
 
 void CMSU_Boltzmann::InputPartList(CpartList *partlist){
 	int ipart,balanceID;
@@ -38,7 +39,6 @@ void CMSU_Boltzmann::InputPartList(CpartList *partlist){
 			nhyperons+=1;
 			*/
 	}
-	//printf("nbaryons=%d, nhyperons=%d\n",nbaryons,nhyperons);
 }
 
 double CMSU_Boltzmann::WriteOSCAR(int ievent){
@@ -476,8 +476,6 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 						mti->sufficientNB[btype]=false;
 					mti->TB[btype]=T;
 					mti->muB[btype]=mu;
-					if(fabs(mu)>0.0001)
-					printf("btype=%d, muB=%g\n",btype,mu);
 					mti->UxB[btype]=Ux;
 					mti->UyB[btype]=Uy;
 					mti->NB[btype]=0;

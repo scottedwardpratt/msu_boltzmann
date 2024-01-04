@@ -228,7 +228,6 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	}
 	
 	if(tau<CMuTInfo::taumin[ix1][iy1] || tau<CMuTInfo::taumin[ix2][iy2]){
-		//printf("annihilation canceled for being in hydro area\n");
 		cancel=true;
 		return cancel;
 	}
@@ -239,15 +238,10 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	btype2=part2->resinfo->Btype;
 	if(btype1==-1 || btype2==-1 || mti1->Tpi<0.05 || mti2->Tpi<0.05){
 		cancel=false;
-		//printf("annihilation proceeding, due to small T or funky btype\n");
-		//printf("Tpi=%g,%g,  btype=%d,%d\n",mti1->Tpi,mti2->Tpi,btype1,btype2);
 		return cancel;
 	}
 	if(!mti1->sufficientNB[btype1] || !mti2->sufficientNB[btype2] || !mti1->sufficientNpi || !mti2->sufficientNpi || !mti1->sufficientNK || !mti2->sufficientNK){
 		cancel=false;
-		//printf("annihilation proceeding because of insufficent Npi-NK-NB\n");
-		//printf("     Npi=%d,%d, NK=%d,%d, NB=%d,%d\n",mti1->Npi,mti2->Npi,mti1->NK,mti2->NK,
-		//	mti1->NB[btype1],mti2->NB[btype2]);
 		return cancel;
 	}
 
@@ -286,21 +280,6 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	betaEtot=EB*(betameson-betaB);
 	reduction_factor=1.0-exp(muQtot-betaEtot);
 	
-	/*	
-	if(reduction_factor<0.0){
-		printf("________________________________________________________\n");
-		printf("-- tau=%g, reduction factor=%g, (%d,%d), netK=%g\n",
-			tau,reduction_factor,part1->resinfo->pid,part2->resinfo->pid,netK);
-		printf("-- btype1=%d, btype2=%d\n",btype1,btype2);
-		printf("-- Tpi=%g, TK=%g\n",0.5*(mti1->Tpi+mti2->Tpi),0.5*(mti1->TK+mti2->TK));
-		printf("-- TB1=%g, TB2=%g\n",mti1->TB[btype1],mti2->TB[btype2]);
-		printf("-- mupi=%g, muK=%g\n",0.5*(mti1->mupi+mti2->mupi),0.5*(mti1->muK+mti2->muK));
-		printf("-- muB1+muB2=%g\n",mti1->muB[btype1]+mti2->muB[btype2]);
-		printf("-- muQtot=%g, betaEtot=%g\n",muQtot,betaEtot);
-		printf("________________________________________________________\n");
-	}
-	*/
-	
 	if(mti1->TB[btype1]!=mti1->TB[btype1] || mti2->TB[btype2]!=mti1->TB[btype2]){
 		CLog::Fatal("temperature screwed up\n");
 	}
@@ -312,20 +291,10 @@ bool CMSU_Boltzmann::CancelAnnihilation(CMSUPart *part1,CMSUPart *part2){
 	}
 		
 	if(randy->ran()<reduction_factor){
-		//printf("annihilation proceeding, tau=%g, reduction_factor=%g\n",tau,reduction_factor);
 		cancel=false;
 		return cancel;
 	}
 
-	/*
-	printf("------------------------------------\n");
-	printf("annihilation canceled, tau=%g, reduction_factor=%g, betameson=%g, betaB=%g, EB=%g\n",tau,reduction_factor,betameson,betaB,EB);
-	printf("xyz=(%g,%g,%g),    (%g,%g,%g)\n",part1->r[1],part1->r[2],part1->r[3],part2->r[1],part2->r[2],part2->r[3]);
-	printf("UB=(%g,%g,%g)\n",UB[1],UB[2],UB[3]);
-	printf("P=(%g,%g,%g,%g)\n",P[0],P[1],P[2],P[3]);
-	printf("P1=(%g,%g), (%g,%g)\n",part1->p[1],part1->p[2],part2->p[1],part2->p[2]);
-	printf("------------------------------------\n");
-	*/
 	cancel=true;
 	return cancel;
 }

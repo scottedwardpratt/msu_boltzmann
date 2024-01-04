@@ -17,8 +17,6 @@
 
 using namespace std;
 
-
-
 namespace NMSUPratt{
 
 	class ChadronCount{

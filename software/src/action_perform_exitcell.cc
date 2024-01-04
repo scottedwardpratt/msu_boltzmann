@@ -41,6 +41,6 @@ void CAction::PerformExitCell(){
 		boltzmann->nexit+=1;
 	}
 	else{
-		printf("PerformExitCell, partmap.size=%lu\n",partmap.size());
+		CLog::Info("PerformExitCell, partmap.size="+to_string(partmap.size())+"\n");
 	}
 }
