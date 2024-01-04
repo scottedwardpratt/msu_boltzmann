@@ -547,7 +547,6 @@ void CBalanceArrays::IncrementNumer(CMSUPart *parta,CMSUPart *partb){
 	CMSUPart partaa,partbb;
 	pida=parta->resinfo->pid;
 	pidb=partb->resinfo->pid;
-
 	if(abs(pida)!=211 && abs(pida)!=321 && abs(pida)!=2212){
 		return;
 	}
