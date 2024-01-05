@@ -15,6 +15,7 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 	CHBChargeMap::iterator itc0,itc1;
 	itc1=chargemap.end(); itc1--;
 	maxbid=itc1->first;
+	printf("--- check in, maxbid=%d\n",maxbid);
 	for(bid=0;bid<maxbid;bid+=2){
 		icpair_even=chargemap.equal_range(bid);
 		itc0=icpair_even.first;
@@ -46,27 +47,35 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	CresInfo *resinfo;
 	sampler=charge->hyper.sampler;
 
-	
 	Q(0)=charge->q[0];
 	Q(1)=charge->q[1];
 	Q(2)=charge->q[2];
 	Qprime=sampler->chiinv0*Q;
+	cout << "chiinv0=\n";
+	cout << sampler->chiinv0 << endl;
+	exit(1);
 
 	for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
+		printf("check aaa\n");
 		resinfo=itr->second;
 		ires=resinfo->ires;
 		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
+			printf("check bbb\n");
 			if(!balancearrays->PPBAR_ONLY 
 				|| (balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112)){
 				q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
 				delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
 				bweight=charge->weight*delN/fabs(delN);
 				randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
+				printf("check ccc, Tf=%g\n",sampler->Tf);
+				printf("check ccc, pid=%d, dens0=%g, dN=%g, nsample=%d, q.qprime=%g\n",
+				resinfo->pid,sampler->density0i[ires],delN*NSAMPLE_UDS2BAL,NSAMPLE_UDS2BAL,q.dot(Qprime));
 				while(randy->test_threshold(0.0)){
 					sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
 					mass=resinfo->mass;
 					part=GetDeadPart();
 					rapidity=charge->eta+asinh(p[3]/sqrt(mass*mass+p[1]*p[1]+p[2]*p[2]));
+					printf("------ check adding part\n");
 					part->InitBalance(resinfo->pid,charge->x,charge->y,charge->tau,charge->eta,p[1],p[2],mass,rapidity,bweight,balanceID);
 					if(abs(resinfo->pid)==211)
 						Npions_fromcharges+=1;
@@ -139,6 +148,8 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		}
 	}while(!feof(fptr));
 	fclose(fptr);
+	
+	printf("check maxbid=%d\n",maxbid);
 	
 	etaboost.resize((maxbid+1)/2);
 	for(bidcharge=0;bidcharge<(maxbid+1)/2;bidcharge+=1){
