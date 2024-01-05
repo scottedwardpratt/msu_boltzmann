@@ -1,5 +1,5 @@
 #include "msu_boltzmann/msu_boltzmann.h"
-#include "msu_hydrobalance/hbcharge.h"
+#include "bfduke/bfcharge.h"
 #include "msu_sampler/part.h"
 #include "msu_sampler/sampler.h"
 #include "msu_commonutils/constants.h"

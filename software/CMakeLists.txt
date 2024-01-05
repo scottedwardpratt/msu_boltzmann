@@ -9,7 +9,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(GSL REQUIRED)
 find_package(Eigen3 REQUIRED)
 include_directories(SYSTEM ${GSL_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${GITHOME_MSU}/commonutils/software/include ${GITHOME_MSU}/msu_sampler/software/include ${GITHOME_MSU}/hydrobalance/software/include ${GITHOME_MSU}/msu_eos/software/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${GITHOME_MSU}/commonutils/software/include ${GITHOME_MSU}/msu_sampler/software/include ${GITHOME_MSU}/bf_duke/software/include ${GITHOME_MSU}/hydrobalance/software/include ${GITHOME_MSU}/msu_eos/software/include)
 
 file(GLOB boltzmann_src ${CMAKE_CURRENT_SOURCE_DIR}/src/**.cc)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "lib")
