@@ -19,7 +19,7 @@ void CAction::PerformDecay(){
 
 	if(mothermass!=mothermass){
 		mother->Print();
-		exit(1);
+		CLog::Fatal("mothermass!=mothermass in CAction::PerformDecay()\n");
 	}
 	if(mother->cell!=NULL && mother->cell!=mother->FindCell() && tau<boltzmann->TAUCOLLMAX){
 		mother->CheckRapidity();

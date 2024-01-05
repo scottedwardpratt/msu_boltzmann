@@ -331,7 +331,6 @@ void CBalanceArrays::WriteDenoms(){
 }
 
 void CBalanceArrays::ProcessBFPartMap(){
-	printf("howdy\n");
 	int balanceID,pida,pidb,maxbid=-1;
 	double delymax=1.6,dely,ya,yb;
 	pair<CMSUPartMap::iterator,CMSUPartMap::iterator> itpair_even,itpair_odd;
@@ -346,8 +345,6 @@ void CBalanceArrays::ProcessBFPartMap(){
 	}
 	snprintf(message,CLog::CHARLENGTH,"maxbid=%d, bfpartmap.size=%d\n",maxbid,int(bfpartmap.size()));
 	CLog::Info(message);
-	
-	printf("howdy, maxbid=%d\n",maxbid);
 	
 	for(balanceID=0;balanceID<maxbid;balanceID+=2){
 		itpair_even=bfpartmap.equal_range(balanceID);

@@ -223,38 +223,9 @@ void CAcceptance_STAR::star_acc_eff(int pid,double pt,double eta,bool &accept,do
 	}
 }
 
-/*
-double CAcceptance_STAR::ManuelEff(double eta, double pt) {
-	if (fabs(eta)>1.0) {
-		//cout << "Eta out of range " << eta << endl;
-		return 0;
-	}
-	if (pt>3000 || pt<0) {
-		//cout << "pT out of range " << pt << endl;
-		return 0;
-	}
-	eta+=1.0;
-	size_t eta_index = static_cast<int>(eta/0.1);
-	size_t pt_index  = static_cast<int>(pt/100.0);
-	if (eta_index>=20) {
-		// this should not happen if the eta_index
-		// is properly done! But let's be safe...
-		cout << "Eta index out of range! " << eta_index << " " << eta << endl;
-		return 0;
-	}
-	if (pt_index>=30) {
-		// ditto
-		cout << "pT index out of range! " << pt_index << " " << pt << endl;
-		return 0;
-	}
-	return ManuelData[eta_index][pt_index];
-}
-*/
-
 double CAcceptance_STAR::ScottEff(double eta, double pt) {
 	// Very Cheap efficiency for non-indentified particles
 	if (fabs(eta)>1.0) {
-		//cout << "Eta out of range " << eta << endl;
 		return 0;
 	}
 	if(pt>400.0){

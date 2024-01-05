@@ -29,16 +29,13 @@ CInelasticList::CInelasticList(){
 		if(UseFile){
 			inelasticfile.open(filename.c_str());
 			if(inelasticfile){
-				cout << "Importing inelastic information from file" << endl;
 				ReadInelasticInfo(true);
 			}
 			else{
-				cout << "No inelastic information file, creating..." << endl;
 				ReadInelasticInfo(false);
 			}
 		}
 		else{
-			cout << "Not Using File" << endl;
 			ReadInelasticInfo(false);
 		}
 	}
@@ -75,7 +72,7 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 
 	string filler;
 	fstream inelasticfile;
-	int ires1, ires2, ires3, ires4, netq, netb, nets, pmq=0, pmb=0, pms=0, size, foobar=0, sum = 0;
+	int ires1, ires2, ires3, ires4, netq, netb, nets, pmq=0, pmb=0, pms=0, size, sum = 0;
 	double foo = 0;
 	CresInfo *resinfoptr_1 = NULL,*resinfoptr_2 = NULL;
 	CresInfoMap::iterator rpos1,rpos2;
@@ -98,7 +95,6 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 
 					CInelasticInfo temp2(resinfoptr_1,resinfoptr_2, 0);
 					ThermalArray[netb][netq][nets][pmb][pmq][pms].push_back(temp2);
-					foobar++;
 				}
 			}
 			if(UseInelasticArray){
@@ -115,7 +111,6 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 						}
 					}
 				}else{
-					cout << "Inelastic array needed, but not in inelastic file. Erasing and creating a new one." << endl;
 					inelasticfile.close();
 					remove(filename.c_str());
 					ReadInelasticInfo(false);
@@ -129,7 +124,6 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 		inelasticfile.close();
 	}
 	else{
-			//cout << "Working" << endl;
 		for(rpos1=reslist->resmap.begin();rpos1!=reslist->resmap.end();rpos1++){
 			resinfoptr_1=rpos1->second;
 			for(rpos2=rpos1;rpos2!=reslist->resmap.end();rpos2++){
@@ -137,7 +131,6 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 					//create a new CInelasticInfo object from the two current resonance info
 				temp = new CInelasticInfo(resinfoptr_1, resinfoptr_2, 0);
 				SortedAdd(ThermalArray[abs(temp->net_b)][abs(temp->net_q)][abs(temp->net_s)][Misc::Sign(temp->net_b)][Misc::Sign(temp->net_q)][Misc::Sign(temp->net_s)], *temp);
-				foobar++;
 				delete temp;
 			}
 		}
@@ -146,7 +139,6 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 				resinfoptr_1=rpos1->second;
 				for(rpos2=reslist->resmap.begin();rpos2!=reslist->resmap.end();rpos2++){
 					resinfoptr_2=rpos2->second;
-					cout << resinfoptr_1->ires << "," << resinfoptr_2->ires << endl;
 					temp = new CInelasticInfo(resinfoptr_1, resinfoptr_2, 0);
 					Th_iter = ThermalArray[abs(temp->net_b)][abs(temp->net_q)][abs(temp->net_s)][Misc::Sign(temp->net_b)][Misc::Sign(temp->net_q)][Misc::Sign(temp->net_s)].begin();
 					while(Th_iter != ThermalArray[abs(temp->net_b)][abs(temp->net_q)][abs(temp->net_s)][Misc::Sign(temp->net_b)][Misc::Sign(temp->net_q)][Misc::Sign(temp->net_s)].end()){
@@ -155,10 +147,8 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 						if(AddToArrayCheck(*(Th_iter->resinfo_1), *(Th_iter->resinfo_2), *resinfoptr_1, *resinfoptr_2)){
 							SortedAdd(InelasticArray[min(ires1, ires2)][max(ires1, ires2)], *temp);
 							foo++;
-								//cout << foo << endl;
 							if(foo >= 5000000000){
-								cout << "Error, too many resonances are being read in." << endl;
-								exit(-1);
+								CLog::Fatal("CInelastic, Error, too many resonances are being read in\n");
 							}
 						}
 						Th_iter++;
@@ -169,7 +159,6 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 			}
 		}
 		if(UseFile){
-			//cout << "storing to file" << endl;
 			inelasticfile.open(filename.c_str(), fstream::out);
 			if(inelasticfile){
 				//inelasticfile << boltzmann->run_name << endl;
@@ -209,13 +198,11 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 					}
 				}
 			}else{
-				cout << "Unable to open inelastic file " << filename << endl;
-				exit(-1);
+				CLog::Fatal("Unable to open inelastic file "+filename+"\n");
 			}
 			inelasticfile.close();	
 		}
 	}
-	cout << "Stored " << foobar << " inelastic resonances" << endl;
 }
 
 // adds CInelasticInfo inelastic_in to list list_in, assuming that list_in is sorted by energy
