@@ -14,7 +14,6 @@ void CAction::PerformDecay(){
 	double deleta;
 	ppos=partmap.begin();
 	mother=ppos->second;
-	boltzmann->GetDeadParts(product);
 	mothermass=mother->GetMass();
 
 	if(mothermass!=mothermass){
@@ -45,9 +44,27 @@ void CAction::PerformDecay(){
 		}
 	}
 	mother->resinfo->DecayGetResInfoPtr(mothermass,nbodies,daughterresinfo);
+	//printf("product.size=%lu, daughterresinfo.size=%lu\n",product.size(),daughterresinfo.size());
+	//printf("mothermass=%g =? %g:",mothermass,mother->resinfo->mass);
+	boltzmann->GetDeadParts(product);
 	for(ibody=0;ibody<nbodies;ibody++){
 		product[ibody]->resinfo=daughterresinfo[ibody];
+		//printf(" %g =? %g, ",product[ibody]->resinfo->mass,daughterresinfo[ibody]->mass);
 	}
+	//printf("\n");
+	/*
+	for(ibody=0;ibody<nbodies;ibody++){
+		printf("%g =? %g, ",product[ibody]->resinfo->mass,daughterresinfo[ibody]->mass);
+	}
+	printf("\n");
+	for(ibody=0;ibody<nbodies;ibody++){
+		if(product[ibody]->resinfo!=daughterresinfo[ibody]){
+			product[ibody]->resinfo->Print();
+			daughterresinfo[ibody]->Print();
+			exit(1);
+		}
+	}
+	*/
 	boltzmann->msudecay->Decay(mother,nbodies,product);
 	
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

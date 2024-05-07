@@ -29,12 +29,15 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 		width_daughters+=daughter[ibody]->resinfo->width;
 	}
 	if(mass_daughters<minmass_daughters || mass[0]<minmass_daughters){
+		
 		snprintf(message,CLog::CHARLENGTH,"mothermass=%g, daughter masses=(",mass[0]);
 		for(int i=1;i<=nbodies;i++){
-			snprintf(message,CLog::CHARLENGTH,"%s%g, ",message,mass[i]);
+			snprintf(message,CLog::CHARLENGTH,"%s %g, ",message,daughter[i-1]->resinfo->mass);
 		}
 		snprintf(message,CLog::CHARLENGTH,"%s)\n",message);
 		CLog::Info(message);
+		CLog::Info("minmass_daughters="+to_string(minmass_daughters)+"\n");
+		CLog::Info("mass_daughters="+to_string(mass_daughters)+"\n");
 		CLog::Fatal("masses out of whack in decay\n");
 	}
 	if(mass[0]>minmass_daughters+0.5*(mass_daughters-minmass_daughters) && mass[0]>mass_daughters-width_daughters){
@@ -104,7 +107,7 @@ void CMSU_Decay::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daught
 	CMSUPart *dptr;
 	double tau=boltzmann->tau;
 	mass[0]=sqrt(mother->msquared);
-
+	
 	GetMassesForDecay(mass,nbodies,daughter);
 	
 	if(nbodies==2){

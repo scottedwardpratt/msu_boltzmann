@@ -66,9 +66,10 @@ void CMSU_Boltzmann::KillAllParts(){
 			snprintf(message,CLog::CHARLENGTH,"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
 			part->currentmap=&PartMap;
 			CLog::Fatal(message);
-			//Misc::Pause();
 		}
-		part->Kill();
+		else{
+			part->Kill();
+		}
 		ppos=PartMap.begin();
 	}
 	

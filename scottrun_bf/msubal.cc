@@ -4,6 +4,7 @@
 #include "msu_commonutils/log.h"
 #include <cstring>
 using namespace std;
+using namespace NMSUPratt;
 
 int main(int argc, char *argv[]){
 	if (argc != 2) {
@@ -12,34 +13,33 @@ int main(int argc, char *argv[]){
   }
 	CparameterMap parmap;
 	string run_name=argv[1];
-	char message[200];
-	int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,ndecay;
+	char message[CLog::CHARLENGTH];
+	long long int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,ndecay;
 	//char logfilename[100];
 	//sprintf(logfilename,"msuboltz_log.txt");
 	//CLog::Init(logfilename);
 	CLog::INTERACTIVE=true;
-
 	string filename="model_output/fixed_parameters.txt";
 	parmap.ReadParsFromFile(filename);
 	filename="model_output/"+run_name+"/parameters.txt";
 	parmap.ReadParsFromFile(filename);
+	
 	CmasterSampler ms(&parmap);
 	CpartList *pl=new CpartList(&parmap,ms.reslist);
-
 	ms.partlist=pl;
 	ms.randy->reset(time(NULL));
 	ms.ReadHyper_OSU_2D();
-
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
 	msuboltz->InitCascade();
-
-	CBalanceArrays *barray=msuboltz->balancearrays;
+	
+	//CBalanceArrays *barray=msuboltz->balancearrays;
 	
 	nparts=0;
 	nevents=parmap.getI("SAMPLER_NEVENTS",10);
 	nevents=parmap.getI("MSU_BOLTZMANN_NEVENTSMAX",10);
 
 	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
+	printf("check b\n");
 	msuboltz->ReadMuTInfo();
 	msuboltz->nevents=0;
 
@@ -51,33 +51,42 @@ int main(int argc, char *argv[]){
 
 	for(ievent=0;ievent<nevents;ievent++){
 		msuboltz->Reset();
+		printf("before: pl.nparts=%d\n",pl->nparts);
 		nparts+=ms.MakeEvent();
+		printf("after: pl.nparts=%d, npartstot=%lld\n",pl->nparts,nparts);
 		msuboltz->InputPartList(pl);
 		pl->Clear();
 		msuboltz->PerformAllActions();
 		msuboltz->IncrementHadronCount();
+		
+		printf("Ndead=%lu\n",msuboltz->DeadPartMap.size());
+		msuboltz->KillAllParts();
+		printf("after Killing: Ndead=%lu\n",msuboltz->DeadPartMap.size());
+		printf("after Killing: Nalive=%lu\n",msuboltz->PartMap.size());
 		
 		nmerge+=msuboltz->nmerge;
 		nscatter+=msuboltz->nscatter;
 		nannihilate+=msuboltz->nannihilate;
 		ncancel_annihilate+=msuboltz->ncancel_annihilate;
 		ndecay+=msuboltz->ndecay;
-		sprintf(message,"ievent=%lld nparts/event=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS));
+		snprintf(message,CLog::CHARLENGTH,"ievent=%lld nparts/event=%g, ndecay=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS),double(ndecay)/double(ms.NEVENTS));
 		CLog::Info(message);
-		barray->ProcessPartMap();
+		//barray->ProcessPartMap();
 	}
-	sprintf(message,"ndecay/event=%g, nmerge/event=%g, nscatter/event=%g\n",
+	snprintf(message,CLog::CHARLENGTH,"ndecay/event=%g, nmerge/event=%g, nscatter/event=%g\n",
 		double(ndecay)/double(nevents),double(nmerge)/double(nevents),double(nscatter)/double(nevents));
 	CLog::Info(message);
-	sprintf(message,"nannihilate=%g, ncancel_annihilate=%g\n",
+	snprintf(message,CLog::CHARLENGTH,"nannihilate=%g, ncancel_annihilate=%g\n",
 		double(nannihilate)/double(nevents),double(ncancel_annihilate)/double(nevents));
 	CLog::Info(message);
 	//msuboltz->WriteMuTInfo();
+	/*
 	msuboltz->WriteHadronCount();
 	barray->ConstructBFs();
 	barray->WriteBFs();
 	barray->WriteDenoms();
 	barray->WriteGammaP();
+	*/
 
 	CLog::Info("YIPPEE!!!!! We made it all the way through!\n");
 	return 0;

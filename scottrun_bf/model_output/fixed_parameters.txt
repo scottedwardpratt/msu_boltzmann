@@ -9,8 +9,8 @@ MSU_BOLTZMANN_XYMAX 30.0 # extent of collision mesh in xy plane (fm)
 MSU_BOLTZMANN_NXY 15 # number of cells in XY direction = 2*NXY, cell size = XYMAX/NXY
 MSU_BOLTZMANN_COOPERFRYE_CREATENEGPARTS false # neg. weighted particle from CF surface
 MSU_BOLTZMANN_NSCATT_MAX 0 # neg. weight tracing cut off after this no. of scatt.s
-MSU_BOLTZMANN_DELNPARTSTOT 2000
-MSU_BOLTZMANN_DELNACTIONSTOT 5000
+MSU_BOLTZMANN_DELNPARTSTOT 10000
+MSU_BOLTZMANN_DELNACTIONSTOT 10000
 MSU_BOLTZMANN_INPUT_DATAROOT model_output # reads in CF info from this directory
 MSU_BOLTZMANN_OUTPUT_DATAROOT model_output # writes OSCAR info file in this directory
 MSU_BOLTZMANN_SIGMADEFAULT 1.0 # all scatterings use this s-wave scatttering
@@ -36,7 +36,6 @@ MSU_BOLTZMANN_MUTCALC_DXY 1.0
 MSU_BOLTZMANN_MUTCALC_NXY 30
 MSU_BOLTZMANN_MUTCALC_NMINCALC 10
 MSU_BOLTZMANN_BARYON_ANNIHILATION true
-HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
 ######################
 RESONANCES_INFO_FILE ../progdata/resinfo/pdg-SMASH.dat
 RESONANCES_DECAYS_FILE ../progdata/resinfo/pdg-SMASH.dat
@@ -48,7 +47,7 @@ MSU_SAMPLER_SIGMAFMIN 0.093
 MSU_SAMPLER_SIGMAFMAX 0.093
 MSU_SAMPLER_NSIGMAF 0
 MSU_SAMPLER_SETMU0 true
-MSU_SAMPLER_NPARTS_BLOCKSIZE 2000
+MSU_SAMPLER_NPARTS_BLOCKSIZE 7000
 MSU_SAMPLER_MEANFIELD simple
 MSU_SAMPLER_CALCMU false #true if hydro hyper info doesn't already have mu.
 MSU_SAMPLER_FINDT false
@@ -58,7 +57,8 @@ MSU_SAMPLER_SFDIRNAME ../progdata/resinfo/spectralfunctions
 MSU_SAMPLER_USEPOLEMASS false
 MSU_SAMPLER_BJORKEN_ETAMAX 5.0
 ######################
-HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
+#HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
+HYPER_INFO_FILE hyperdata/hyper.txt
 #HYPER_INFO_FILE ../hyperdata/hypertest/hyper.txt
 HYPERDATA_FILENAME hyper.txt
 FREEZEOUT_TEMP   155
