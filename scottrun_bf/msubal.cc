@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
 	CparameterMap parmap;
 	string run_name=argv[1];
 	char message[CLog::CHARLENGTH];
-	long long int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,ievent,ndecay;
+	long long int nmerge,nscatter,nannihilate,ncancel_annihilate,nevents,nparts,npartstot,ievent,ndecay;
 	//char logfilename[100];
 	//sprintf(logfilename,"msuboltz_log.txt");
 	//CLog::Init(logfilename);
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 	
 	//CBalanceArrays *barray=msuboltz->balancearrays;
 	
-	nparts=0;
+	npartstot=0;
 	nevents=parmap.getI("MSU_BOLTZMANN_NEVENTSMAX",10);
 
 	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
@@ -49,7 +49,8 @@ int main(int argc, char *argv[]){
 
 	for(ievent=0;ievent<nevents;ievent++){
 		msuboltz->Reset();
-		nparts+=ms.MakeEvent();
+		nparts=ms.MakeEvent();
+		npartstot+=nparts;
 		msuboltz->InputPartList(pl);
 		pl->Clear();
 		msuboltz->PerformAllActions();
@@ -61,7 +62,7 @@ int main(int argc, char *argv[]){
 		nannihilate+=msuboltz->nannihilate;
 		ncancel_annihilate+=msuboltz->ncancel_annihilate;
 		ndecay+=msuboltz->ndecay;
-		snprintf(message,CLog::CHARLENGTH,"ievent=%lld nparts/event=%g, ndecay=%g\n",ms.NEVENTS,double(nparts)/double(ms.NEVENTS),double(ndecay)/double(ms.NEVENTS));
+		snprintf(message,CLog::CHARLENGTH,"ievent=%lld nparts=%lld, nparts/event=%g, ndecay=%g\n",ms.NEVENTS,nparts,double(npartstot)/double(ms.NEVENTS),double(ndecay)/double(ms.NEVENTS));
 		CLog::Info(message);
 		//barray->ProcessPartMap();
 	}
