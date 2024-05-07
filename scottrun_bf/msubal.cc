@@ -27,19 +27,17 @@ int main(int argc, char *argv[]){
 	CmasterSampler ms(&parmap);
 	CpartList *pl=new CpartList(&parmap,ms.reslist);
 	ms.partlist=pl;
-	ms.randy->reset(time(NULL));
-	ms.ReadHyper_OSU_2D();
+	ms.randy->reset(1234);
+	ms.ReadHyper_Duke_2D();
 	CMSU_Boltzmann *msuboltz=new CMSU_Boltzmann(run_name,&parmap,ms.reslist);
 	msuboltz->InitCascade();
 	
 	//CBalanceArrays *barray=msuboltz->balancearrays;
 	
 	nparts=0;
-	nevents=parmap.getI("SAMPLER_NEVENTS",10);
 	nevents=parmap.getI("MSU_BOLTZMANN_NEVENTSMAX",10);
 
 	nmerge=nscatter=nannihilate=ncancel_annihilate=ndecay=0;
-	printf("check b\n");
 	msuboltz->ReadMuTInfo();
 	msuboltz->nevents=0;
 
@@ -51,18 +49,12 @@ int main(int argc, char *argv[]){
 
 	for(ievent=0;ievent<nevents;ievent++){
 		msuboltz->Reset();
-		printf("before: pl.nparts=%d\n",pl->nparts);
 		nparts+=ms.MakeEvent();
-		printf("after: pl.nparts=%d, npartstot=%lld\n",pl->nparts,nparts);
 		msuboltz->InputPartList(pl);
 		pl->Clear();
 		msuboltz->PerformAllActions();
 		msuboltz->IncrementHadronCount();
-		
-		printf("Ndead=%lu\n",msuboltz->DeadPartMap.size());
 		msuboltz->KillAllParts();
-		printf("after Killing: Ndead=%lu\n",msuboltz->DeadPartMap.size());
-		printf("after Killing: Nalive=%lu\n",msuboltz->PartMap.size());
 		
 		nmerge+=msuboltz->nmerge;
 		nscatter+=msuboltz->nscatter;
