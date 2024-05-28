@@ -20,7 +20,7 @@ CMSU_Decay::CMSU_Decay(Crandy *randyset){
 
 void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPart *,5> &daughter){
 	double minmass_daughters=0.0,mass_daughters=0.0,width_daughters=0.0;
-	double mtot,E0,netprob,Estarmax;
+	double mtot,E0,netprob,Estarmax,extram,totwidth;
 	int imass,ibody;
 	int ntry;
 	for(ibody=0;ibody<nbodies;ibody++){
@@ -51,9 +51,27 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 			}
 			ntry+=1;
 			if(ntry>20){
-				mass[0]+=0.005;
-				if(ntry>200)
-					CLog::Info("In CMSU_Decay::GetMassesForDecay, ntry="+to_string(ntry)+"\n");
+				extram=mass[0];
+				totwidth=0.0;
+				for(ibody=0;ibody<nbodies;ibody++){
+					extram-=daughter[ibody]->resinfo->minmass;
+					if(daughter[ibody]->resinfo->decay){
+						totwidth+=daughter[ibody]->resinfo->width;
+					}
+				}
+				mtot=0.0;
+				extram=sqrt(randy->ran())*extram;
+				for(ibody=0;ibody<nbodies;ibody++){
+					mass[ibody+1]=daughter[ibody]->resinfo->minmass
+						+(daughter[ibody]->resinfo->width/totwidth)*extram;
+					mtot+=mass[ibody+1];
+					if(mtot>mass[0])
+						CLog::Info("1: HUH!!!, screwed up mass finding in CMSU_Decay::GetMassesForDecay\n");
+				}
+				
+				
+				if(ntry>21)
+					CLog::Info("1: In CMSU_Decay::GetMassesForDecay, ntry="+to_string(ntry)+"\n");
 			}
 		}while(mtot>mass[0]);
 	}
@@ -86,9 +104,25 @@ void CMSU_Decay::GetMassesForDecay(vector<double> &mass,int nbodies,array<CMSUPa
 			}
 			ntry+=1;
 			if(ntry>20){
-				mass[0]+=0.005;
-				if(ntry>200)
-					CLog::Info("ntry="+to_string(ntry)+"\n");
+				extram=mass[0];
+				totwidth=0.0;
+				for(ibody=0;ibody<nbodies;ibody++){
+					extram-=daughter[ibody]->resinfo->minmass;
+					if(daughter[ibody]->resinfo->decay){
+						totwidth+=daughter[ibody]->resinfo->width;
+					}
+				}
+				mtot=0.0;
+				extram=sqrt(randy->ran())*extram;
+				for(ibody=0;ibody<nbodies;ibody++){
+					mass[ibody+1]=daughter[ibody]->resinfo->minmass
+						+(daughter[ibody]->resinfo->width/totwidth)*extram;
+					mtot+=mass[ibody+1];
+					if(mtot>mass[0])
+						CLog::Info("2: HUH!!!, screwed up mass finding in CMSU_Decay::GetMassesForDecay\n");
+				}
+				if(ntry>21)
+					CLog::Info("2: In CMSU_Decay::GetMassesForDecay, ntry="+to_string(ntry)+"\n");
 			}
 		}while(mtot>mass[0]); 
 	}

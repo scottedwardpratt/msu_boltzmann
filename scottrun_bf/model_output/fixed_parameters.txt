@@ -4,13 +4,13 @@ MSU_BOLTZMANN_NSAMPLE 1 # oversampling ratio, 1=cascade, infty=Boltzmann
 MSU_BOLTZMANN_TAUCOLLMAX 30.0 #no collisions beyond this tau
 MSU_BOLTZMANN_BJORKEN true  # cyclic BC for |eta|>MSU_BOLTZMANN_ETAMAX
 MSU_BOLTZMANN_ETAMAX 1.0
-MSU_BOLTZMANN_NETA 2 # number of cells in eta direction = 2*NETA
+MSU_BOLTZMANN_NETA 3 # number of cells in eta direction = 2*NETA
 MSU_BOLTZMANN_XYMAX 30.0 # extent of collision mesh in xy plane (fm)
 MSU_BOLTZMANN_NXY 15 # number of cells in XY direction = 2*NXY, cell size = XYMAX/NXY
 MSU_BOLTZMANN_COOPERFRYE_CREATENEGPARTS false # neg. weighted particle from CF surface
 MSU_BOLTZMANN_NSCATT_MAX 0 # neg. weight tracing cut off after this no. of scatt.s
-MSU_BOLTZMANN_DELNPARTSTOT 5000
-MSU_BOLTZMANN_DELNACTIONSTOT 20000
+MSU_BOLTZMANN_DELNPARTSTOT 50000
+MSU_BOLTZMANN_DELNACTIONSTOT 100000
 MSU_BOLTZMANN_INPUT_DATAROOT model_output # reads in CF info from this directory
 MSU_BOLTZMANN_OUTPUT_DATAROOT model_output # writes OSCAR info file in this directory
 MSU_BOLTZMANN_SIGMADEFAULT 1.0 # all scatterings use this s-wave scatttering
@@ -26,12 +26,13 @@ MSU_BOLTZMANN_INELASTIC_INFO_FILE inelastic.tmp
 MSU_BOLTZMANN_BINARY_RW true
 MSU_BOLTZMANN_MUTCALC_OUTPUT_DIR mutcalc_results
 MSU_BOLTZMANN_MUTCALC_INPUT_DIR mutcalc_input
-MSU_BOLTZMANN_BFCALC false;
+MSU_BOLTZMANN_BFCALC true;
 MSU_BOLTZMANN_MUTCALC_DELTAU 1.0
 MSU_BOLTZMANN_MUTCALC_DXY 1.0
 MSU_BOLTZMANN_MUTCALC_NXY 30
 MSU_BOLTZMANN_MUTCALC_NMINCALC 10
-MSU_BOLTZMANN_BARYON_ANNIHILATION true
+MSU_BOLTZMANN_BARYON_ANNIHILATION false
+MSU_BOLTZMANN_VARY_FUGACITY false
 ######################
 RESONANCES_INFO_FILE ../progdata/resinfo/pdg-SMASH.dat
 RESONANCES_DECAYS_FILE ../progdata/resinfo/pdg-SMASH.dat
@@ -54,11 +55,12 @@ MSU_SAMPLER_USEPOLEMASS false
 MSU_SAMPLER_BJORKEN_ETAMAX 1.0  ## this is set inside CMSU_Boltzmann constructor
 ######################
 #HYPER_INFO_FILE ../hyperdata/OSU/alice_cent0_5/hyper.txt
-HYPER_INFO_FILE hyperdata/hyper.txt
+#HYPER_INFO_FILE hyperdata/hyper.txt
+HYPER_INFO_FILE udsdata/alicePbPb_cent0_5/hyper.txt
 #HYPER_INFO_FILE ../hyperdata/hypertest/hyper.txt
 HYPERDATA_FILENAME hyper.txt
 FREEZEOUT_TEMP   155
-NSAMPLE_HYDRO2UDS 10
+NSAMPLE_HYDRO2UDS 2
 NSAMPLE_UDS2BAL 2
 LATTICEDATA_DIRNAME ../latticedata
 EOS_PSTDATA_FILENAME ../eos/EOS_tables/EOS_PST_H.txt
@@ -75,8 +77,8 @@ BF_DY 0.1
 BF_NQINVBINS 100
 BF_DQINV 0.01     # GeV
 BF_NPHIBINS 28
-BF_FROM_UDS false
+BF_FROM_UDS true
 BF_PPBAR_ONLY true
 BF_NoKsNoPhi    false
-#BF_ACCEPTANCE PERFECTq
+#BF_ACCEPTANCE PERFECT
 BF_ACCEPTANCE ALICE

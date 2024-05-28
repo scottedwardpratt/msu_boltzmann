@@ -85,7 +85,8 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	string filename=dirname+"/"+"uds"+chargefile+".txt";
 	Chyper *hyper;
 	int maxbid=0;
-	double Tfo=parmap->getD("FREEZEOUT_TEMP",0.155);
+	double Tfo=parmap->getD("FREEZEOUT_TEMP",155);
+	Tfo=Tfo/1000.0;
 	char dummy[120];
 	vector<double> etaboost;
 	CHBChargeMap::iterator it;
@@ -98,9 +99,13 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
 	chargemap.clear();
+	int iread=0;
 	do{
 		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&balanceID,&qu,&qd,&qs,&w,&tau_read,&eta,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
+		fgets(dummy,120,fptr);
+		//printf("iread=%d, bid=%d, tau=%g, x=%g, y=%g, pitildexy=%g\n",iread,balanceID,tau_read,x,y,pitildexy);
+		iread+=1;
 		if(!feof(fptr)){
 			charge=new CHBCharge();
 			hyper=&(charge->hyper);
@@ -136,6 +141,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 				maxbid=balanceID;
 		}
 	}while(!feof(fptr));
+	CLog::Info("read in "+to_string(iread)+" uds charges\n");
 	fclose(fptr);
 	
 	etaboost.resize((maxbid+1)/2);
