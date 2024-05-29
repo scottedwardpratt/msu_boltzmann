@@ -1,4 +1,4 @@
-MSU_BOLTZMANN_NEVENTSMAX 10
+MSU_BOLTZMANN_NEVENTSMAX 1
 MSU_BOLTZMANN_COLLISIONS true
 MSU_BOLTZMANN_NSAMPLE 1 # oversampling ratio, 1=cascade, infty=Boltzmann
 MSU_BOLTZMANN_TAUCOLLMAX 30.0 #no collisions beyond this tau
