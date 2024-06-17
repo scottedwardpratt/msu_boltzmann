@@ -10,6 +10,8 @@
 #include "msu_commonutils/randy.h"
 #include "msu_boltzmann/action.h"
 
+CmasterSampler *CMSU_Boltzmann::mastersampler=NULL;
+
 using namespace std;
 using namespace NMSUPratt;
 

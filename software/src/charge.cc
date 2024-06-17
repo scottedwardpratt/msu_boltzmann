@@ -43,40 +43,45 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	Eigen::Vector3d Qprime,Q,q;
 	CresInfoMap::iterator itr;
 	CresInfo *resinfo;
-	sampler=charge->hyper.sampler;
+	if(hyper->T0>mastersampler->TFmin){
+		printf("calling ChooseSampler a\n");
+		sampler=mastersampler->ChooseSampler(hyper);
+		sampler->CalcNHadrons(hyper);
+		sampler->CalcChiWithFugacity(hyper);
 
-	Q(0)=charge->q[0];
-	Q(1)=charge->q[1];
-	Q(2)=charge->q[2];
-	Qprime=sampler->chiinv0*Q;
+		Q(0)=charge->q[0];
+		Q(1)=charge->q[1];
+		Q(2)=charge->q[2];
+		//Qprime=sampler->chiinv0*Q;
+		Qprime=sampler->chiinv*Q;
 
-	for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
-		resinfo=itr->second;
-		ires=resinfo->ires;
-		if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
-			if(!balancearrays->PPBAR_ONLY 
+		for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
+			resinfo=itr->second;
+			ires=resinfo->ires;
+			if(resinfo->baryon!=0 || resinfo->charge!=0 || resinfo->strange!=0){
+				if(!balancearrays->PPBAR_ONLY 
 				|| (balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112)){
-				q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
-				delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
-				bweight=charge->weight*delN/fabs(delN);
-				randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
-				while(randy->test_threshold(0.0)){
-					sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
-					mass=resinfo->mass;
-					part=GetDeadPart();
-					rapidity=charge->eta+asinh(p[3]/sqrt(mass*mass+p[1]*p[1]+p[2]*p[2]));
-					part->InitBalance(resinfo->pid,charge->x,charge->y,charge->tau,charge->eta,p[1],p[2],mass,rapidity,bweight,balanceID);
-					if(abs(resinfo->pid)==211)
-						Npions_fromcharges+=1;
-					if(abs(resinfo->pid)==2212)
-						Nprotons_fromcharges+=1;
-					randy->increase_threshold();
+					q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
+					delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
+					bweight=charge->weight*delN/fabs(delN);
+					randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
+					while(randy->test_threshold(0.0)){
+						sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
+						mass=resinfo->mass;
+						part=GetDeadPart();
+						rapidity=charge->eta+asinh(p[3]/sqrt(mass*mass+p[1]*p[1]+p[2]*p[2]));
+						part->InitBalance(resinfo->pid,charge->x,charge->y,charge->tau,charge->eta,p[1],p[2],mass,rapidity,bweight,balanceID);
+						if(abs(resinfo->pid)==211)
+							Npions_fromcharges+=1;
+						if(abs(resinfo->pid)==2212)
+							Nprotons_fromcharges+=1;
+						randy->increase_threshold();
+					}
 				}
 			}
 		}
 	}
 }
-
 
 void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	string dirname="udsdata/"+qualifier;
@@ -85,14 +90,13 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	string filename=dirname+"/"+"uds"+chargefile+".txt";
 	Chyper *hyper;
 	int maxbid=0;
-	double Tfo=parmap->getD("FREEZEOUT_TEMP",155);
-	Tfo=Tfo/1000.0;
 	char dummy[120];
 	vector<double> etaboost;
 	CHBChargeMap::iterator it;
 	CHBCharge *charge;
 	int balanceID,qu,qd,qs,bidcharge;
-	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx;
+	double u0,ux,uy,x,y,tau_read,eta,w,dOmega0,dOmegaX,dOmegaY,pitildexx,T0;
+	double fugacity_u,fugacity_d,fugacity_s;
 	double pitildexy,pitildeyy;
 	Csampler *sampler;
 	CLog::Info("opening uds file "+filename+"\n");
@@ -101,15 +105,19 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	chargemap.clear();
 	int iread=0;
 	do{
-		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&balanceID,&qu,&qd,&qs,&w,&tau_read,&eta,&x,&y,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,&pitildexx,&pitildeyy,&pitildexy);
+		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&balanceID,&qu,&qd,&qs,&w,
+		&tau_read,&eta,&x,&y,
+		&T0,&ux,&uy,&dOmega0,&dOmegaX,&dOmegaY,
+		&pitildexx,&pitildeyy,&pitildexy,
+		&fugacity_u,&fugacity_d,&fugacity_s);
 		fgets(dummy,120,fptr);
 		//printf("iread=%d, bid=%d, tau=%g, x=%g, y=%g, pitildexy=%g\n",iread,balanceID,tau_read,x,y,pitildexy);
 		iread+=1;
 		if(!feof(fptr)){
 			charge=new CHBCharge();
 			hyper=&(charge->hyper);
-			hyper->T0=Tfo;
+			hyper->T0=T0;
 			charge->q[0]=qu;
 			charge->q[1]=qd;
 			charge->q[2]=qs;
@@ -131,14 +139,25 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 			hyper->pitilde[1][1]=pitildexx;
 			hyper->pitilde[2][2]=pitildeyy;
 			hyper->pitilde[1][2]=hyper->pitilde[2][1]=pitildexy;
-			sampler=Csampler::mastersampler->ChooseSampler(hyper);
+			hyper->fugacity_u=fugacity_u;
+			hyper->fugacity_d=fugacity_d;
+			hyper->fugacity_s=fugacity_s;
+			sampler=NULL;
+			double tfmin=mastersampler->TFmin;
+			if(T0>tfmin){
+				sampler=Csampler::mastersampler->ChooseSampler(hyper);
+				hyper->T0=sampler->Tf;
+				hyper->P=sampler->P0;
+				hyper->epsilon=sampler->epsilon0;
+			}
 			hyper->sampler=sampler;
-			hyper->T0=sampler->Tf;
-			hyper->P=sampler->P0;
-			hyper->epsilon=sampler->epsilon0;
-			chargemap.insert(CHBChargePair(balanceID,charge));
-			if(balanceID>maxbid)
-				maxbid=balanceID;
+			if(T0>tfmin){
+				chargemap.insert(CHBChargePair(balanceID,charge));
+				if(balanceID>maxbid)
+					maxbid=balanceID;
+			}
+			else
+				delete charge;
 		}
 	}while(!feof(fptr));
 	CLog::Info("read in "+to_string(iread)+" uds charges\n");

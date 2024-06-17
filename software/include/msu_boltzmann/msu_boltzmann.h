@@ -220,6 +220,8 @@ namespace NMSUPratt{
 		void DeleteCharges();
 		double TotalVolume;
 		Eigen::Matrix3d chitotQ,chitotH;
+		
+		static CmasterSampler *mastersampler;
 	};
 
 }
