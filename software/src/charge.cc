@@ -44,7 +44,6 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	CresInfoMap::iterator itr;
 	CresInfo *resinfo;
 	if(hyper->T0>mastersampler->TFmin){
-		printf("calling ChooseSampler a\n");
 		sampler=mastersampler->ChooseSampler(hyper);
 		sampler->CalcNHadrons(hyper);
 		sampler->CalcChiWithFugacity(hyper);
@@ -113,7 +112,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		&fugacity_u,&fugacity_d,&fugacity_s);
 		fgets(dummy,120,fptr);
 		//printf("iread=%d, bid=%d, tau=%g, x=%g, y=%g, pitildexy=%g\n",iread,balanceID,tau_read,x,y,pitildexy);
-		printf("Charge Info, T0=%g\n",T0);
 		iread+=1;
 		if(!feof(fptr)){
 			charge=new CHBCharge();
@@ -163,6 +161,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	}while(!feof(fptr));
 	CLog::Info("read in "+to_string(iread)+" uds charges\n");
 	fclose(fptr);
+	Misc::Pause();
 	
 	etaboost.resize((maxbid+1)/2);
 	for(bidcharge=0;bidcharge<(maxbid+1)/2;bidcharge+=1){
