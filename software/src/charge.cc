@@ -113,6 +113,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		&fugacity_u,&fugacity_d,&fugacity_s);
 		fgets(dummy,120,fptr);
 		//printf("iread=%d, bid=%d, tau=%g, x=%g, y=%g, pitildexy=%g\n",iread,balanceID,tau_read,x,y,pitildexy);
+		printf("Charge Info, T0=%g\n",T0);
 		iread+=1;
 		if(!feof(fptr)){
 			charge=new CHBCharge();
