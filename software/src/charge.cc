@@ -83,10 +83,8 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 }
 
 void CMSU_Boltzmann::ReadCharges(int ichargefile){
-	string dirname="udsdata/"+qualifier;
-	char chargefile[20];
-	snprintf(chargefile,20,"%d",ichargefile);
-	string filename=dirname+"/"+"uds"+chargefile+".txt";
+	string dirname="model_output/"+run_name+"/"+qualifier+"/udsdata";
+	string filename=dirname+"/"+"uds"+to_string(ichargefile)+".txt";
 	Chyper *hyper;
 	int maxbid=0;
 	char dummy[120];
@@ -161,7 +159,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	}while(!feof(fptr));
 	CLog::Info("read in "+to_string(iread)+" uds charges\n");
 	fclose(fptr);
-	Misc::Pause();
 	
 	etaboost.resize((maxbid+1)/2);
 	for(bidcharge=0;bidcharge<(maxbid+1)/2;bidcharge+=1){

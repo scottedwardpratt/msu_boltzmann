@@ -22,15 +22,12 @@ CMSU_Boltzmann::CMSU_Boltzmann(string run_name_set,CparameterMap *parmap_set,Cre
 	parmap=parmap_set;
 	run_name=run_name_set;
 	reslist=reslist_set;
-
+	nevents=0;
 	CopyParMapPars();
 	string command="mkdir -p model_output/"+run_name;
 	system(command.c_str());
 	if(BFCALC){
 		balancearrays=new CBalanceArrays(this);
-		if(balancearrays->FROM_UDS){
-			parmap->ReadParsFromFile("udsdata/udsparameters.txt");
-		}
 	}
 	ibalmax=0;
 	npartstot=nactionstot=0;
