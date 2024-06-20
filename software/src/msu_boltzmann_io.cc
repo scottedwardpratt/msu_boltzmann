@@ -66,8 +66,8 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 		fwrite(&nparts,sizeof(int),1,oscarfile);
 	}
 	else
-		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap->getD("GLAUBER_B",0.0),
-	parmap->getD("GLAUBER_B",0.0));
+		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
+	parmap.getD("GLAUBER_B",0.0));
 	ppos=PartMap.begin();
 	for(ipart=0;ipart<nparts;ipart++){
 		part=ppos->second;
@@ -189,8 +189,8 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 		fwrite(&nparts,sizeof(int),1,oscarfile);
 	}
 	else
-		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap->getD("GLAUBER_B",0.0),
-	parmap->getD("GLAUBER_B",0.0));
+		fprintf(oscarfile,"%7d %6d    %8.5f     %8.5f\n",ievent,nparts,parmap.getD("GLAUBER_B",0.0),
+	parmap.getD("GLAUBER_B",0.0));
 	double dnchdy=0,rapidity;
 	int ipart;
 	CMSUPart *part;
@@ -319,7 +319,7 @@ void CMSU_Boltzmann::WriteMuTInfo(){
 	FILE *fptr;
 	CMuTInfo *mti;
 	CalcMuTU();
-	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_OUTPUT_DIR","mutcalc_results");
+	dirname=parmap.getS("MSU_BOLTZMANN_MUTCALC_OUTPUT_DIR","mutcalc_results");
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
 	for(iitau=0;iitau<ntau;iitau++){
 		tau_print=(iitau+1)*MUTCALC_DELTAU;
@@ -409,7 +409,7 @@ void CMSU_Boltzmann::ReadMuTInfo(){
 	FILE *fptr;
 	CMuTInfo *mti;
 	ntau=lrint(TAUCOLLMAX/MUTCALC_DELTAU);
-	dirname=parmap->getS("MSU_BOLTZMANN_MUTCALC_INPUT_DIR","mutcalc_input");
+	dirname=parmap.getS("MSU_BOLTZMANN_MUTCALC_INPUT_DIR","mutcalc_input");
 	for(iitau=0;iitau<ntau;iitau++){
 		tau_read=(iitau+1)*MUTCALC_DELTAU;
 		snprintf(filename,CLog::CHARLENGTH,"%s/mutinfo_pi_tau%g.txt",dirname.c_str(),tau_read);
