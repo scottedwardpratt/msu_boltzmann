@@ -60,16 +60,14 @@ void CMSU_Boltzmann::KillAllParts(){
 	while(ppos!=PartMap.end()){
 		part=ppos->second;
 		if(part->currentmap!=&PartMap){
-			snprintf(message,CLog::CHARLENGTH,"Fatal: KillAllParts:  currentpart not listed as PartMap\n");
+			snprintf(message,CLog::CHARLENGTH,"Fatal: KillAllParts:  currentpart not listed in PartMap\n");
 			CLog::Info(message);
 			part->Print();
 			snprintf(message,CLog::CHARLENGTH,"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
 			part->currentmap=&PartMap;
-			CLog::Fatal(message);
+			CLog::Info(message);
 		}
-		else{
-			part->Kill();
-		}
+		part->Kill();
 		ppos=PartMap.begin();
 	}
 	
@@ -213,7 +211,7 @@ void CMSU_Boltzmann::SplitPart(CMSUPart *part1,CMSUPart *part2){
 }
 
 CMSUPart* CMSU_Boltzmann::GetDeadPart(){
-	if(DeadPartMap.size()==0){
+	if(DeadPartMap.size()<10){
 		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
 			new CMSUPart(npartstot);
 		}
@@ -224,7 +222,7 @@ CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 
 void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 	int ipart;
-	while(DeadPartMap.size()<2){
+	while(DeadPartMap.size()<10){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
 		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
@@ -237,7 +235,7 @@ void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 
 void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 	int ipart;
-	while(DeadPartMap.size()<6){
+	while(DeadPartMap.size()<10){
 		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
 			new CMSUPart(npartstot);
 		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");

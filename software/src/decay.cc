@@ -161,6 +161,10 @@ void CMSU_Decay::Decay(CMSUPart *mother,int &nbodies,array<CMSUPart *,5> &daught
 		decay_nbody->GenerateMomenta(p);
 	}
 	
+	if(nbodies>5){
+		CLog::Fatal("In CMSU_Decay::Decay, nbodies="+to_string(nbodies)+"\n");
+	}
+	
 	/* Boost the new particles */
 	for(alpha=0;alpha<4;alpha++)
 		u[alpha]=mother->p[alpha]/mass[0];
