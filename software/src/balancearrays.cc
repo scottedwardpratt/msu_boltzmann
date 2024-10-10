@@ -658,19 +658,13 @@ void CBalanceArrays::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
 	string command="mkdir -p modelruns/"+boltzmann->run_name+"/"+qualifier;
 	system(command.c_str());
-	
-	bf_results_dirname="modelruns/"+boltzmann->run_name+"/"+qualifier+"/results_type2";
-	
-
 	if(FROM_UDS){
 		bf_results_dirname="modelruns/"+boltzmann->run_name+"/"+qualifier+"/results_type1";
 	}
 	else{
 		bf_results_dirname="modelruns/"+boltzmann->run_name+"/"+qualifier+"/results_type2";
-		if(boltzmann->subrun_number>=0){
-			bf_results_dirname=bf_results_dirname+"/subrun"+to_string(boltzmann->subrun_number);
-		}
 	}
+	bf_results_dirname=bf_results_dirname+"/subruns/subrun"+to_string(boltzmann->subrun_number);
 	command="mkdir -p "+bf_results_dirname;
 	system(command.c_str());
 
