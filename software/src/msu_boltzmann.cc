@@ -59,8 +59,8 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	DENSWRITE=parmap.getB("MSU_BOLTZMANN_DENSWRITE",false);
 	DENSWRITE_NTAU=parmap.getI("MSU_BOLTZMANN_DENSWRITE_NTAU",20);
 	DENSWRITE_DELTAU=parmap.getD("MSU_BOLTZMANN_DENSWRITE_DELTAU",1.0);
-	input_dataroot=parmap.getS("MSU_BOLTZMANN_INPUT_DATAROOT","udsdata/boltzmann");
-	output_dataroot=parmap.getS("MSU_BOLTZMANN_OUTPUT_DATAROOT","udsdata/boltzmann");
+	input_dataroot=parmap.getS("MSU_BOLTZMANN_INPUT_DATAROOT","modelruns");
+	output_dataroot=parmap.getS("MSU_BOLTZMANN_OUTPUT_DATAROOT","modelruns");
 	NSAMPLE=parmap.getI("MSU_SAMPLER_NSAMPLE",1);
 	NSAMPLE_UDS2BAL=parmap.getI("NSAMPLE_UDS2BAL",1);
 	ERROR_PRINT=parmap.getB("MSU_BOLTZMANN_ERROR_PRINT",true);
