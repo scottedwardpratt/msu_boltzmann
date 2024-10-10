@@ -104,7 +104,7 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 void CMSU_Boltzmann::ReadOSCARHeader(){
 	int ndead=3,idead;
 	char dummy[200];
-	oscarfilename="model_output/"+run_name+"/"+qualifier+"/oscar.txt";
+	oscarfilename="modelrun/"+run_name+"/"+qualifier+"/oscar.txt";
 	if(BINARY_RW)
 		oscarfile=fopen(oscarfilename.c_str(),"rb");
 	else{
@@ -288,7 +288,7 @@ int CMSU_Boltzmann::ReadBalanceParts(int ievent){
 }
 
 void CMSU_Boltzmann::WriteDens(){
-	string densfilename="model_output/"+run_name+"/"+qualifier+"/dens.txt";
+	string densfilename="modelruns/"+run_name+"/"+qualifier+"/dens.txt";
 	FILE *densfile = fopen(densfilename.c_str(),"w");
 	fprintf(densfile,"#ix iy  dens[itau=0] dens[itau=1]...\n");
 	double dxy;

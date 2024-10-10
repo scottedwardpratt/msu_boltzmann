@@ -19,12 +19,13 @@ using namespace NMSUPratt;
 CMSU_Boltzmann::CMSU_Boltzmann(){
 };
 
-CMSU_Boltzmann::CMSU_Boltzmann(int run_number,CresList *reslist_set){
+CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *reslist_set){
 	run_name="run"+to_string(run_number);
+	subrun_number=subrun_number_set;
 	reslist=reslist_set;
-	string parsfilename="model_output/fixed_parameters.txt";
+	string parsfilename="modelruns/fixed_parameters.txt";
 	parmap.ReadParsFromFile(parsfilename);
-	parsfilename="model_output/run"+to_string(run_number)+"/parameters.txt";
+	parsfilename="modelruns/run"+to_string(run_number)+"/mod_parameters.txt";
 	if(std::filesystem::exists(parsfilename))
 		parmap.ReadParsFromFile(parsfilename);
 	nevents=0;
@@ -191,7 +192,7 @@ void CMSU_Boltzmann::InitCascade(){
 
 void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
-	string command="mkdir -p model_output/"+run_name+"/"+qualifier;
+	string command="mkdir -p modelruns/"+run_name+"/"+qualifier;
 	system(command.c_str());
 	if(oscarfile!=NULL){
 		fclose(oscarfile);
@@ -200,7 +201,7 @@ void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 	if(BFCALC){
 		balancearrays->SetQualifier(qualifier);
 	}
-	oscarfilename="model_output/"+run_name+"/"+qualifier+"/oscar.txt";
+	oscarfilename="modelruns/"+run_name+"/"+qualifier+"/oscar.txt";
 }
 
 void CMSU_Boltzmann::Reset(){

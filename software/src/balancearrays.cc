@@ -48,7 +48,7 @@ void CBalanceArrays::InitArrays(){
 		acceptance=new CAcceptance_ALICE_Perfect(parmap);
 	}
 	else{
-		snprintf(message,CLog::CHARLENGTH,"Define BF_ACCEPTANCE in parameters.txt\n");
+		snprintf(message,CLog::CHARLENGTH,"Define BF_ACCEPTANCE in mod_parameters.txt\n");
 		CLog::Fatal(message);
 	}
 	CBFNumer::acceptance=acceptance;
@@ -656,24 +656,20 @@ void CBalanceArrays::IncrementNumer(CMSUPart *parta,CMSUPart *partb){
 
 void CBalanceArrays::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
-	string command="mkdir -p model_output/"+boltzmann->run_name+"/"+qualifier;
+	string command="mkdir -p modelruns/"+boltzmann->run_name+"/"+qualifier;
 	system(command.c_str());
 	
-	if(acceptance_description=="CHEAP"){
-		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_cheap";
-	}
-	else if(acceptance_description=="STAR"){
-		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_star";
-	}
-	else if(acceptance_description=="ALICE"){
-		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_alice";
-	}
-	else if(acceptance_description=="ALICE_PERFECT"){
-		bf_results_dirname="model_output/"+boltzmann->run_name+"/"+qualifier+"/results_alice";
+	bf_results_dirname="modelruns/"+boltzmann->run_name+"/"+qualifier+"/results_type2";
+	
+
+	if(FROM_UDS){
+		bf_results_dirname="modelruns/"+boltzmann->run_name+"/"+qualifier+"/results_type1";
 	}
 	else{
-		snprintf(message,CLog::CHARLENGTH,"acceptance_description not recognized in CBalanceArrays::SetQualifier()\n");
-		CLog::Fatal(message);
+		bf_results_dirname="modelruns/"+boltzmann->run_name+"/"+qualifier+"/results_type2";
+		if(boltzmann->subrun_number>=0){
+			bf_results_dirname=bf_results_dirname+"/subrun"+to_string(boltzmann->subrun_number);
+		}
 	}
 	command="mkdir -p "+bf_results_dirname;
 	system(command.c_str());

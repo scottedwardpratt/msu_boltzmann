@@ -83,7 +83,7 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 }
 
 void CMSU_Boltzmann::ReadCharges(int ichargefile){
-	string dirname="model_output/"+run_name+"/"+qualifier+"/udsdata";
+	string dirname="modelruns/"+run_name+"/"+qualifier+"/udsdata";
 	string filename=dirname+"/"+"uds"+to_string(ichargefile)+".txt";
 	Chyper *hyper;
 	int maxbid=0;
@@ -109,7 +109,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		&pitildexx,&pitildeyy,&pitildexy,
 		&fugacity_u,&fugacity_d,&fugacity_s);
 		fgets(dummy,120,fptr);
-		//printf("iread=%d, bid=%d, tau=%g, x=%g, y=%g, pitildexy=%g\n",iread,balanceID,tau_read,x,y,pitildexy);
 		iread+=1;
 		if(!feof(fptr)){
 			charge=new CHBCharge();
@@ -178,6 +177,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		hyper=&(charge->hyper);
 	}
 	etaboost.clear();
+	printf("uds charges read in, chargemap size=%lu\n",chargemap.size());
 	//CalcChiTotFromQ();
 }
 

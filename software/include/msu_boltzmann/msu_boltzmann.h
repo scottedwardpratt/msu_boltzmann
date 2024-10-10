@@ -83,7 +83,7 @@ namespace NMSUPratt{
 		\param[in] run_name_set This is the "run name" read in from the command line.
 		*/
 		CMSU_Boltzmann(); // this is a constructor which does nothing but create an object
-		CMSU_Boltzmann(int run_number_set,CresList *reslist_set); // this gets all arrays ready
+		CMSU_Boltzmann(int run_number_set,int subrun_number_set,CresList *reslist_set); // this gets all arrays ready
 		CBalanceArrays *balancearrays,*bfbalancearrays;
 		void CopyParMapPars(); // copies parmap to B3D variables (usually similar name)
 		void InitCascade();
@@ -103,6 +103,7 @@ namespace NMSUPratt{
 		string input_dataroot;
 		string output_dataroot;
 		string run_name,qualifier;
+		int subrun_number;
 		CMSU_Decay *msudecay;
 
 		string oscarfilename;
