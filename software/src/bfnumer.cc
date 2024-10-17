@@ -237,7 +237,7 @@ void CBFNumer::WriteNumer(string dirname,string numertype,bool NoQ){
 	filename=dirname+"/"+name+"/"+numertype+"_etas.txt";
 	fptr=fopen(filename.c_str(),"w");
 	for(ibin=0;ibin<Netabins;ibin++){
-		fprintf(fptr,"%7.2f %10.3e %10.3e\n",(0.5+ibin)*Deta,Betas[ibin],Betas[ibin]);
+		fprintf(fptr,"%7.2f %10.3e %10.3e\n",(0.5+ibin)*Deta,Betas[ibin],Cetas[ibin]);
 	}
 	fclose(fptr);
 	
