@@ -129,6 +129,7 @@ namespace NMSUPratt{
 		void KillAllParts();
 		void SplitPart(CMSUPart *part1,CMSUPart *part2);
 		void CheckPartMap();
+		void CheckDeadPartMap();
 		void CheckActions();
 
 		void AddAction_Activate(CMSUPart *part);

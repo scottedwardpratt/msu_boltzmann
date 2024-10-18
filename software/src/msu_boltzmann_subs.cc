@@ -276,6 +276,22 @@ void CMSU_Boltzmann::CheckPartMap(){
 	}
 }
 
+void CMSU_Boltzmann::CheckDeadPartMap(){
+	CMSUPartMap::iterator iter;
+	CMSUPart *part;
+	for(iter=DeadPartMap.begin();iter!=DeadPartMap.end();iter++){
+		part=iter->second;
+		if(part->currentmap!=&DeadPartMap){
+			part->Print();
+			snprintf(message,CLog::CHARLENGTH,"----- FAILED CheckPartMap-----\n");
+			CLog::Fatal(message);
+		}
+		if(part->msquared!=part->msquared){
+			CLog::Fatal("In CheckDeadPartMap, msquared!=msquared\n");
+		}
+	}
+}
+
 void CMSU_Boltzmann::InitMuTCalc(){
 	int ix,iy,ntau;
 	CMuTInfo::boltzmann=this;
