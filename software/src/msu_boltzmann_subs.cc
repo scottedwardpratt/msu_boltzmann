@@ -60,14 +60,17 @@ void CMSU_Boltzmann::KillAllParts(){
 	while(ppos!=PartMap.end()){
 		part=ppos->second;
 		if(part->currentmap!=&PartMap){
-			snprintf(message,CLog::CHARLENGTH,"Fatal: KillAllParts:  currentpart not listed in PartMap\n");
+			snprintf(message,CLog::CHARLENGTH,"KillAllParts:  currentpart not listed in PartMap\n");
 			CLog::Info(message);
 			part->Print();
 			snprintf(message,CLog::CHARLENGTH,"PartMap.size=%d, DeadPartMap.size=%d\n",int(PartMap.size()),int(DeadPartMap.size()));
-			part->currentmap=&PartMap;
 			CLog::Info(message);
+			PartMap.erase(ppos);
+			part->currentmap=NULL;
+			
 		}
-		part->Kill();
+		else
+			part->Kill();
 		ppos=PartMap.begin();
 	}
 	
