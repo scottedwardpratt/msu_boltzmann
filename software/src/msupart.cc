@@ -210,11 +210,12 @@ CMSUPartMap::iterator CMSUPart::DeleteFromCurrentMap(){
 	neighbor++;
 	if(ppos==currentmap->end()){
 		snprintf(message,CLog::CHARLENGTH,"FATAL: In CMSUPart::DeleteFromCurrentMap, can't find ppos!!!\n");
-		Print();
+		CLog::Fatal(message);
 		snprintf(message,CLog::CHARLENGTH,"currentmap has length %d\n",int(currentmap->size()));
 		CLog::Fatal(message);
 	}
-	else currentmap->erase(ppos);
+	else
+		currentmap->erase(ppos);
 	currentmap=NULL;
 	return neighbor;
 }

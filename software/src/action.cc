@@ -149,8 +149,8 @@ void CAction::CheckPartList(){
 		ppos2=part->GetPos(&(boltzmann->PartMap));
 		if(ppos2==boltzmann->PartMap.end()){
 			part->Print();
-			snprintf(message,CLog::CHARLENGTH,"%s____________ CAction::CheckPartList FATAL, action type=%d ________________\n",message,type);
-			snprintf(message,CLog::CHARLENGTH,"%siterator not in expected pmap\n",message);
+			snprintf(message,CLog::CHARLENGTH,"%s ____________ CAction::CheckPartList FATAL, action type=%d ________________\n",message,type);
+			snprintf(message,CLog::CHARLENGTH,"%s iterator not in expected pmap\n",message);
 			CLog::Fatal(message);
 		}
 		++ppos;
