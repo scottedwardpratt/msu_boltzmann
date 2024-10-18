@@ -23,7 +23,7 @@ void CMSU_Boltzmann::AddAction_Activate(CMSUPart *part){
 	action->MoveToActionMap();
 	action->partmap.clear();
 	action->partmap.insert(CMSUPartPair(part->key,part));
-	if(action->tau<tau){
+	if(action->tau<tau-1.0E-8){
 		snprintf(message,CLog::CHARLENGTH,"trying to AddAction_Activate at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
 		CLog::Fatal(message);
 	}
@@ -38,7 +38,7 @@ void CMSU_Boltzmann::AddAction_Decay(CMSUPart *part,double taudecay){
 	action->MoveToActionMap();
 	action->partmap.insert(CMSUPartPair(part->key,part));
 	part->actionmap.insert(CActionPair(action->key,action));
-	if(action->tau<tau){
+	if(action->tau<tau-1.0E-8){
 		part->Print();
 		part->cell->Print();
 		snprintf(message,CLog::CHARLENGTH,"CMSU_Boltzmann::AddAction_Decay, trying to AddAction_Decay at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
@@ -58,7 +58,7 @@ void CMSU_Boltzmann::AddAction_ExitCell(CMSUPart *part){
 		action->partmap.clear();
 		action->partmap.insert(CMSUPartPair(part->key,part));
 		part->actionmap.insert(CActionPair(action->key,action));
-		if(action->tau<tau-1.0E-10){
+		if(action->tau<tau-1.0E-8){
 			part->Print();
 			part->cell->Print();
 			snprintf(message,CLog::CHARLENGTH,"CMSU_Boltzmann::AddAction_ExitCell, trying to AddAction_ExitCell at earler time!!! action->tau=%g, tau=%g\n",action->tau,tau);
@@ -84,7 +84,7 @@ void CMSU_Boltzmann::AddAction_Collision(CMSUPart *part1,CMSUPart *part2,double 
 	}
 	//action->dsigma_merge=dsigma_merge;
 	action->MoveToActionMap();
-	if(action->tau<tau){
+	if(action->tau<tau-1.0E-8){
 		action->Print();
 		snprintf(message,CLog::CHARLENGTH,"trying to AddAction_Collision at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
@@ -105,7 +105,7 @@ void CMSU_Boltzmann::AddAction_DensCalc(double taucalc){
 	action->tau=taucalc;
 	action->MoveToActionMap();
 	action->partmap.clear(); 
-	if(action->tau<tau){
+	if(action->tau<tau-1.0E-8){
 		action->Print();
 		snprintf(message,CLog::CHARLENGTH,"trying to AddAction_DensCalc at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
@@ -119,7 +119,7 @@ void CMSU_Boltzmann::AddAction_MuTCalc_UpdateNPE(double taucalc){
 	action->tau=taucalc;
 	action->MoveToActionMap();
 	action->partmap.clear(); 
-	if(action->tau<tau){
+	if(action->tau<tau-1.0E-8){
 		action->Print();
 		snprintf(message,CLog::CHARLENGTH,"trying to AddAction_MuTCalc at earler time!!!  tau=%g\n",tau);
 		CLog::Fatal(message);
