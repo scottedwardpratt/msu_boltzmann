@@ -17,24 +17,15 @@ CBalance *CMSUPart::cb=NULL;
 char *CMSUPart::message=new char[500];
 
 CMSUPart::CMSUPart(){
-	cell=NULL;
-	currentmap=NULL;
-	bweight=1.0;
-	tau0=0.0;
-	currentmap=NULL;
-	cell=NULL;
-	active=false;
-	balanceID=-999;
 }
 
-CMSUPart::CMSUPart(int keyset){
+void CMSUPart::InitDead(int keyset){
 	bweight=1.0;
 	key=keyset;
 	tau0=0.0;
 	tauexit=0.0;
 	tau_lastint=0.0;
 	taudecay=0.0;
-	currentmap=&boltzmann->DeadPartMap;
 	cell=NULL;
 	actionmap.clear();
 	active=false;
@@ -45,8 +36,11 @@ CMSUPart::CMSUPart(int keyset){
 	y=eta=0.0;
 	nscatt=0;
 	balanceID=-999;
-	boltzmann->DeadPartMap.insert(CMSUPartPair(key,this));
-	boltzmann->npartstot+=1;
+	AddToMap(&boltzmann->DeadPartMap);
+}
+
+CMSUPart::CMSUPart(int keyset){
+	InitDead(keyset);
 }
 
 CMSUPart::~CMSUPart(){

@@ -213,21 +213,15 @@ void CMSU_Boltzmann::SplitPart(CMSUPart *part1,CMSUPart *part2){
 }
 
 CMSUPart* CMSU_Boltzmann::GetDeadPart(){
-	if(DeadPartMap.size()<10){
-		for(int ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++){
-			new CMSUPart(npartstot);
-		}
-		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
+	if(DeadPartMap.size()<2){
+		CLog::Fatal("MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
 	}
 	return DeadPartMap.begin()->second;
 }
 
 void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
-	int ipart;
-	while(DeadPartMap.size()<10){
-		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
-			new CMSUPart(npartstot);
-		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
+	if(DeadPartMap.size()<3){
+		CLog::Fatal("MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	part1=ppos->second;
@@ -236,14 +230,11 @@ void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 }
 
 void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
-	int ipart;
-	while(DeadPartMap.size()<10){
-		for(ipart=0;ipart<DELNPARTSTOT*NSAMPLE;ipart++)
-			new CMSUPart(npartstot);
-		CLog::Info("making new Dead parts,  PartMap Size="+to_string(PartMap.size())+", tau="+to_string(tau)+"\n");
+	if(DeadPartMap.size()<6){
+		CLog::Fatal("MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
-	for(ipart=0;ipart<5;ipart++){
+	for(int ipart=0;ipart<5;ipart++){
 		product[ipart]=ppos->second;
 		++ppos;
 	}
@@ -251,11 +242,7 @@ void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 
 CAction* CMSU_Boltzmann::GetDeadAction(){
 	if(DeadActionMap.size()==0){
-		CLog::Info("making new action, ActionMap Size="+to_string(ActionMap.size())+", tau="+to_string(tau)+"\n");
-		for(int iaction=0;iaction<DELNACTIONSTOT*NSAMPLE;iaction++)
-			new CAction(-1);
-		snprintf(message,CLog::CHARLENGTH,"created %d new actions, Action Map Size=%lu\n",DELNACTIONSTOT*NSAMPLE,ActionMap.size());
-		CLog::Info(message);
+		CLog::Fatal("ActionVector too small, Increase MSU_BOLTZMANN_DELNACTIONSTOT\n");
 	}
 	return DeadActionMap.begin()->second;
 }

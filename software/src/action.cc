@@ -11,6 +11,13 @@ CAction::CAction(){
 }
 
 CAction::CAction(int keyset){
+	InitDead(keyset);
+}
+
+CAction::~CAction(){
+}
+
+void CAction::InitDead(int keyset){
 	key=keyset;
 	listid=key;
 	tau=0.0;

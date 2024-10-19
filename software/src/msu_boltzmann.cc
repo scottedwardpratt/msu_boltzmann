@@ -38,6 +38,8 @@ CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *re
 	//CresList::boltzmann=this;
 	CMSUPart::boltzmann=this;
 	tau=0.0;
+	allpartsvec.resize(DELNPARTSTOT);
+	allactionsvec.resize(DELNACTIONSTOT);
 	chitotH.setZero();
 	chitotQ.setZero();
 	PartMap.clear();
@@ -210,6 +212,16 @@ void CMSU_Boltzmann::Reset(){
 	double taucalc;
 	KillAllParts();
 	KillAllActions();
+	PartMap.clear();
+	DeadPartMap.clear();
+	ActionMap.clear();
+	DeadActionMap.clear();
+	for(unsigned int ipart=0;ipart<allpartsvec.size();ipart++){
+		allpartsvec[ipart].InitDead(int(ipart));
+	}
+	for(unsigned int iaction=0;iaction<allactionsvec.size();iaction++){
+		allactionsvec[iaction].InitDead(int(iaction));
+	}
 	tau=0.0;
 	nactionstot=0;
 	npartstot=0;

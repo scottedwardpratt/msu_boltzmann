@@ -51,7 +51,7 @@ namespace NMSUPratt{
 
 		CMSUPart(int keyset);
 	
-	
+		void InitDead(int keyset);
 		void InitBalance(int ID,double x,double y,double tau,double eta,double px,double py,double mass,double rapidity,double bweight,int balanceid);
 		void Propagate(double tau);
 		void FindDecay();

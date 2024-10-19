@@ -38,6 +38,7 @@ namespace NMSUPratt{
 		/*!
 		This map is used to schedule and organize the various actions that the model must perform in time order. It contains all actions (as CAction objects) that have yet to occur, and the map's key is the boost-invariant time \f$\tau\f$ at which the action is scheduled to occur.
 		*/
+		vector<CAction> allactionsvec;
 		CActionMap ActionMap;
 		CActionMap DeadActionMap; // action objects not in line to be processed
 		CresList *reslist;	//!< The CresList instance for the mucalodel (dynamically allocated).
@@ -69,6 +70,7 @@ namespace NMSUPratt{
 	
 		void ReadHydroInput();
 		CMSUPart *GetDeadPart();
+		vector<CMSUPart> allpartsvec;
 		void GetDeadParts(CMSUPart *&part1,CMSUPart *&part2);
 		void GetDeadParts(array<CMSUPart*,5> &product);
 		CAction *GetDeadAction();

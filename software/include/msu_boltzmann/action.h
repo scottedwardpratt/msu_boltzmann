@@ -51,6 +51,7 @@ namespace NMSUPratt{
 		array <CresInfo *,5> daughterresinfo;
 		//void PerformSwallowParticles();
 		CAction();
+		void InitDead(int keyset);
 		CAction(int keyset);
 		~CAction();
 

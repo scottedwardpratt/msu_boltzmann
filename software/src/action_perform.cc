@@ -8,16 +8,12 @@ void CAction::Perform(){
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
-	//if(tau>20 && type!=1){
-		//CLog::Info("Performing Action of type "+to_string(type)+", tau="+to_string(tau)+"\n");
-		//CLog::Info("nactionstot="+to_string(boltzmann->nactionstot)+"\n");
-	//}
-
-
+	
 	boltzmann->nactionstot+=1;
 	boltzmann->tau=tau;
 	for(ppos=partmap.begin();ppos!=partmap.end();++ppos){
 		part=ppos->second;
+		
 		part->Propagate(tau);
 		if(part->currentmap != &(boltzmann->PartMap)){
 			CLog::Info("wrong map for part in Action List\n");
