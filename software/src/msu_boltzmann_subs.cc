@@ -395,6 +395,7 @@ void CMSU_Boltzmann::IncrementSpectraV2(){
 void CMSU_Boltzmann::WriteSpectraV2(){
 	int ipt,ispecies;
 	double d3poverE,spec,v,pt;
+	double degen[3]={2.0,2.0,4.0};
 	
 	FILE *fptr;
 	string dirname,filename;
@@ -408,7 +409,7 @@ void CMSU_Boltzmann::WriteSpectraV2(){
 		pt=(ipt+0.5)*DELPT_SPECTRA;
 		fprintf(fptr,"%6.3f ",pt);
 		for(ispecies=0;ispecies<3;ispecies++){
-			spec=spectra[ispecies][ipt]/(d3poverE*double(nevents*NSAMPLE));
+			spec=spectra[ispecies][ipt]/(d3poverE*double(nevents*NSAMPLE)*degen[ispecies]);
 			fprintf(fptr,"%12.5e ",spec);
 		}
 		fprintf(fptr,"\n");
