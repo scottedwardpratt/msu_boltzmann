@@ -59,6 +59,12 @@ namespace NMSUPratt{
 		vector<vector<vector<CMSU_BoltzmannCell *> > > cell;
 		vector<vector<vector<CMuTInfo *>>> muTinfo;
 		vector<double> annihilation_array;
+		
+		double DELPT_SPECTRA,DELPT_V2;
+		int NPT_SPECTRA,NPT_V2;
+		vector<vector<double>> spectra,v2,v2denom;
+		void IncrementSpectraV2();
+		void WriteSpectraV2();
 
 		int Npions_fromcharges,Nprotons_fromcharges;
 	
@@ -203,10 +209,6 @@ namespace NMSUPratt{
 		bool STAR_ACCEPTANCE;
 		CRegenerate *regen;
 		int DecayParts(int nparts);
-		double CalcSpectra_PHENIX();
-		void CalcSpectra_PHENIXppbar();
-		double CalcSpectra_ALICE();
-		void Calc3DSpectra();
 		void CalcBalance();
 		void CalcBalanceQGP();
 		void CalcV2_STAR();

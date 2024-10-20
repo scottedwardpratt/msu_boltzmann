@@ -90,6 +90,11 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	MUTCALC_DELTAU=parmap.getD("MSU_BOLTZMANN_MUTCALC_DELTAU",0.5);
 	ANNIHILATION_SREDUCTION=parmap.getD("MSU_BOLTZMANN_ANNIHILATION_SREDUCTION",1.0);
 	RESONANCE_DECAYS=parmap.getB("MSU_BOLTZMANN_RESONANCE_DECAYS",true);
+	DELPT_SPECTRA=parmap.getD("MSU_BOLTZMANN_DELPT_SPECTRA",0.025);
+	DELPT_V2=parmap.getD("MSU_BOLTZMANN_DELPT_V2",0.025);
+	NPT_SPECTRA=parmap.getI("MSU_BOLTZMANN_NPT_SPECTRA",80);
+	NPT_V2=parmap.getI("MSU_BOLTZMANN_NPT_V2",80);
+	
 	NPARTSMAX*=NSAMPLE;
 	DXY=XYMAX/double(NXY);
 	DETA=ETAMAX/double(NETA);
@@ -185,6 +190,22 @@ void CMSU_Boltzmann::InitCascade(){
 		annihilation_array.resize(imax);
 		for(int i=0;i<imax;i++){
 			annihilation_array[i]=0.0;
+		}
+	}
+	spectra.resize(3);
+	for(int ispecies=0;ispecies<3;ispecies++){
+		spectra[ispecies].resize(NPT_SPECTRA);
+		for(int ipt=0;ipt<NPT_V2;ipt++)
+			spectra[ispecies][ipt]=0.0;
+	}
+	v2.resize(3);
+	v2denom.resize(3);
+	for(int ispecies=0;ispecies<3;ispecies++){
+		v2[ispecies].resize(NPT_V2);
+		v2denom[ispecies].resize(NPT_V2);
+		for(int ipt=0;ipt<NPT_V2;ipt++){
+			v2[ispecies][ipt]=0.0;
+			v2denom[ispecies][ipt]=0.0;
 		}
 	}
 	if(MUTCALC || BARYON_ANNIHILATION){

@@ -359,6 +359,78 @@ void CMSU_Boltzmann::IncrementHadronCount(){
 	}
 }
 
+void CMSU_Boltzmann::IncrementSpectraV2(){
+	int ipt,ispecies;
+	double pt,phi;
+	CMSUPartMap::iterator iter;
+	CMSUPart *part;
+	CresInfo *resinfo;
+	nbaryons=0;
+	for(iter=PartMap.begin();iter!=PartMap.end();iter++){
+		part=iter->second;
+		resinfo=part->resinfo;
+		ispecies=-1;
+		if(abs(resinfo->pid)==211)
+			ispecies=0;
+		if(abs(resinfo->pid)==311)
+			ispecies=1;
+		if(abs(resinfo->pid)==2112 || abs(resinfo->pid)==2212)
+			ispecies=2;
+		if(ispecies>=0){
+			pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
+			ipt=floorl(pt/DELPT_SPECTRA);
+			if(ipt<NPT_SPECTRA){
+				spectra[ispecies][ipt]+=1.0;
+			}
+			ipt=floorl(pt/DELPT_V2);
+			if(ipt<NPT_V2){
+				phi=atan2(part->p[2],part->p[1]);
+				v2[ispecies][ipt]+=cos(2.0*phi);
+				v2denom[ispecies][ipt]+=1.0;
+			}
+		}
+	}
+}
+
+void CMSU_Boltzmann::WriteSpectraV2(){
+	int ipt,ispecies;
+	double d3poverE,spec,v,pt;
+	
+	FILE *fptr;
+	string dirname,filename;
+	dirname="modelruns/"+run_name+"/"+qualifier+"/results_spectrav2";
+	dirname=dirname+"/subruns/subrun"+to_string(subrun_number);
+	
+	filename=dirname+"/spectra.txt";
+	fptr=fopen("filename.c_str()","w");
+	for(ipt=0;ipt<NPT_SPECTRA;ipt++){
+		d3poverE=2.0*ETAMAX*PI*(pow((ipt+1)*DELPT_SPECTRA,2)-pow(ipt*DELPT_SPECTRA,2));
+		pt=(ipt+0.5)*DELPT_SPECTRA;
+		fprintf(fptr,"%6.3f ",pt);
+		for(ispecies=0;ispecies<3;ispecies++){
+			spec=spectra[ispecies][ipt]/(d3poverE*double(nevents*NSAMPLE));
+			fprintf(fptr,"%12.5e ",spec);
+		}
+		fprintf(fptr,"\n");
+	}
+	fclose(fptr);
+	
+	filename=dirname+"/v2.txt";
+	fptr=fopen("filename.c_str()","w");
+	for(ipt=0;ipt<NPT_V2;ipt++){
+		d3poverE=2.0*ETAMAX*PI*(pow((ipt+1)*DELPT_V2,2)-pow(ipt*DELPT_V2,2));
+		pt=(ipt+0.5)*DELPT_V2;
+		fprintf(fptr,"%6.3f ",pt);
+		for(ispecies=0;ispecies<3;ispecies++){
+			v=v2[ispecies][ipt]/v2denom[ispecies][ipt];
+			fprintf(fptr,"%12.5e ",v);
+		}
+		fprintf(fptr,"\n");
+	}
+	fclose(fptr);
+	
+}
+
 void CMSU_Boltzmann::WriteHadronCount(){
 	char message[CLog::CHARLENGTH];
 	double norm=1.0/double(nevents*NSAMPLE);
