@@ -61,6 +61,7 @@ namespace NMSUPratt{
 		vector<double> annihilation_array;
 		
 		double DELPT_SPECTRA,DELPT_V2;
+		vector<double> meanpt,meanv2,meanpt_denom,meanv2_denom;
 		int NPT_SPECTRA,NPT_V2;
 		vector<vector<double>> spectra,v2,v2denom;
 		void IncrementSpectraV2();

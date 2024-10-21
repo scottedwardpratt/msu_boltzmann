@@ -381,12 +381,16 @@ void CMSU_Boltzmann::IncrementSpectraV2(){
 			ipt=floorl(pt/DELPT_SPECTRA);
 			if(ipt<NPT_SPECTRA){
 				spectra[ispecies][ipt]+=1.0;
+				meanpt[ispecies]+=pt;
+				meanpt_denom[ispecies]+=1.0;
 			}
 			ipt=floorl(pt/DELPT_V2);
 			if(ipt<NPT_V2){
 				phi=atan2(part->p[2],part->p[1]);
 				v2[ispecies][ipt]+=cos(2.0*phi);
 				v2denom[ispecies][ipt]+=1.0;
+				meanv2[ispecies]+=cos(2.0*phi);
+				meanv2_denom[ispecies]+=1.0;
 			}
 		}
 	}
@@ -396,18 +400,19 @@ void CMSU_Boltzmann::WriteSpectraV2(){
 	int ipt,ispecies;
 	double d3poverE,spec,v,pt;
 	double degen[3]={2.0,2.0,4.0};
-	
 	FILE *fptr;
-	string dirname,filename;
+	string dirname,filename,command;
 	dirname="modelruns/"+run_name+"/"+qualifier+"/results_spectrav2";
 	dirname=dirname+"/subruns/subrun"+to_string(subrun_number);
-	
+	command="mkdir -p "+dirname;
+	system(command.c_str());
+
 	filename=dirname+"/spectra.txt";
-	fptr=fopen("filename.c_str()","w");
+	fptr=fopen(filename.c_str(),"w");
 	for(ipt=0;ipt<NPT_SPECTRA;ipt++){
 		d3poverE=2.0*ETAMAX*PI*(pow((ipt+1)*DELPT_SPECTRA,2)-pow(ipt*DELPT_SPECTRA,2));
 		pt=(ipt+0.5)*DELPT_SPECTRA;
-		fprintf(fptr,"%6.3f ",pt);
+		fprintf(fptr,"%7.4f ",pt);
 		for(ispecies=0;ispecies<3;ispecies++){
 			spec=spectra[ispecies][ipt]/(d3poverE*double(nevents*NSAMPLE)*degen[ispecies]);
 			fprintf(fptr,"%12.5e ",spec);
@@ -417,17 +422,26 @@ void CMSU_Boltzmann::WriteSpectraV2(){
 	fclose(fptr);
 	
 	filename=dirname+"/v2.txt";
-	fptr=fopen("filename.c_str()","w");
+	fptr=fopen(filename.c_str(),"w");
 	for(ipt=0;ipt<NPT_V2;ipt++){
-		d3poverE=2.0*ETAMAX*PI*(pow((ipt+1)*DELPT_V2,2)-pow(ipt*DELPT_V2,2));
 		pt=(ipt+0.5)*DELPT_V2;
-		fprintf(fptr,"%6.3f ",pt);
+		fprintf(fptr,"%7.4f ",pt);
 		for(ispecies=0;ispecies<3;ispecies++){
 			v=v2[ispecies][ipt]/v2denom[ispecies][ipt];
 			fprintf(fptr,"%12.5e ",v);
 		}
 		fprintf(fptr,"\n");
 	}
+	fclose(fptr);
+	
+	filename=dirname+"/meanpt_meanv2.txt";
+	fptr=fopen(filename.c_str(),"w");
+	fprintf(fptr,"<pt>_pi %12.5f\n",meanpt[0]/meanpt_denom[0]);
+	fprintf(fptr,"<pt>_K  %12.5f\n",meanpt[1]/meanpt_denom[1]);
+	fprintf(fptr,"<pt>_p  %12.5f\n",meanpt[2]/meanpt_denom[2]);
+	fprintf(fptr,"<v2>_pi %12.5f\n",meanv2[0]/meanv2_denom[0]);
+	fprintf(fptr,"<v2>_K  %12.5f\n",meanv2[1]/meanv2_denom[1]);
+	fprintf(fptr,"<v2>_p  %12.5f\n",meanv2[2]/meanv2_denom[2]);
 	fclose(fptr);
 	
 }
@@ -438,8 +452,8 @@ void CMSU_Boltzmann::WriteHadronCount(){
 	long long int NB=hadroncount.NN+hadroncount.NLambda+hadroncount.NSigma+hadroncount.NXi+hadroncount.NOmega;
 	long long int Nhyper=NB-hadroncount.NN;
 	snprintf(message,CLog::CHARLENGTH,"Npi     %g\nNK      %g\nNN      %g\nNLambda %g\nNsigma  %g\nNXi     %g\nNOmega  %g\nNB      %g\nNhyper  %g\n",norm*hadroncount.Npi,norm*hadroncount.NK,norm*hadroncount.NN,
-		norm*hadroncount.NLambda,norm*hadroncount.NSigma,norm*hadroncount.NXi,
-		norm*hadroncount.NOmega,norm*NB,norm*Nhyper);
+	norm*hadroncount.NLambda,norm*hadroncount.NSigma,norm*hadroncount.NXi,
+	norm*hadroncount.NOmega,norm*NB,norm*Nhyper);
 	CLog::Info(message);
 }
 

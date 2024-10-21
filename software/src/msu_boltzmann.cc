@@ -192,8 +192,16 @@ void CMSU_Boltzmann::InitCascade(){
 			annihilation_array[i]=0.0;
 		}
 	}
+	meanpt.resize(3);
+	meanv2.resize(3);
+	meanpt_denom.resize(3);
+	meanv2_denom.resize(3);
 	spectra.resize(3);
 	for(int ispecies=0;ispecies<3;ispecies++){
+		meanpt[ispecies]=0.0;
+		meanv2[ispecies]=0.0;
+		meanpt_denom[ispecies]=0.0;
+		meanv2_denom[ispecies]=0.0;
 		spectra[ispecies].resize(NPT_SPECTRA);
 		for(int ipt=0;ipt<NPT_V2;ipt++)
 			spectra[ispecies][ipt]=0.0;
