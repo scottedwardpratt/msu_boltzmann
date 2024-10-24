@@ -361,7 +361,7 @@ void CMSU_Boltzmann::IncrementHadronCount(){
 
 void CMSU_Boltzmann::IncrementSpectraV2(){
 	int ipt,ispecies;
-	double pt,phi;
+	double pt,phi,ptmin=0.0,ptmax=0.0;
 	CMSUPartMap::iterator iter;
 	CMSUPart *part;
 	CresInfo *resinfo;
@@ -370,27 +370,40 @@ void CMSU_Boltzmann::IncrementSpectraV2(){
 		part=iter->second;
 		resinfo=part->resinfo;
 		ispecies=-1;
-		if(abs(resinfo->pid)==211)
+		if(abs(resinfo->pid)==211){
+			ptmin=0.2;
+			ptmax=2.0;
 			ispecies=0;
-		if(abs(resinfo->pid)==311)
+		}
+		if(abs(resinfo->pid)==321){
+			ptmin=0.2;
+			ptmax=2.0;
 			ispecies=1;
-		if(abs(resinfo->pid)==2112 || abs(resinfo->pid)==2212)
+		}
+		if(abs(resinfo->pid)==2112 || abs(resinfo->pid)==2212){
 			ispecies=2;
+			ptmin=0.5;
+			ptmax=2.5;
+		}
 		if(ispecies>=0){
 			pt=sqrt(part->p[1]*part->p[1]+part->p[2]*part->p[2]);
 			ipt=floorl(pt/DELPT_SPECTRA);
 			if(ipt<NPT_SPECTRA){
 				spectra[ispecies][ipt]+=1.0;
-				meanpt[ispecies]+=pt;
-				meanpt_denom[ispecies]+=1.0;
+				if(pt>ptmin &&pt<ptmax){
+					meanpt[ispecies]+=pt;
+					meanpt_denom[ispecies]+=1.0;
+				}
 			}
 			ipt=floorl(pt/DELPT_V2);
 			if(ipt<NPT_V2){
 				phi=atan2(part->p[2],part->p[1]);
 				v2[ispecies][ipt]+=cos(2.0*phi);
 				v2denom[ispecies][ipt]+=1.0;
-				meanv2[ispecies]+=cos(2.0*phi);
-				meanv2_denom[ispecies]+=1.0;
+				if(pt>ptmin && pt<ptmax){
+					meanv2[ispecies]+=cos(2.0*phi);
+					meanv2_denom[ispecies]+=1.0;
+				}
 			}
 		}
 	}
@@ -436,12 +449,12 @@ void CMSU_Boltzmann::WriteSpectraV2(){
 	
 	filename=dirname+"/meanpt_meanv2.txt";
 	fptr=fopen(filename.c_str(),"w");
-	fprintf(fptr,"<pt>_pi %12.5f\n",meanpt[0]/meanpt_denom[0]);
-	fprintf(fptr,"<pt>_K  %12.5f\n",meanpt[1]/meanpt_denom[1]);
-	fprintf(fptr,"<pt>_p  %12.5f\n",meanpt[2]/meanpt_denom[2]);
-	fprintf(fptr,"<v2>_pi %12.5f\n",meanv2[0]/meanv2_denom[0]);
-	fprintf(fptr,"<v2>_K  %12.5f\n",meanv2[1]/meanv2_denom[1]);
-	fprintf(fptr,"<v2>_p  %12.5f\n",meanv2[2]/meanv2_denom[2]);
+	fprintf(fptr,"meanpt_pi %12.5f\n",meanpt[0]/meanpt_denom[0]);
+	fprintf(fptr,"meanpt_K  %12.5f\n",meanpt[1]/meanpt_denom[1]);
+	fprintf(fptr,"meanpt_p  %12.5f\n",meanpt[2]/meanpt_denom[2]);
+	fprintf(fptr,"meanv2_pi %12.5f\n",meanv2[0]/meanv2_denom[0]);
+	fprintf(fptr,"meanv2_K  %12.5f\n",meanv2[1]/meanv2_denom[1]);
+	fprintf(fptr,"meanv2_p  %12.5f\n",meanv2[2]/meanv2_denom[2]);
 	fclose(fptr);
 	
 }
