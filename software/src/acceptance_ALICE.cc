@@ -191,13 +191,13 @@ void CAcceptance_ALICE_Perfect::CalcAcceptanceNoID(bool &accept,double &efficien
 
 double CAcceptance_ALICE::GetDelYMax(int pida,int pidb){
 	if(abs(pida)==211 && abs(pidb)==211){
-		return 1.6;
+		return 1.4;
 	}
 	else if(abs(pida)==2212 && abs(pidb)==2212){
-		return 1.2;
+		return 1.0;
 	}
 	else
-		return 1.4;
+		return 1.2;
 }
 
 double CAcceptance_ALICE_Perfect::GetDelYMax(int pida,int pidb){
