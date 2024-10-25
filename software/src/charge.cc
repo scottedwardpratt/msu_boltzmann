@@ -177,7 +177,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		hyper=&(charge->hyper);
 	}
 	etaboost.clear();
-	printf("uds charges read in, chargemap size=%lu\n",chargemap.size());
+	CLog::Info("uds charges read in, chargemap size="+to_string(chargemap.size())+"\n");
 	//CalcChiTotFromQ();
 }
 
