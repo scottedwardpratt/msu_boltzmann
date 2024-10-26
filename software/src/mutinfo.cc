@@ -61,22 +61,25 @@ CMuTInfo::CMuTInfo(double tau_set){
 void CMuTInfo::Print(){
 	char message[CLog::CHARLENGTH];
 	snprintf(message,CLog::CHARLENGTH,"-------- MuT Info, tau=%g ----------\n",tau);
-
-	snprintf(message,CLog::CHARLENGTH,"%sNpi=%d, Epi/N=%g, Pxpi/Npi=%g, Pypi/Npi=%g\n",
-		message,Npi,Epi/Npi,Pxpi/Npi,Pypi/Npi);
-	snprintf(message,CLog::CHARLENGTH,"%sTpi=%g, mupi=%g\n",message,Tpi,mupi);
-
-	snprintf(message,CLog::CHARLENGTH,"%sNK=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
-		message,NK,EK/NK,PxK/NK,PyK/NK);
-	snprintf(message,CLog::CHARLENGTH,"%sTK=%g, muK=%g\n",message,TK,muK);
-
+	CLog::Info(message);
+	snprintf(message,CLog::CHARLENGTH,"Npi=%d, Epi/N=%g, Pxpi/Npi=%g, Pypi/Npi=%g\n",
+	Npi,Epi/Npi,Pxpi/Npi,Pypi/Npi);
+	CLog::Info(message);
+	snprintf(message,CLog::CHARLENGTH,"Tpi=%g, mupi=%g\n",Tpi,mupi);
+	CLog::Info(message);
+	snprintf(message,CLog::CHARLENGTH,"NK=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
+	NK,EK/NK,PxK/NK,PyK/NK);
+	CLog::Info(message);
+	snprintf(message,CLog::CHARLENGTH,"TK=%g, muK=%g\n",TK,muK);
 	CLog::Info(message);
 
 	for(int btype=0;btype<8;btype++){
 		snprintf(message,CLog::CHARLENGTH,"btype=%d\n",btype);
-		snprintf(message,CLog::CHARLENGTH,"%sNB=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
-			message,NB[btype],EB[btype]/NB[btype],PxB[btype]/NB[btype],PyB[btype]/NB[btype]);
-		snprintf(message,CLog::CHARLENGTH,"%sTK=%g, muK=%g\n",message,TB[btype],muB[btype]);
+		CLog::Info(message);
+		snprintf(message,CLog::CHARLENGTH,"NB=%d, EK/NK=%g, PxK/NK=%g, PyK/NK=%g\n",
+		NB[btype],EB[btype]/NB[btype],PxB[btype]/NB[btype],PyB[btype]/NB[btype]);
+		CLog::Info(message);
+		snprintf(message,CLog::CHARLENGTH,"TK=%g, muK=%g\n",TB[btype],muB[btype]);
 		CLog::Info(message);
 	}
 }

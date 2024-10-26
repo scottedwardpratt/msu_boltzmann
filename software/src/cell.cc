@@ -5,7 +5,7 @@ using namespace std;
 using namespace NMSUPratt;
 
 CMSU_Boltzmann *CMSU_BoltzmannCell::boltzmann=NULL;
-char *CMSU_BoltzmannCell::message=new char[500];
+char *CMSU_BoltzmannCell::message=new char[CLog::CHARLENGTH];
 
 CMSU_BoltzmannCell::CMSU_BoltzmannCell(double xminset,double xmaxset,double yminset,double ymaxset,double etaminset,double etamaxset){
 	xmin=xminset; xmax=xmaxset; ymin=yminset; ymax=ymaxset; etamin=etaminset; etamax=etamaxset;	
