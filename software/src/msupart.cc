@@ -14,7 +14,7 @@ using namespace NMSUPratt;
 
 CMSU_Boltzmann *CMSUPart::boltzmann=NULL;
 CBalance *CMSUPart::cb=NULL;
-char *CMSUPart::message=new char[500];
+char *CMSUPart::message=new char[CLog::CHARLENGTH];
 
 CMSUPart::CMSUPart(){
 }
