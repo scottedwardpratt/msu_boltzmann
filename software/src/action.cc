@@ -116,8 +116,8 @@ bool CAction::Kill(){
 		currentmap->erase(epos);
 		boltzmann->nactionkills+=1;
 		key=listid;
-		AddToMap(boltzmann->DeadActionMap.end(),&boltzmann->DeadActionMap);
-		//AddToMap(&boltzmann->DeadActionMap);
+		//AddToMap(boltzmann->DeadActionMap.end(),&boltzmann->DeadActionMap);
+		AddToMap(&boltzmann->DeadActionMap);
 		ppos=partmap.begin();
 		while(ppos!=partmap.end()){
 			part=ppos->second;

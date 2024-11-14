@@ -77,7 +77,7 @@ namespace NMSUPratt{
 	
 		void ReadHydroInput();
 		CMSUPart *GetDeadPart();
-		vector<CMSUPart> allpartsvec;
+		vector<CMSUPart *> allpartsvec;
 		void GetDeadParts(CMSUPart *&part1,CMSUPart *&part2);
 		void GetDeadParts(array<CMSUPart*,5> &product);
 		CAction *GetDeadAction();
