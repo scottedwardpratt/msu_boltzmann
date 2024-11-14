@@ -44,13 +44,20 @@ void CMSU_Boltzmann::PerformAllActions(){
 
 void CMSU_Boltzmann::KillAllActions(){
 	CAction *action;
-	CActionMap::iterator epos=ActionMap.begin();
+	CActionMap::iterator epos;
+	epos=ActionMap.begin();
 	while(epos!=ActionMap.end()){
 		action=epos->second;
 		action->Kill();
 		epos=ActionMap.begin();
 	}
 	ActionMap.clear();
+	epos=DeadActionMap.begin();
+	while(epos!=DeadActionMap.end()){
+		action=epos->second;
+		printf("%d\n",action->key);
+		++epos;
+	}
 }
 
 void CMSU_Boltzmann::KillAllParts(){
