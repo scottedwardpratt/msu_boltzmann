@@ -53,7 +53,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *re
 		allactionsvec[iaction]=new CAction(iaction);
 	}
 	for(int ipart=0;ipart<DELNPARTSTOT;ipart++){
-		allpartsvec[ipart]=new CMSUPart();
+		allpartsvec[ipart]=new CMSUPart(ipart);
 	}
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;

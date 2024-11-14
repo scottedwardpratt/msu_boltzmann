@@ -34,16 +34,24 @@ void CAction::InitDead(int keyset){
 // type=0(creation) 1(decay) 2(collision) 3(VizWrite) 4(DensCalc)
 
 CActionMap::iterator CAction::GetPos(CActionMap *emap){
+	if(currentmap!=emap){
+		CLog::Info("In CAction::GetPos(), emap!=currentmap\n");
+		return emap->end();
+	}
 	pair<CActionMap::iterator,CActionMap::iterator> epospair;
 	CActionMap::iterator epos;
 	epospair=emap->equal_range(key);
 	epos=epospair.first;
+	if(epos==emap->end()){
+		return emap->end();
+	}
 	while(epos->second!=this && epos!=epospair.second){
 		++epos;
 	}
 	if(epos->second!=this){
 		snprintf(message,CLog::CHARLENGTH,"CAction::GetPos cannot find this action, key=%g\n",key);
 		CLog::Info(message);
+		Print();
 		return emap->end();
 	}
 	else
@@ -61,81 +69,69 @@ void CAction::MoveToActionMap(){
 		epos=GetPos(currentmap);
 		if(epos!=currentmap->end()){
 			boltzmann->DeadActionMap.erase(epos);
+			key=tau;
+			AddToMap(&(boltzmann->ActionMap));
 			//partmap.clear();
 		}
 		else{
-			snprintf(message,CLog::CHARLENGTH,"cannot find epos for action in DeadActionMap!!!\n");
+			snprintf(message,CLog::CHARLENGTH,"In MoveToActionMap(), cannot find epos for action in DeadActionMap!!!\n");
 			snprintf(message,CLog::CHARLENGTH,"%sDeadActionMap.size=%d\n",message,int(boltzmann->DeadActionMap.size()));
 			CLog::Fatal(message);
 		}
-		key=tau;
-		AddToMap(&(boltzmann->ActionMap));
 	}
 }
 
 bool CAction::Kill(){
+	CActionMap::iterator eeepos,eepos,epos;
+	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	if(currentmap==&(boltzmann->DeadActionMap)){
-		printf("trying to kill dead action aAAAAaaa\n");
-	}
-	CActionMap::iterator eepos,epos;
-	CMSUPartMap::iterator ppos;
-	epos=GetPos(currentmap);
-	if(epos==boltzmann->ActionMap.end()){
-		if(currentmap!=&(boltzmann->DeadActionMap)){
-			printf("Action not in DeadActionMap????\n");
-			Misc::Pause();
-		}
-		ppos=partmap.begin();
-		while(ppos!=partmap.end()){
-			part=ppos->second;
-			epos=part->actionmap.begin();
-			while(epos!=part->actionmap.end()){
-				eepos=epos;
-				++eepos;
-				if(epos->second==this)
-					part->actionmap.erase(epos);
-				epos=eepos;
+		CLog::Info("trying to kill dead action aAAAAaaa\n");
+		epos=GetPos(&(boltzmann->DeadActionMap));
+		if(epos==boltzmann->DeadActionMap.end()){
+			printf("currentmap=DeadActionMap, but action not there\n");
+			epos=GetPos(&(boltzmann->ActionMap));
+			if(epos==boltzmann->ActionMap.end()){
+				CLog::Fatal("particle not in ActionMap either\n");
 			}
-			++ppos;
 		}
-		partmap.clear();
-		dsigma_merge.clear();
-		currentmap=&(boltzmann->DeadActionMap);
-		return false;
 	}
-	else{
-		if(currentmap!=&(boltzmann->ActionMap)){
-			printf("trying to kill action not in ActionMap\n");
-			if(currentmap==&(boltzmann->DeadActionMap))
-				printf("already in DeadActionMap\n");
-			else
-				printf("not in DeadActionMap either!!\n");
-			Misc::Pause();
-		}
-		currentmap->erase(epos);
-		boltzmann->nactionkills+=1;
-		key=listid;
-		//AddToMap(boltzmann->DeadActionMap.end(),&boltzmann->DeadActionMap);
-		AddToMap(&boltzmann->DeadActionMap);
-		ppos=partmap.begin();
-		while(ppos!=partmap.end()){
-			part=ppos->second;
-			epos=part->actionmap.begin();
-			while(epos!=part->actionmap.end()){
-				eepos=epos;
-				++eepos;
-				if(epos->second==this)
-					part->actionmap.erase(epos);
-				epos=eepos;
+	else if(currentmap==&(boltzmann->ActionMap)){
+		epos=GetPos(&(boltzmann->ActionMap));
+		if(epos==boltzmann->ActionMap.end()){
+			printf("currentmap=ActionMap, but action not there\n");
+			eepos=GetPos(&(boltzmann->DeadActionMap));
+			if(eepos==boltzmann->DeadActionMap.end()){
+				Print();
+				printf("ActionMap size=%lu DeadActionMapsize=%lu\n",
+				boltzmann->ActionMap.size(),boltzmann->DeadActionMap.size());
+				CLog::Info("action not in DeadActionMap either\n");
 			}
-			++ppos;
 		}
-		dsigma_merge.clear();
-		partmap.clear();
-		return true;
+		else{
+			currentmap->erase(epos);
+			boltzmann->nactionkills+=1;
+			key=listid;
+			//AddToMap(boltzmann->DeadActionMap.end(),&boltzmann->DeadActionMap);
+			AddToMap(&boltzmann->DeadActionMap);
+			ppos=partmap.begin();
+			while(ppos!=partmap.end()){
+				part=ppos->second;
+				eepos=part->actionmap.begin();
+				while(eepos!=part->actionmap.end()){
+					eeepos=eepos;
+					++eeepos;
+					if(eepos->second==this)
+						part->actionmap.erase(eepos);
+					eepos=eeepos;
+				}
+				++ppos;
+			}
+			dsigma_merge.clear();
+			partmap.clear();
+			return true;
+		}
 	}
-	tau=-1.0;
 	type=-1;
 }
 
@@ -156,6 +152,15 @@ void CAction::AddPart(CMSUPart *part){
 void CAction::Print(){
 	snprintf(message,CLog::CHARLENGTH,"___________ type=%d, tau=%g, nparts=%d ___________\n",type,tau,int(partmap.size()));
 	CLog::Info(message);
+	if(currentmap==&(boltzmann->DeadActionMap)){
+		CLog::Info("currentmap=DeadActionMap\n");
+	}
+	else if(currentmap==&(boltzmann->ActionMap)){
+		CLog::Info("currentmap=ActionMap\n");
+	}
+	else{
+		CLog::Info("currentmap is neither ActionMap or DeadActionMap\n");
+	}
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	for(ppos=partmap.begin();ppos!=partmap.end();++ppos){

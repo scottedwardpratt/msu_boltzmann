@@ -44,6 +44,7 @@ void CMSU_Boltzmann::PerformAllActions(){
 
 void CMSU_Boltzmann::KillAllActions(){
 	CAction *action;
+	printf("killing all actions, ActionMap Size=%lu\n",ActionMap.size());
 	CActionMap::iterator epos=ActionMap.begin();
 	while(epos!=ActionMap.end()){
 		action=epos->second;
@@ -215,14 +216,14 @@ void CMSU_Boltzmann::SplitPart(CMSUPart *part1,CMSUPart *part2){
 
 CMSUPart* CMSU_Boltzmann::GetDeadPart(){
 	if(DeadPartMap.size()<2){
-		CLog::Fatal("MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
+		CLog::Fatal("Increase MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
 	}
 	return DeadPartMap.begin()->second;
 }
 
 void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 	if(DeadPartMap.size()<3){
-		CLog::Fatal("MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
+		CLog::Fatal("Increase MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	part1=ppos->second;
@@ -232,7 +233,7 @@ void CMSU_Boltzmann::GetDeadParts(CMSUPart *&part1,CMSUPart *&part2){
 
 void CMSU_Boltzmann::GetDeadParts(array<CMSUPart*,5> &product){
 	if(DeadPartMap.size()<6){
-		CLog::Fatal("MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
+		CLog::Fatal("Increase MSU_BOLTZMANN_DELNPARTSTOT in parameters file!\n");
 	}
 	CMSUPartMap::iterator ppos=DeadPartMap.begin();
 	for(int ipart=0;ipart<5;ipart++){

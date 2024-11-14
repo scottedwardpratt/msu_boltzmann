@@ -180,12 +180,18 @@ void CMSUPart::Print(){
 	if(currentmap==&(boltzmann->DeadPartMap)) currentmapname="DeadPartMap";
 	snprintf(message,CLog::CHARLENGTH,"currentmap=%s\n",currentmapname.c_str());
 	CLog::Info(message);
-	if(cell==NULL) snprintf(message,CLog::CHARLENGTH,"CELL=NULL\n");
-	CLog::Info(message);
-	if(nextcell==NULL) snprintf(message,CLog::CHARLENGTH,"NEXTCELL=NULL\n");
-	CLog::Info(message);
-	if(cell!=NULL) snprintf(message,CLog::CHARLENGTH,"Cell No: ix=%d, iy=%d, ieta=%d\n",cell->ix,cell->iy,cell->ieta);
-	CLog::Info(message);
+	if(cell==NULL){
+		snprintf(message,CLog::CHARLENGTH,"CELL=NULL\n");
+		CLog::Info(message);
+	}
+	if(nextcell==NULL){
+		snprintf(message,CLog::CHARLENGTH,"NEXTCELL=NULL\n");
+		CLog::Info(message);
+	}
+	if(cell!=NULL){
+		snprintf(message,CLog::CHARLENGTH,"Cell No: ix=%d, iy=%d, ieta=%d\n",cell->ix,cell->iy,cell->ieta);
+		CLog::Info(message);
+	}
 	snprintf(message,CLog::CHARLENGTH,"________________________________________________________________________\n");
 	CLog::Info(message);CLog::Info(message);
 }
