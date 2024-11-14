@@ -69,7 +69,7 @@ void CMSU_Boltzmann::KillAllActions(){
 			exit(1);
 		}
 		if(action->key!=itest){
-			printf("action->key=%g =?%g\n",action->key,itest);
+			printf("action->key=%g =?%d\n",action->key,itest);
 			exit(1);
 		}
 		action->tau=0.0;
