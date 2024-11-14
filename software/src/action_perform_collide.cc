@@ -38,6 +38,8 @@ void CAction::PerformCollide(){
 			CLog::Fatal("Inside PerformCollide, should not happen");
 		}
 	}
+	
+	printf("howdy G, colltype=%d\n",colltype);
 
 	if(colltype==0 || nproducts==0){
 		boltzmann->npass+=1;
@@ -67,8 +69,10 @@ void CAction::PerformCollide(){
 		part2->FindActions();
 	}
 	else{
+		printf("howdy H, colltype=%d\n",colltype);
 		part1->Kill();
 		part2->Kill();
+		printf("howdy HH, colltype=%d\n",colltype);
 		for(iproduct=0;iproduct<nproducts;iproduct++){
 			part=product[iproduct];
 			part->Setp0();
@@ -78,12 +82,17 @@ void CAction::PerformCollide(){
 			part->actionmother=boltzmann->nactionstot;
 			cell=part->FindCell();
 			part->ChangeCell(cell);
+			printf("howdy I, colltype=%d\n",colltype);
 			part->ChangeMap(&boltzmann->PartMap);
+			printf("howdy J, colltype=%d\n",colltype);
 			part->FindActions();
+			printf("howdy K, colltype=%d\n",colltype);
 		}
 		for(iproduct=nproducts;iproduct<5;iproduct++){
 			part=product[iproduct];
+			printf("howdy L, colltype=%d\n",colltype);
 			part->Kill();
+			printf("howdy M, colltype=%d\n",colltype);
 		}
 	}	
 }
