@@ -75,6 +75,9 @@ void CAction::MoveToActionMap(){
 
 bool CAction::Kill(){
 	CMSUPart *part;
+	if(currentmap==&(boltzmann->DeadActionMap)){
+		printf("trying to kill dead action aAAAAaaa\n");
+	}
 	CActionMap::iterator eepos,epos;
 	CMSUPartMap::iterator ppos;
 	epos=GetPos(currentmap);
