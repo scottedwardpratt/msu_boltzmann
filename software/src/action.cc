@@ -8,6 +8,9 @@ CMSU_Boltzmann *CAction::boltzmann=NULL;
 char *CAction::message=new char[500];
 
 CAction::CAction(){
+	//int keyset=boltzmann->DeadActionMap.size();
+	//printf("initializing with key %d\n",keyset);
+	//InitDead(keyset);
 }
 
 CAction::CAction(int keyset){
@@ -76,7 +79,10 @@ bool CAction::Kill(){
 	CMSUPartMap::iterator ppos;
 	epos=GetPos(currentmap);
 	if(epos==boltzmann->ActionMap.end()){
-		key=0;
+		if(currentmap!=&(boltzmann->DeadActionMap)){
+			printf("Action not in DeadActionMap????\n");
+			Misc::Pause();
+		}
 		ppos=partmap.begin();
 		while(ppos!=partmap.end()){
 			part=ppos->second;
@@ -96,9 +102,17 @@ bool CAction::Kill(){
 		return false;
 	}
 	else{
+		if(currentmap!=&(boltzmann->ActionMap)){
+			printf("trying to kill action not in ActionMap\n");
+			if(currentmap==&(boltzmann->DeadActionMap))
+				printf("already in DeadActionMap\n");
+			else
+				printf("not in DeadActionMap either!!\n");
+			Misc::Pause();
+		}
 		currentmap->erase(epos);
 		boltzmann->nactionkills+=1;
-		key=0;
+		key=listid;
 		AddToMap(boltzmann->DeadActionMap.end(),&boltzmann->DeadActionMap);
 		//AddToMap(&boltzmann->DeadActionMap);
 		ppos=partmap.begin();
@@ -118,6 +132,8 @@ bool CAction::Kill(){
 		partmap.clear();
 		return true;
 	}
+	tau=-1.0;
+	type=-1;
 }
 
 void CAction::AddToMap(CActionMap *newmap){

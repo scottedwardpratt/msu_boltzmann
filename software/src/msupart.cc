@@ -357,7 +357,8 @@ void CMSUPart::KillActions(){
 	while(ep!=actionmap.end()){
 		action=ep->second;
 		epp=ep; ++epp;
-		action->Kill();
+		if(action->currentmap!=&(boltzmann->DeadActionMap))
+			action->Kill();
 		ep=epp;
 	}
 	actionmap.clear();

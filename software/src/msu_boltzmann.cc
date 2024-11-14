@@ -49,6 +49,9 @@ CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *re
 	randy=new Crandy(-1234);
 	msudecay=new CMSU_Decay(randy);
 	CAction::boltzmann=this;
+	for(int iaction=0;iaction<DELNACTIONSTOT;iaction++){
+		allactionsvec[iaction]=new CAction(iaction);
+	}
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
 	msudecay->boltzmann=this;
@@ -249,7 +252,7 @@ void CMSU_Boltzmann::Reset(){
 		allpartsvec[ipart].InitDead(int(ipart));
 	}
 	for(unsigned int iaction=0;iaction<allactionsvec.size();iaction++){
-		allactionsvec[iaction].InitDead(int(iaction));
+		allactionsvec[iaction]->InitDead(int(iaction));
 	}
 	tau=0.0;
 	nactionstot=0;
