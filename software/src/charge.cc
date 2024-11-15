@@ -36,7 +36,7 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	int ires;
 	double delN,bweight;
-	double rapidity,mass;
+	double rapidity,mass,fugacity;
 	Chyper *hyper=&(charge->hyper);
 	CMSUPart *part;
 	FourVector p;
@@ -55,10 +55,18 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 		Q(0)=charge->q[0];
 		Q(1)=charge->q[1];
 		Q(2)=charge->q[2];
-		if(mastersampler->VARY_FUGACITY)
-			Qprime=sampler->chiinv*Q;
-		else
+		if(mastersampler->VARY_FUGACITY){
+			//Qprime=sampler->chiinv*Q;
 			Qprime=sampler->chiinv0*Q;
+		}
+		else{
+			for(int a=0;a<3;a++){
+				Qprime(a)=0.0;
+				for(int b=0;b<3;b++){
+					Qprime(a)+=sampler->chiinv0(a,b)*Q(b);
+				}
+			}
+		}
 		
 
 		for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
@@ -73,7 +81,7 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 					if(mastersampler->VARY_FUGACITY){
 						//double II3=2.0*resinfo->charge-resinfo->baryon-resinfo->strange;
 						//double mutot=hyper->muB*resinfo->baryon+hyper->muII*II3+hyper->muS*resinfo->strange;
-						double fugacity=pow(hyper->fugacity_u,abs(resinfo->Nu))
+						fugacity=pow(hyper->fugacity_u,abs(resinfo->Nu))
 							*pow(hyper->fugacity_d,abs(resinfo->Nd))*pow(hyper->fugacity_s,abs(resinfo->Ns));
 						delN*=fugacity;
 					}
@@ -89,7 +97,20 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 					
 					bweight=charge->weight*delN/fabs(delN);
 					randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
+					int itest=0;
 					while(randy->test_threshold(0.0)){
+						if(itest>10){
+							printf("---- itest=%d, delN=%g,%g\n",itest,delN,delN*NSAMPLE_UDS2BAL);
+							printf("density0i=%g\n",sampler->density0i[ires]);
+							for(int iq=0;iq<3;iq++)
+								printf("(%g,%g,%d) ",Q(iq),Qprime(iq),charge->q[iq]);
+							printf("\n chiinv0=\n");
+							cout << sampler->chiinv0 << endl;
+							printf("Tf=%g\n",sampler->Tf);
+							resinfo->Print();
+							exit(1);
+						}
+						itest+=1;
 						sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
 						mass=resinfo->mass;
 						part=GetDeadPart();
