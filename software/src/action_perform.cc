@@ -5,7 +5,7 @@ using namespace std;
 using namespace NMSUPratt;
 
 void CAction::Perform(){
-	printf("check in Perform, type=%d\n",type);
+	//printf("check in Perform, type=%d\n",type);
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	CMSU_BoltzmannCell *cell;
@@ -42,9 +42,9 @@ void CAction::Perform(){
 		PerformDecay();
 	}
 	else if(type==2){
-		printf("check a\n");
+		//printf("check a\n");
 		PerformCollide();
-		printf("check b\n");
+		//printf("check b\n");
 	}
 	else if(type==4){
 		PerformDensCalc();
@@ -57,13 +57,13 @@ void CAction::Perform(){
 		CLog::Fatal(message);
 	}
 	if(currentmap != &(boltzmann->DeadActionMap)){
-		printf("check c\n");
+		//printf("check c\n");
 		Kill();
 	}
 	int sizecheck=boltzmann->ActionMap.size()+boltzmann->DeadActionMap.size();
 	if(sizecheck!=boltzmann->DELNACTIONSTOT){
 		CLog::Fatal("sizecheck failed for action maps\n");
 	}
-	printf("check out perform\n");
+	//printf("check out perform\n");
 	
 }

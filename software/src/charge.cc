@@ -15,6 +15,7 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 	CHBChargeMap::iterator itc0,itc1;
 	itc1=chargemap.end(); itc1--;
 	maxbid=itc1->first;
+	printf("before GenHadronsFromCharges, PartMap.size=%lu, maxbid=%d, chargemap.size=%lu, DeadPartMap.size=%lu\n",PartMap.size(),maxbid,chargemap.size(),DeadPartMap.size());
 	for(bid=0;bid<maxbid;bid+=2){
 		icpair_even=chargemap.equal_range(bid);
 		itc0=icpair_even.first;
@@ -29,6 +30,7 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 			}
 		}
 	}
+	printf("after GenHadronsFromCharges, PartMap.size=%lu\n",PartMap.size());
 }
 
 void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
@@ -45,14 +47,19 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	CresInfo *resinfo;
 	if(hyper->T0>mastersampler->TFmin){
 		sampler=mastersampler->ChooseSampler(hyper);
-		sampler->CalcNHadrons(hyper);
-		sampler->CalcChiWithFugacity(hyper);
+		if(mastersampler->VARY_FUGACITY){
+			sampler->CalcNHadrons(hyper);
+			sampler->CalcChiWithFugacity(hyper);
+		}
 
 		Q(0)=charge->q[0];
 		Q(1)=charge->q[1];
 		Q(2)=charge->q[2];
-		//Qprime=sampler->chiinv0*Q;
-		Qprime=sampler->chiinv*Q;
+		if(mastersampler->VARY_FUGACITY)
+			Qprime=sampler->chiinv*Q;
+		else
+			Qprime=sampler->chiinv0*Q;
+		
 
 		for(itr=reslist->resmap.begin();itr!=reslist->resmap.end();++itr){
 			resinfo=itr->second;
@@ -61,7 +68,25 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 				if(!balancearrays->PPBAR_ONLY 
 				|| (balancearrays->PPBAR_ONLY && resinfo->baryon!=0 && abs(resinfo->pid)!=2112)){
 					q[0]=resinfo->q[0]; q[1]=resinfo->q[1]; q[2]=resinfo->q[2];
+					
 					delN=sampler->density0i[ires]*(q.dot(Qprime)); // number of hadrons to create
+					if(mastersampler->VARY_FUGACITY){
+						//double II3=2.0*resinfo->charge-resinfo->baryon-resinfo->strange;
+						//double mutot=hyper->muB*resinfo->baryon+hyper->muII*II3+hyper->muS*resinfo->strange;
+						double fugacity=pow(hyper->fugacity_u,abs(resinfo->Nu))
+							*pow(hyper->fugacity_d,abs(resinfo->Nd))*pow(hyper->fugacity_s,abs(resinfo->Ns));
+						delN*=fugacity;
+					}
+					
+					if(fabs(delN)>1.0){
+						printf("YIKES! delN=%g\n",delN);
+						resinfo->Print();
+						printf("density0i=%g, T=%g\n",sampler->density0i[ires],sampler->Tf);
+						exit(1);
+					}
+					
+					
+					
 					bweight=charge->weight*delN/fabs(delN);
 					randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
 					while(randy->test_threshold(0.0)){

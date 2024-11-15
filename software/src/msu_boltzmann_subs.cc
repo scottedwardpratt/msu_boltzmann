@@ -96,9 +96,11 @@ void CMSU_Boltzmann::KillAllParts(){
 			part->Kill();
 			PartMap.erase(ppos);			
 		}
-		else
+		else{
 			part->Kill();
+		}
 		ppos=PartMap.begin();
+		
 	}
 	
 	// Recheck 

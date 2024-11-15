@@ -92,7 +92,8 @@ bool CAction::Kill(){
 			printf("currentmap=DeadActionMap, but action not there\n");
 			epos=GetPos(&(boltzmann->ActionMap));
 			if(epos==boltzmann->ActionMap.end()){
-				CLog::Fatal("particle not in ActionMap either\n");
+				Print();
+				CLog::Info("particle not in ActionMap either\n");
 			}
 		}
 	}
@@ -129,10 +130,11 @@ bool CAction::Kill(){
 			}
 			dsigma_merge.clear();
 			partmap.clear();
+			type=-1;
 			return true;
 		}
 	}
-	type=-1;
+	return false;
 }
 
 void CAction::AddToMap(CActionMap *newmap){
@@ -150,6 +152,7 @@ void CAction::AddPart(CMSUPart *part){
 }
 
 void CAction::Print(){
+	CLog::Info("---------- Action Info -------------\n");
 	snprintf(message,CLog::CHARLENGTH,"___________ type=%d, tau=%g, nparts=%d ___________\n",type,tau,int(partmap.size()));
 	CLog::Info(message);
 	if(currentmap==&(boltzmann->DeadActionMap)){
@@ -167,7 +170,7 @@ void CAction::Print(){
 		part=ppos->second;
 		part->Print();
 	}
-	snprintf(message,CLog::CHARLENGTH,"_________________________________________________\n");
+	snprintf(message,CLog::CHARLENGTH,"----------------------------\n");
 	CLog::Info(message);
 }
 
