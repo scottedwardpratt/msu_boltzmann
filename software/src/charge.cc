@@ -15,7 +15,6 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 	CHBChargeMap::iterator itc0,itc1;
 	itc1=chargemap.end(); itc1--;
 	maxbid=itc1->first;
-	printf("before GenHadronsFromCharges, PartMap.size=%lu, maxbid=%d, chargemap.size=%lu, DeadPartMap.size=%lu\n",PartMap.size(),maxbid,chargemap.size(),DeadPartMap.size());
 	for(bid=0;bid<maxbid;bid+=2){
 		icpair_even=chargemap.equal_range(bid);
 		itc0=icpair_even.first;
@@ -30,7 +29,6 @@ void CMSU_Boltzmann::GenHadronsFromCharges(){
 			}
 		}
 	}
-	printf("after GenHadronsFromCharges, PartMap.size=%lu\n",PartMap.size());
 }
 
 void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
@@ -84,32 +82,12 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 						fugacity=pow(hyper->fugacity_u,abs(resinfo->Nu))
 							*pow(hyper->fugacity_d,abs(resinfo->Nd))*pow(hyper->fugacity_s,abs(resinfo->Ns));
 						delN*=fugacity;
-					}
-					
-					if(fabs(delN)>1.0){
-						printf("YIKES! delN=%g\n",delN);
-						resinfo->Print();
-						printf("density0i=%g, T=%g\n",sampler->density0i[ires],sampler->Tf);
-						exit(1);
-					}
-					
-					
+					}					
 					
 					bweight=charge->weight*delN/fabs(delN);
 					randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
 					int itest=0;
 					while(randy->test_threshold(0.0)){
-						if(itest>10){
-							printf("---- itest=%d, delN=%g,%g\n",itest,delN,delN*NSAMPLE_UDS2BAL);
-							printf("density0i=%g\n",sampler->density0i[ires]);
-							for(int iq=0;iq<3;iq++)
-								printf("(%g,%g,%d) ",Q(iq),Qprime(iq),charge->q[iq]);
-							printf("\n chiinv0=\n");
-							cout << sampler->chiinv0 << endl;
-							printf("Tf=%g\n",sampler->Tf);
-							resinfo->Print();
-							exit(1);
-						}
 						itest+=1;
 						sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
 						mass=resinfo->mass;
@@ -228,27 +206,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	CLog::Info("uds charges read in, chargemap size="+to_string(chargemap.size())+"\n");
 	//CalcChiTotFromQ();
 }
-
-/*
-void CMSU_Boltzmann::DeleteCharges(){
-	CHBChargeMap::iterator it,itnext;
-	CHBCharge *charge;
-	printf("YYYYYYYYYYYY before delete: chargemap.size=%lu\n",chargemap.size());
-	it=chargemap.begin();
-	while(it!=chargemap.end()){
-		itnext=it;
-		++itnext;
-		charge=it->second;
-		chargemap.erase(it);
-		if(charge!=nullptr)
-			delete charge;
-		it=itnext;
-	}
-	printf("YYYYYYYYYYYY after: chargemap.size=%lu\n",chargemap.size());
-	Misc::Pause();
-	//chargemap.clear();
-}
-*/
 
 void CMSU_Boltzmann::IncrementChiTotFromCharges(){
 	pair<CHBChargeMap::iterator,CHBChargeMap::iterator> icpair_even,icpair_odd;

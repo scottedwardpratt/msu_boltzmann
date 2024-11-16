@@ -8,9 +8,6 @@ CMSU_Boltzmann *CAction::boltzmann=NULL;
 char *CAction::message=new char[500];
 
 CAction::CAction(){
-	//int keyset=boltzmann->DeadActionMap.size();
-	//printf("initializing with key %d\n",keyset);
-	//InitDead(keyset);
 }
 
 CAction::CAction(int keyset){
@@ -86,27 +83,23 @@ bool CAction::Kill(){
 	CMSUPartMap::iterator ppos;
 	CMSUPart *part;
 	if(currentmap==&(boltzmann->DeadActionMap)){
-		CLog::Info("trying to kill dead action aAAAAaaa\n");
 		epos=GetPos(&(boltzmann->DeadActionMap));
 		if(epos==boltzmann->DeadActionMap.end()){
-			printf("currentmap=DeadActionMap, but action not there\n");
 			epos=GetPos(&(boltzmann->ActionMap));
 			if(epos==boltzmann->ActionMap.end()){
 				Print();
-				CLog::Info("particle not in ActionMap either\n");
+				CLog::Info("particle not in either ActionMap\n");
 			}
 		}
 	}
 	else if(currentmap==&(boltzmann->ActionMap)){
 		epos=GetPos(&(boltzmann->ActionMap));
 		if(epos==boltzmann->ActionMap.end()){
-			printf("currentmap=ActionMap, but action not there\n");
 			eepos=GetPos(&(boltzmann->DeadActionMap));
 			if(eepos==boltzmann->DeadActionMap.end()){
 				Print();
-				printf("ActionMap size=%lu DeadActionMapsize=%lu\n",
 				boltzmann->ActionMap.size(),boltzmann->DeadActionMap.size());
-				CLog::Info("action not in DeadActionMap either\n");
+				CLog::Info("action not in either ActionMap\n");
 			}
 		}
 		else{
