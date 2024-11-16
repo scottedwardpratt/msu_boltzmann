@@ -51,7 +51,7 @@ double CMSU_Boltzmann::WriteOSCAR(int ievent){
 	int nparts=PartMap.size();
 	snprintf(message,CLog::CHARLENGTH,"writing %d particles to %s\n",nparts,oscarfilename.c_str());
 	CLog::Info(message);
-	if(oscarfile==NULL){
+	if(oscarfile==nullptr){
 		if(BINARY_RW)
 			oscarfile=fopen(oscarfilename.c_str(),"wb");
 		else{
@@ -124,7 +124,7 @@ int CMSU_Boltzmann::ReadOSCAR(int ievent){
 	double bmin,bmax; // impact parameter
 	CMSUPart *mother;
 	tau=0.0;
-	if(oscarfile==NULL){
+	if(oscarfile==nullptr){
 		ReadOSCARHeader();
 	}
 	if(BINARY_RW){
@@ -173,7 +173,7 @@ double CMSU_Boltzmann::WriteBalanceParts(int ievent){
 	CMSU_BoltzmannBinaryBalancePartInfo bpart;
 	double sigma=0;
 	int nsigma=0;
-	if(oscarfile==NULL){
+	if(oscarfile==nullptr){
 		if(BINARY_RW)
 			oscarfile=fopen(oscarfilename.c_str(),"wb");
 		else{
@@ -240,7 +240,7 @@ int CMSU_Boltzmann::ReadBalanceParts(int ievent){
 	double bmin,bmax; // impact parameter
 	CMSUPart *mother;
 	tau=0.0;
-	if(oscarfile==NULL){
+	if(oscarfile==nullptr){
 		ReadOSCARHeader();
 	}
 	if(BINARY_RW){

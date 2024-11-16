@@ -4,13 +4,13 @@
 using namespace std;
 using namespace NMSUPratt;
 
-CMSU_Boltzmann *CMSU_BoltzmannCell::boltzmann=NULL;
+CMSU_Boltzmann *CMSU_BoltzmannCell::boltzmann=nullptr;
 char *CMSU_BoltzmannCell::message=new char[CLog::CHARLENGTH];
 
 CMSU_BoltzmannCell::CMSU_BoltzmannCell(double xminset,double xmaxset,double yminset,double ymaxset,double etaminset,double etamaxset){
 	xmin=xminset; xmax=xmaxset; ymin=yminset; ymax=ymaxset; etamin=etaminset; etamax=etamaxset;	
 	ireflection=0;
-	creflection=NULL;
+	creflection=nullptr;
 }
 
 void CMSU_BoltzmannCell::Print(){

@@ -11,7 +11,7 @@
 #include "msu_commonutils/randy.h"
 #include "msu_boltzmann/action.h"
 
-CmasterSampler *CMSU_Boltzmann::mastersampler=NULL;
+CmasterSampler *CMSU_Boltzmann::mastersampler=nullptr;
 
 using namespace std;
 using namespace NMSUPratt;
@@ -38,6 +38,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *re
 	//CresList::boltzmann=this;
 	CMSUPart::boltzmann=this;
 	tau=0.0;
+	chargevec.resize(40000);
 	allpartsvec.resize(DELNPARTSTOT);
 	allactionsvec.resize(DELNACTIONSTOT);
 	chitotH.setZero();
@@ -58,7 +59,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *re
 	CMSUPart::boltzmann=this;
 	CMSU_BoltzmannCell::boltzmann=this;
 	msudecay->boltzmann=this;
-	oscarfile=NULL;
+	oscarfile=nullptr;
 }
 
 void CMSU_Boltzmann::CopyParMapPars(){
@@ -100,6 +101,7 @@ void CMSU_Boltzmann::CopyParMapPars(){
 	DELPT_V2=parmap.getD("MSU_BOLTZMANN_DELPT_V2",0.025);
 	NPT_SPECTRA=parmap.getI("MSU_BOLTZMANN_NPT_SPECTRA",120);
 	NPT_V2=parmap.getI("MSU_BOLTZMANN_NPT_V2",120);
+	CHARGEVEC_MAXSIZE=parmap.getI("MSU_BOLTZMANN_CHARGEMAP_MAXSIZE",40000);
 	
 	NPARTSMAX*=NSAMPLE;
 	DXY=XYMAX/double(NXY);
@@ -138,14 +140,14 @@ void CMSU_Boltzmann::InitCascade(){
 			for(ieta=0;ieta<2*NETA;ieta++){
 				c=cell[ix][iy][ieta];
 				c->ix=ix; c->iy=iy; c->ieta=ieta;
-				c->creflection=NULL;
+				c->creflection=nullptr;
 				for(jx=ix-1;jx<=ix+1;jx++){
 					for(jy=iy-1;jy<=iy+1;jy++){
 						for(jeta=ieta-1;jeta<=ieta+1;jeta++){
 							if(jx>=0 && jy>=0 && jeta>=0 && jx<2*NXY && jy<2*NXY && jeta<2*NETA){
 								c->neighbor[1+jx-ix][1+jy-iy][1+jeta-ieta]=cell[jx][jy][jeta];
 							}
-							else c->neighbor[1+jx-ix][1+jy-iy][1+jeta-ieta]=NULL;
+							else c->neighbor[1+jx-ix][1+jy-iy][1+jeta-ieta]=nullptr;
 						}
 					}
 				}
@@ -231,9 +233,9 @@ void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 	qualifier=qualifier_set;
 	string command="mkdir -p modelruns/"+run_name+"/"+qualifier;
 	system(command.c_str());
-	if(oscarfile!=NULL){
+	if(oscarfile!=nullptr){
 		fclose(oscarfile);
-		oscarfile=NULL;
+		oscarfile=nullptr;
 	}
 	if(BFCALC){
 		balancearrays->SetQualifier(qualifier);
@@ -272,6 +274,6 @@ void CMSU_Boltzmann::Reset(){
 }
 
 CMSU_Boltzmann::~CMSU_Boltzmann(){
-	if(oscarfile!=NULL)
+	if(oscarfile!=nullptr)
 		fclose(oscarfile);
 }

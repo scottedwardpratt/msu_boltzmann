@@ -8,7 +8,7 @@
 using namespace std;
 using namespace NMSUPratt;
 
-CMSU_Boltzmann *CInelasticList::boltzmann=NULL;
+CMSU_Boltzmann *CInelasticList::boltzmann=nullptr;
 bool CInelasticList::UseFile = false;
 bool CInelasticList::UseInelasticArray = false;
 
@@ -17,7 +17,7 @@ CInelasticList::CInelasticList(){
 	// UseFile = false;
 	// UseInelasticArray = true;
 
-	if(boltzmann!=NULL){
+	if(boltzmann!=nullptr){
 		NResonances = boltzmann->reslist->resmap.size();
 		filename = boltzmann->parmap.getS("MSU_BOLTZMANN_INELASTIC_INFO_FILE",string("inelastic.tmp"));
 
@@ -74,7 +74,7 @@ void CInelasticList::ReadInelasticInfo(bool FromFile){
 	fstream inelasticfile;
 	int ires1, ires2, ires3, ires4, netq, netb, nets, pmq=0, pmb=0, pms=0, size, sum = 0;
 	double foo = 0;
-	CresInfo *resinfoptr_1 = NULL,*resinfoptr_2 = NULL;
+	CresInfo *resinfoptr_1 = nullptr,*resinfoptr_2 = nullptr;
 	CresInfoMap::iterator rpos1,rpos2;
 	CInelasticInfo *temp;
 	list<CInelasticInfo>::iterator Th_iter;

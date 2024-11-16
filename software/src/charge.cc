@@ -42,7 +42,7 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 	FourVector p;
 	Csampler *sampler;
 	CHBChargeMap::iterator it;
-	Eigen::Vector3d Qprime,Q,q;
+	Eigen::Vector<double,3> Qprime,Q,q;
 	CresInfoMap::iterator itr;
 	CresInfo *resinfo;
 	if(hyper->T0>mastersampler->TFmin){
@@ -129,6 +129,8 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 }
 
 void CMSU_Boltzmann::ReadCharges(int ichargefile){
+	chargemap.clear();
+	int ncharges=0;
 	string dirname="udsdata/modelruns/"+run_name+"/"+qualifier+"/udsdata/subrun"+to_string(subrun_number);
 	string filename=dirname+"/"+"uds"+to_string(ichargefile)+".txt";
 	Chyper *hyper;
@@ -145,7 +147,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	CLog::Info("opening uds file "+filename+"\n");
 	FILE *fptr=fopen(filename.c_str(),"r");
 	fgets(dummy,120,fptr);
-	chargemap.clear();
 	int iread=0;
 	do{
 		fscanf(fptr,"%d %d %d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
@@ -157,7 +158,10 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 		fgets(dummy,120,fptr);
 		iread+=1;
 		if(!feof(fptr)){
-			charge=new CHBCharge();
+			charge=&chargevec[ncharges];
+			ncharges+=1;
+			if(ncharges>=int(chargevec.size()))
+				CLog::Fatal("Must increase MSU_BOLTZMANN_CHARGEMAP_MAXSIZE in fixed_parameters.txt\n");
 			hyper=&(charge->hyper);
 			hyper->T0=T0;
 			charge->q[0]=qu;
@@ -184,7 +188,7 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 			hyper->fugacity_u=fugacity_u;
 			hyper->fugacity_d=fugacity_d;
 			hyper->fugacity_s=fugacity_s;
-			sampler=NULL;
+			sampler=nullptr;
 			double tfmin=mastersampler->TFmin;
 			if(T0>tfmin){
 				sampler=Csampler::mastersampler->ChooseSampler(hyper);
@@ -198,8 +202,6 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 				if(balanceID>maxbid)
 					maxbid=balanceID;
 			}
-			else
-				delete charge;
 		}
 	}while(!feof(fptr));
 	CLog::Info("read in "+to_string(iread)+" uds charges\n");
@@ -227,27 +229,33 @@ void CMSU_Boltzmann::ReadCharges(int ichargefile){
 	//CalcChiTotFromQ();
 }
 
+/*
 void CMSU_Boltzmann::DeleteCharges(){
 	CHBChargeMap::iterator it,itnext;
 	CHBCharge *charge;
+	printf("YYYYYYYYYYYY before delete: chargemap.size=%lu\n",chargemap.size());
 	it=chargemap.begin();
 	while(it!=chargemap.end()){
 		itnext=it;
 		++itnext;
 		charge=it->second;
-		if(charge!=NULL)
+		chargemap.erase(it);
+		if(charge!=nullptr)
 			delete charge;
 		it=itnext;
 	}
-	chargemap.clear();
+	printf("YYYYYYYYYYYY after: chargemap.size=%lu\n",chargemap.size());
+	Misc::Pause();
+	//chargemap.clear();
 }
+*/
 
 void CMSU_Boltzmann::IncrementChiTotFromCharges(){
 	pair<CHBChargeMap::iterator,CHBChargeMap::iterator> icpair_even,icpair_odd;
 	CHBChargeMap::iterator itc;
 	int a,b,bid,maxbid;
-	Eigen::Vector3d qa;
-	Eigen::Vector3d qb;
+	Eigen::Vector<double,3> qa;
+	Eigen::Vector<double,3> qb;
 	itc=chargemap.end(); itc--;
 	maxbid=itc->first;
 	CHBCharge *chargea,*chargeb;

@@ -101,7 +101,7 @@ double CMSU_Boltzmann::GetSigma(CMSUPart *part1,CMSUPart *part2,double Minv2,
 	}
 	merge=reslist->MergeArray[ir1][ir2];
 	dsigma_merge.clear();
-	while(merge!=NULL){
+	while(merge!=nullptr){
 		degen1=part1->resinfo->degen;
 		degen2=part2->resinfo->degen;
 		M=sqrt(Minv2);
@@ -132,7 +132,7 @@ bool CMSU_Boltzmann::FindCollision(CMSUPart *part1,CMSUPart *part2,double &tauco
 	}
 	if(part1->resinfo->pid==22 || part2->resinfo->pid==22)
 		return false;
-	if(part1->cell==NULL || part2->cell==NULL)
+	if(part1->cell==nullptr || part2->cell==nullptr)
 		return false;
 	if(part1->tau0>TAUCOLLMAX || part2->tau0>TAUCOLLMAX)
 		return false;
@@ -177,7 +177,7 @@ void CMSU_Boltzmann::FindAllCollisions(){
 		part1->KillActions();
 		part1->active=true;
 		part1->ChangeCell(part1->FindCell());
-		if(part1->cell!=NULL){
+		if(part1->cell!=nullptr){
 			part1->FindCellExit();
 		}
 		if(part1->resinfo->decay)
@@ -191,7 +191,7 @@ void CMSU_Boltzmann::FindAllCollisions(){
 		while(ppos1!=ppos2){
 			part1=ppos1->second;
 			if(part1->balanceID<0 || part2->balanceID<0){
-				if(part1->cell!=NULL && part2->cell!=NULL){
+				if(part1->cell!=nullptr && part2->cell!=nullptr){
 					FindCollision(part1,part2,taucoll);
 				}
 			}

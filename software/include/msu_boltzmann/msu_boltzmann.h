@@ -14,6 +14,7 @@
 #include "msu_boltzmann/balancearrays.h"
 #include "msu_boltzmann/inelastic.h"
 #include "msu_boltzmann/decay.h"
+#include "bfduke/bfcharge.h"
 
 using namespace std;
 
@@ -59,6 +60,7 @@ namespace NMSUPratt{
 		vector<vector<vector<CMSU_BoltzmannCell *> > > cell;
 		vector<vector<vector<CMuTInfo *>>> muTinfo;
 		vector<double> annihilation_array;
+		vector<CHBCharge> chargevec;
 		
 		double DELPT_SPECTRA,DELPT_V2;
 		vector<double> meanpt,meanv2,meanpt_denom,meanv2_denom;
@@ -105,7 +107,7 @@ namespace NMSUPratt{
 		long long int NACTIONSMAX,nactionstot;
 		int NPARTSMAX,nbaryons,npartstot;
 		int NSAMPLE,NSAMPLE_UDS2BAL;
-		int DELNPARTSTOT,DELNACTIONSTOT;
+		int DELNPARTSTOT,DELNACTIONSTOT,CHARGEVEC_MAXSIZE;
 		bool BINARY_RW;
 		double SIGMAMAX,SIGMADEFAULT, SIGMABF,SIGMAINELASTIC, Q0; // cross sections in sq. fm
 		double RESWIDTH_ALPHA; // sets spectral function for res widths
@@ -224,9 +226,9 @@ namespace NMSUPratt{
 		void CBalanceArray(CMSU_Boltzmann *boltzmann);
 		void IncrementChiTotFromCharges();
 		void IncrementChiTotFromHadrons();
-		void DeleteCharges();
+		//void DeleteCharges();
 		double TotalVolume;
-		Eigen::Matrix3d chitotQ,chitotH;
+		Eigen::Matrix<double,3,3> chitotQ,chitotH;
 		
 		static CmasterSampler *mastersampler;
 	};

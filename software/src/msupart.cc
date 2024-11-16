@@ -12,8 +12,8 @@
 using namespace std;
 using namespace NMSUPratt;
 
-CMSU_Boltzmann *CMSUPart::boltzmann=NULL;
-CBalance *CMSUPart::cb=NULL;
+CMSU_Boltzmann *CMSUPart::boltzmann=nullptr;
+CBalance *CMSUPart::cb=nullptr;
 char *CMSUPart::message=new char[CLog::CHARLENGTH];
 
 CMSUPart::CMSUPart(){
@@ -26,10 +26,10 @@ void CMSUPart::InitDead(int keyset){
 	tauexit=0.0;
 	tau_lastint=0.0;
 	taudecay=0.0;
-	cell=NULL;
+	cell=nullptr;
 	actionmap.clear();
 	active=false;
-	resinfo=NULL;
+	resinfo=nullptr;
 	for(int alpha=0;alpha<4;alpha++){
 		r[alpha]=p[alpha]=0.0;
 	}
@@ -180,15 +180,15 @@ void CMSUPart::Print(){
 	if(currentmap==&(boltzmann->DeadPartMap)) currentmapname="DeadPartMap";
 	snprintf(message,CLog::CHARLENGTH,"currentmap=%s\n",currentmapname.c_str());
 	CLog::Info(message);
-	if(cell==NULL){
-		snprintf(message,CLog::CHARLENGTH,"CELL=NULL\n");
+	if(cell==nullptr){
+		snprintf(message,CLog::CHARLENGTH,"CELL=nullptr\n");
 		CLog::Info(message);
 	}
-	if(nextcell==NULL){
-		snprintf(message,CLog::CHARLENGTH,"NEXTCELL=NULL\n");
+	if(nextcell==nullptr){
+		snprintf(message,CLog::CHARLENGTH,"NEXTCELL=nullptr\n");
 		CLog::Info(message);
 	}
-	if(cell!=NULL){
+	if(cell!=nullptr){
 		snprintf(message,CLog::CHARLENGTH,"Cell No: ix=%d, iy=%d, ieta=%d\n",cell->ix,cell->iy,cell->ieta);
 		CLog::Info(message);
 	}
@@ -216,7 +216,7 @@ CMSUPartMap::iterator CMSUPart::DeleteFromCurrentMap(){
 	}
 	else
 		currentmap->erase(ppos);
-	currentmap=NULL;
+	currentmap=nullptr;
 	return neighbor;
 }
 
@@ -233,7 +233,7 @@ CMSUPartMap::iterator CMSUPart::DeleteFromMap(CMSUPartMap *partmap){
 		neighbor++;
 		partmap->erase(ppos);
 	}
-	//partmap=NULL;
+	//partmap=nullptr;
 	return neighbor;
 }
 
@@ -372,9 +372,9 @@ void CMSUPart::KillActions(){
 
 void CMSUPart::Kill(){
 	KillActions();
-	if(cell!=NULL){
+	if(cell!=nullptr){
 		RemoveFromCell();
-		cell=NULL;
+		cell=nullptr;
 	}
 	DeleteFromCurrentMap();
 	eta=0.0;
@@ -444,7 +444,7 @@ void CMSUPart::FindCollisions(){
 		for(iy=0;iy<3;iy++){
 			for(ieta=0;ieta<3;ieta++){
 				cell2=cell->neighbor[ix][iy][ieta];
-				if(cell2!=NULL){
+				if(cell2!=nullptr){
 					ppos=cell2->partmap.begin();
 					while(ppos!=cell2->partmap.end()){
 						part2=ppos->second;
@@ -463,23 +463,23 @@ void CMSUPart::FindCollisions(){
 
 CMSU_BoltzmannCell *CMSUPart::FindCell(){
 	if(tau0>boltzmann->TAUCOLLMAX || !boltzmann->COLLISIONS){
-		return NULL;
+		return nullptr;
 	}
 	int ieta,ix,iy;
 	double deta=boltzmann->ETAMAX/double(boltzmann->NETA);
 	ieta=lrint(floor((eta+boltzmann->ETAMAX)/deta));
 	if(ieta<0 ||ieta>=2*boltzmann->NETA){
-		return NULL;
+		return nullptr;
 	}
 	double dx=boltzmann->XYMAX/double(boltzmann->NXY);
 	double dy=dx;
 	ix=lrint(floor((r[1]+boltzmann->XYMAX)/dx));
 	if(ix<0 || ix>=2*boltzmann->NXY){
-		return NULL;
+		return nullptr;
 	}
 	iy=lrint(floor((r[2]+boltzmann->XYMAX)/dy));
 	if(iy<0 || iy>=2*boltzmann->NXY){
-		return NULL;
+		return nullptr;
 	}
 	return boltzmann->cell[ix][iy][ieta];
 }
@@ -493,7 +493,7 @@ void CMSUPart::FindDecay(){
 	newt=r[0]+t;
 	newz=r[3]+vz*t;
 	taudecay=sqrt(newt*newt-newz*newz);
-	if(taudecay<tauexit || tauexit>boltzmann->TAUCOLLMAX || cell==NULL){
+	if(taudecay<tauexit || tauexit>boltzmann->TAUCOLLMAX || cell==nullptr){
 		boltzmann->AddAction_Decay(this,taudecay);
 	}
 }
@@ -501,12 +501,12 @@ void CMSUPart::FindDecay(){
 void CMSUPart::FindCellExit(){
 	if(tau0>boltzmann->TAUCOLLMAX){
 		tauexit=tau0;
-		nextcell=cell=NULL;
+		nextcell=cell=nullptr;
 	}
 	if(active){
 		double t,taux,tauy,taueta,z;
 		double etamax=cell->etamax,etamin=cell->etamin;
-		nextcell=NULL;
+		nextcell=nullptr;
 		tauexit=1.0E50;
 		taueta=taux=tauy=tauexit;
 		double vx=p[1]/p[0];
@@ -573,13 +573,13 @@ void CMSUPart::FindActions(){
 		Setp0();
 	}
 
-	if(cell!=NULL && resinfo->pid!=22){
+	if(cell!=nullptr && resinfo->pid!=22){
 		if(boltzmann->COLLISIONS && tau0<boltzmann->TAUCOLLMAX){
 			FindCellExit();
 			FindCollisions();
 		}
 		else{
-			ChangeCell(NULL);
+			ChangeCell(nullptr);
 		}
 	}
 	if(resinfo->decay)
@@ -628,7 +628,7 @@ void CMSUPart::BoostR(FourVector &u){
 }
 
 void CMSUPart::RemoveFromCell(){
-	if(cell!=NULL){
+	if(cell!=nullptr){
 		CMSUPartMap::iterator ppos=GetPos(&(cell->partmap));
 		if(ppos==cell->partmap.end()){
 			snprintf(message,CLog::CHARLENGTH,"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
@@ -643,7 +643,7 @@ void CMSUPart::RemoveFromCell(){
 }
 
 void CMSUPart::CheckCell(){
-	if(cell!=NULL){
+	if(cell!=nullptr){
 		CMSUPartMap::iterator ppos=GetPos(&(cell->partmap));
 		if(ppos==cell->partmap.end()){
 			snprintf(message,CLog::CHARLENGTH,"FATAL: In CMSUPart::RemoveFromCell, can't find ppos!!!\n");
@@ -656,9 +656,9 @@ void CMSUPart::CheckCell(){
 
 void CMSUPart::ChangeCell(CMSU_BoltzmannCell *newcell){
 	if(newcell!=cell){
-		if(cell!=NULL)
+		if(cell!=nullptr)
 			RemoveFromCell();
-		if(newcell!=NULL){
+		if(newcell!=nullptr){
 			newcell->partmap.insert(CMSUPartPair(key,this));
 		}
 		cell=newcell;

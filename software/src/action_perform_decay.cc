@@ -20,7 +20,7 @@ void CAction::PerformDecay(){
 		mother->Print();
 		CLog::Fatal("mothermass!=mothermass in CAction::PerformDecay()\n");
 	}
-	if(mother->cell!=NULL && mother->cell!=mother->FindCell() && tau<boltzmann->TAUCOLLMAX){
+	if(mother->cell!=nullptr && mother->cell!=mother->FindCell() && tau<boltzmann->TAUCOLLMAX){
 		mother->CheckRapidity();
 		mother->cell->Print();
 		mother->FindCell()->Print();
@@ -28,7 +28,7 @@ void CAction::PerformDecay(){
 		snprintf(message,CLog::CHARLENGTH,"Cells don't match for decaying mother\n");
 		CLog::Fatal(message);
 	}
-	if(tau>boltzmann->TAUCOLLMAX || mother->cell==NULL){
+	if(tau>boltzmann->TAUCOLLMAX || mother->cell==nullptr){
 		while(boltzmann->BJORKEN && (mother->eta<-etamax || mother->eta>etamax)){
 			if(mother->eta<-etamax)
 				deleta=2.0*etamax*ceil((-etamax-mother->eta)/(2.0*etamax));

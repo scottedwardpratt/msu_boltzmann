@@ -9,9 +9,9 @@
 using namespace std;
 using namespace NMSUPratt;
 
-char *CBFNumer::message=NULL;
-char *CBFDenom::message=NULL;
-CAcceptance *CBFNumer::acceptance=NULL;
+char *CBFNumer::message=nullptr;
+char *CBFDenom::message=nullptr;
+CAcceptance *CBFNumer::acceptance=nullptr;
 
 CBFNumer::CBFNumer(CparameterMap *parmapset){
 	int iy;
