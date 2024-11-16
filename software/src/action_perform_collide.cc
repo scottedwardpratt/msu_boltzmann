@@ -20,8 +20,6 @@ void CAction::PerformCollide(){
 
 	if((part1->balanceID<0 && part2->balanceID>=0) || (part1->balanceID>=0 && part2->balanceID<0)){
 		boltzmann->Collide_Scatter(part1,part2,nproducts,product);
-		printf("A why am I here\n");
-		exit(1);
 		colltype=-2;
 	}
 	else{
