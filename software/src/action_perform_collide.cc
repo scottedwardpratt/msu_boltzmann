@@ -45,8 +45,6 @@ void CAction::PerformCollide(){
 		part2->actionmother=boltzmann->nactionstot;
 	}
 	else if(colltype==-2){
-		printf("B why am I here\n");
-		exit(1);
 		if(part1->balanceID>=0 && part2->balanceID<0){
 			part1->CopyMomentumInfo(product[0]);
 			part1->Setp0();
