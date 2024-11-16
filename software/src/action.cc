@@ -25,10 +25,10 @@ void CAction::InitDead(int keyset){
 	listid=key;
 	tau=0.0;
 	type=-1;
-	currentmap=&boltzmann->DeadActionMap;
-	boltzmann->DeadActionMap.insert(CActionPair(key,this));
 	partmap.clear();
-	boltzmann->nactionstot+=1;
+	AddToMap(&boltzmann->DeadActionMap);
+	//currentmap=&boltzmann->DeadActionMap;
+	//boltzmann->DeadActionMap.insert(CActionPair(key,this));
 }
 
 // type=0(creation) 1(decay) 2(collision) 3(VizWrite) 4(DensCalc)

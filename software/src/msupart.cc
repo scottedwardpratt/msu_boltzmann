@@ -29,7 +29,7 @@ void CMSUPart::InitDead(int keyset){
 	cell=NULL;
 	actionmap.clear();
 	active=false;
-	resinfo=boltzmann->reslist->GetResInfoPtr(211);
+	resinfo=NULL;
 	for(int alpha=0;alpha<4;alpha++){
 		r[alpha]=p[alpha]=0.0;
 	}

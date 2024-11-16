@@ -46,7 +46,7 @@ CMSU_Boltzmann::CMSU_Boltzmann(int run_number,int subrun_number_set,CresList *re
 	DeadPartMap.clear();
 	ActionMap.clear();
 	DeadActionMap.clear();
-	randy=new Crandy(-1234);
+	randy=new Crandy(run_number*1000+subrun_number);
 	msudecay=new CMSU_Decay(randy);
 	CAction::boltzmann=this;
 	for(int iaction=0;iaction<DELNACTIONSTOT;iaction++){
@@ -242,7 +242,6 @@ void CMSU_Boltzmann::SetQualifier(string qualifier_set){
 }
 
 void CMSU_Boltzmann::Reset(){
-	nevents+=1;
 	int iitau,ntau;
 	double taucalc;
 	KillAllActions();
@@ -268,6 +267,8 @@ void CMSU_Boltzmann::Reset(){
 		}
 		CMuTInfo::NETEVENTS+=NSAMPLE;
 	}
+	randy->reset(nevents);
+	nevents+=1;
 }
 
 CMSU_Boltzmann::~CMSU_Boltzmann(){
