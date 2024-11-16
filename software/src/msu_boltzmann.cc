@@ -245,8 +245,8 @@ void CMSU_Boltzmann::Reset(){
 	nevents+=1;
 	int iitau,ntau;
 	double taucalc;
-	KillAllParts();
 	KillAllActions();
+	KillAllParts();
 	PartMap.clear();
 	DeadPartMap.clear();
 	ActionMap.clear();
