@@ -98,7 +98,6 @@ bool CAction::Kill(){
 			eepos=GetPos(&(boltzmann->DeadActionMap));
 			if(eepos==boltzmann->DeadActionMap.end()){
 				Print();
-				boltzmann->ActionMap.size(),boltzmann->DeadActionMap.size());
 				CLog::Info("action not in either ActionMap\n");
 			}
 		}
