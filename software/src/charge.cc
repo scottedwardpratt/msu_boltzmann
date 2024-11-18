@@ -86,9 +86,7 @@ void CMSU_Boltzmann::GenHadronsFromCharge(int balanceID,CHBCharge *charge){
 					
 					bweight=charge->weight*delN/fabs(delN);
 					randy->increment_netprob(fabs(delN*NSAMPLE_UDS2BAL));
-					int itest=0;
 					while(randy->test_threshold(0.0)){
-						itest+=1;
 						sampler->GetP(&(charge->hyper),hyper->T0,resinfo,p);
 						mass=resinfo->mass;
 						part=GetDeadPart();
