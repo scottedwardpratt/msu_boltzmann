@@ -22,7 +22,7 @@ CBalanceArrays::CBalanceArrays(CMSU_Boltzmann *boltzmannset){
 void CBalanceArrays::InitArrays(){
 	CresInfoMap::iterator itr;
 	NSAMPLE_HYDRO2UDS=parmap->getD("HYDRO2UDS_NSAMPLE",1);
-	NSAMPLE_UDS2BAL=parmap->getD("MSU_BOLTZMAN_NSAMPLE_UDS2BAL",1);
+	NSAMPLE_UDS2BAL=parmap->getD("MSU_BOLTZMANN_NSAMPLE_UDS2BAL",1);
 	FROM_UDS=parmap->getB("BF_FROM_UDS",false);
 	BF_YMAX=parmap->getD("BF_YMAX",1.0);
 	BF_YMIN=-BF_YMAX;
